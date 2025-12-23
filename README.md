@@ -1,6 +1,6 @@
 <div align="center">
 
-![RegimeGuard Banner](./public/banner.jpeg)
+<img src="./public/banner.jpeg" alt="RegimeGuard Banner" style="width: 100%; max-width: 1200px; height: 200px; object-fit: cover; border-radius: 8px;" />
 
 # RegimeGuard
 
