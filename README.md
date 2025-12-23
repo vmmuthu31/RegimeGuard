@@ -56,6 +56,7 @@ interface TradingDecision {
 - ✅ **Volatility anomalies trigger protection** — Automatic capital preservation
 
 This creates a system that:
+
 - 📉 Trades less during unstable conditions
 - 📈 Scales exposure only when conditions are favorable
 - 🛡️ Preserves capital during market stress
@@ -71,37 +72,37 @@ graph TB
         A --> B[Real-time Price Feed]
         A --> C[Volume & Volatility Data]
     end
-    
+
     subgraph "AI Intelligence Layer"
         D[Market Regime Classifier]
         E[Risk Control AI Engine]
         F[Volatility Anomaly Guard]
-        
+
         B --> D
         C --> D
         D --> E
         C --> F
         F --> E
     end
-    
+
     subgraph "Strategy Layer"
         G{Regime Router}
         H[Trend Following Strategy]
         I[Mean Reversion Strategy]
         J[Capital Preservation Mode]
-        
+
         D --> G
         G -->|Trending| H
         G -->|Range-Bound| I
         G -->|High Volatility| J
     end
-    
+
     subgraph "Execution Layer"
         K[Position Sizing Calculator]
         L[Risk Parameter Adjuster]
         M[Order Execution Engine]
         N[WEEX Trading API]
-        
+
         E --> K
         E --> L
         H --> M
@@ -111,18 +112,18 @@ graph TB
         L --> M
         M --> N
     end
-    
+
     subgraph "Monitoring & Transparency"
         O[Trade Logger]
         P[Performance Analytics]
         Q[Explainability Dashboard]
-        
+
         M --> O
         O --> P
         E --> Q
         D --> Q
     end
-    
+
     style D fill:#4CAF50
     style E fill:#4CAF50
     style F fill:#4CAF50
@@ -131,16 +132,16 @@ graph TB
 
 ### Architecture Layers
 
-| Layer | Component | Responsibility | AI-Driven? |
-|-------|-----------|----------------|------------|
-| **Intelligence** | Market Regime Classifier | Identify market conditions (Trending/Range/Volatile) | ✅ Yes |
-| **Intelligence** | Risk Control Engine | Adjust position size, stops, frequency | ✅ Yes |
-| **Intelligence** | Volatility Guard | Detect anomalies, trigger kill-switch | ✅ Yes |
-| **Strategy** | Regime Router | Select execution strategy based on regime | ❌ Rule-based |
-| **Strategy** | Trend Following | EMA/VWAP-based directional trades | ❌ Rule-based |
-| **Strategy** | Mean Reversion | Support/resistance bounce trades | ❌ Rule-based |
-| **Execution** | Position Sizing | Calculate trade size from risk parameters | ❌ Computed |
-| **Execution** | Order Manager | Execute trades via WEEX API | ❌ Automated |
+| Layer            | Component                | Responsibility                                       | AI-Driven?    |
+| ---------------- | ------------------------ | ---------------------------------------------------- | ------------- |
+| **Intelligence** | Market Regime Classifier | Identify market conditions (Trending/Range/Volatile) | ✅ Yes        |
+| **Intelligence** | Risk Control Engine      | Adjust position size, stops, frequency               | ✅ Yes        |
+| **Intelligence** | Volatility Guard         | Detect anomalies, trigger kill-switch                | ✅ Yes        |
+| **Strategy**     | Regime Router            | Select execution strategy based on regime            | ❌ Rule-based |
+| **Strategy**     | Trend Following          | EMA/VWAP-based directional trades                    | ❌ Rule-based |
+| **Strategy**     | Mean Reversion           | Support/resistance bounce trades                     | ❌ Rule-based |
+| **Execution**    | Position Sizing          | Calculate trade size from risk parameters            | ❌ Computed   |
+| **Execution**    | Order Manager            | Execute trades via WEEX API                          | ❌ Automated  |
 
 ---
 
@@ -151,22 +152,26 @@ graph TB
 **Purpose:** Identify the current market environment, not predict price direction.
 
 **Regimes:**
+
 - 📈 **Trending** — Persistent directional movement
 - ↔️ **Range-Bound** — Oscillating between support/resistance
 - ⚠️ **High Volatility** — Unstable, unpredictable conditions
 
 **Inputs:**
+
 - Price momentum indicators
 - Volatility metrics (ATR, realized volatility)
 - Volume behavior patterns
 - Trend persistence signals
 
 **AI Methods:**
+
 - Unsupervised clustering (K-Means, DBSCAN)
 - Hidden Markov Models (HMM)
 - Probabilistic regime confidence scoring
 
 **Output Example:**
+
 ```json
 {
   "regime": "trending",
@@ -184,17 +189,20 @@ graph TB
 **Purpose:** Dynamically adjust risk exposure based on market conditions and portfolio state.
 
 **What It Controls:**
+
 - ✅ Position size multiplier (0.0 - 1.0)
 - ✅ Stop-loss distance (tighter in uncertainty)
 - ✅ Trade frequency (cooldown periods)
 - ✅ Temporary trade suspension
 
 **What It NEVER Controls:**
+
 - ❌ Buy/sell direction
 - ❌ Signal generation
 - ❌ Strategy selection
 
 **Inputs:**
+
 - Regime confidence score
 - Volatility forecast
 - Recent drawdown percentage
@@ -202,6 +210,7 @@ graph TB
 - Asset-specific risk metrics
 
 **Outputs:**
+
 ```json
 {
   "positionSizeMultiplier": 0.35,
@@ -216,12 +225,14 @@ graph TB
 **Purpose:** Capital preservation kill-switch for extreme market conditions.
 
 **Monitors:**
+
 - Sudden volatility expansions (>2σ)
 - Abnormal price-volume divergence
 - Flash crash patterns
 - Liquidity evaporation signals
 
 **Behavior:**
+
 - 🚨 Reduces exposure aggressively (50-100%)
 - 🛑 Prevents new trades during unstable periods
 - 🔄 Auto-resumes when conditions normalize
@@ -232,16 +243,16 @@ graph TB
 
 ### Supported Assets
 
-| Symbol | Name | Leverage | Strategy |
-|--------|------|----------|----------|
-| `cmt_btcusdt` | Bitcoin | 1-20x | Trend/Mean Reversion |
-| `cmt_ethusdt` | Ethereum | 1-20x | Trend/Mean Reversion |
-| `cmt_solusdt` | Solana | 1-20x | Trend/Mean Reversion |
-| `cmt_bnbusdt` | BNB | 1-20x | Trend/Mean Reversion |
-| `cmt_xrpusdt` | XRP | 1-20x | Trend/Mean Reversion |
-| `cmt_adausdt` | Cardano | 1-20x | Trend/Mean Reversion |
-| `cmt_dogeusdt` | Dogecoin | 1-20x | Trend/Mean Reversion |
-| `cmt_ltcusdt` | Litecoin | 1-20x | Trend/Mean Reversion |
+| Symbol         | Name     | Leverage | Strategy             |
+| -------------- | -------- | -------- | -------------------- |
+| `cmt_btcusdt`  | Bitcoin  | 1-20x    | Trend/Mean Reversion |
+| `cmt_ethusdt`  | Ethereum | 1-20x    | Trend/Mean Reversion |
+| `cmt_solusdt`  | Solana   | 1-20x    | Trend/Mean Reversion |
+| `cmt_bnbusdt`  | BNB      | 1-20x    | Trend/Mean Reversion |
+| `cmt_xrpusdt`  | XRP      | 1-20x    | Trend/Mean Reversion |
+| `cmt_adausdt`  | Cardano  | 1-20x    | Trend/Mean Reversion |
+| `cmt_dogeusdt` | Dogecoin | 1-20x    | Trend/Mean Reversion |
+| `cmt_ltcusdt`  | Litecoin | 1-20x    | Trend/Mean Reversion |
 
 ### Risk Parameters
 
@@ -254,17 +265,17 @@ graph TB
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Frontend** | Next.js 16, React 19, TypeScript | Dashboard UI |
-| **UI Components** | shadcn/ui, Tailwind CSS 4 | Modern, accessible design |
-| **State Management** | Jotai (atoms) | Lightweight, atomic state |
-| **Data Fetching** | React Query | Server state, caching, real-time updates |
-| **AI/ML** | TensorFlow.js, scikit-learn (Python) | Regime classification, risk models |
-| **Trading API** | WEEX OpenAPI | Order execution, market data |
-| **Database** | PostgreSQL (Supabase) | Trade history, performance metrics |
-| **Monitoring** | Grafana, Prometheus | Real-time system health |
-| **Runtime** | Bun | Fast package management & execution |
+| Layer                | Technology                           | Purpose                                  |
+| -------------------- | ------------------------------------ | ---------------------------------------- |
+| **Frontend**         | Next.js 16, React 19, TypeScript     | Dashboard UI                             |
+| **UI Components**    | shadcn/ui, Tailwind CSS 4            | Modern, accessible design                |
+| **State Management** | Jotai (atoms)                        | Lightweight, atomic state                |
+| **Data Fetching**    | React Query                          | Server state, caching, real-time updates |
+| **AI/ML**            | TensorFlow.js, scikit-learn (Python) | Regime classification, risk models       |
+| **Trading API**      | WEEX OpenAPI                         | Order execution, market data             |
+| **Database**         | PostgreSQL (Supabase)                | Trade history, performance metrics       |
+| **Monitoring**       | Grafana, Prometheus                  | Real-time system health                  |
+| **Runtime**          | Bun                                  | Fast package management & execution      |
 
 ---
 
@@ -396,34 +407,34 @@ Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 
 ### Market Data
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/market/ticker?symbol=cmt_btcusdt` | Latest price, volume, 24h stats |
-| `GET` | `/api/market/candles?symbol=cmt_btcusdt&interval=1h` | OHLCV data |
-| `GET` | `/api/market/depth?symbol=cmt_btcusdt` | Order book |
+| Method | Endpoint                                             | Description                     |
+| ------ | ---------------------------------------------------- | ------------------------------- |
+| `GET`  | `/api/market/ticker?symbol=cmt_btcusdt`              | Latest price, volume, 24h stats |
+| `GET`  | `/api/market/candles?symbol=cmt_btcusdt&interval=1h` | OHLCV data                      |
+| `GET`  | `/api/market/depth?symbol=cmt_btcusdt`               | Order book                      |
 
 ### Regime Classification
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/regime/current?symbol=cmt_btcusdt` | Current regime + confidence |
-| `GET` | `/api/regime/history?symbol=cmt_btcusdt` | Regime transitions over time |
+| Method | Endpoint                                 | Description                  |
+| ------ | ---------------------------------------- | ---------------------------- |
+| `GET`  | `/api/regime/current?symbol=cmt_btcusdt` | Current regime + confidence  |
+| `GET`  | `/api/regime/history?symbol=cmt_btcusdt` | Regime transitions over time |
 
 ### Trading
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/trading/order` | Place order (with AI risk checks) |
-| `GET` | `/api/trading/positions` | Active positions |
-| `DELETE` | `/api/trading/position/:id` | Close position |
+| Method   | Endpoint                    | Description                       |
+| -------- | --------------------------- | --------------------------------- |
+| `POST`   | `/api/trading/order`        | Place order (with AI risk checks) |
+| `GET`    | `/api/trading/positions`    | Active positions                  |
+| `DELETE` | `/api/trading/position/:id` | Close position                    |
 
 ### Risk & Analytics
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/risk/status` | Current risk exposure, drawdown |
-| `GET` | `/api/analytics/performance` | PnL, Sharpe ratio, win rate |
-| `GET` | `/api/analytics/trades` | Trade history with explanations |
+| Method | Endpoint                     | Description                     |
+| ------ | ---------------------------- | ------------------------------- |
+| `GET`  | `/api/risk/status`           | Current risk exposure, drawdown |
+| `GET`  | `/api/analytics/performance` | PnL, Sharpe ratio, win rate     |
+| `GET`  | `/api/analytics/trades`      | Trade history with explanations |
 
 ---
 
@@ -457,41 +468,46 @@ RegimeGuard aligns with WEEX's philosophy:
 
 ## 📊 Project Status
 
-| Component | Status |
-|-----------|--------|
-| WEEX API Integration | ✅ Complete |
-| Market Regime Classifier | 🔄 In Progress |
-| Risk Control Engine | 🔄 In Progress |
-| Volatility Guard | 📋 Planned |
-| Trend Following Strategy | ✅ Complete |
-| Mean Reversion Strategy | 📋 Planned |
-| Dashboard UI | 🔄 In Progress |
-| Backtesting Framework | 📋 Planned |
-| Documentation | ✅ Complete |
+| Component                 | Status      |
+| ------------------------- | ----------- |
+| WEEX API Integration      | ✅ Complete |
+| Market Regime Classifier  | ✅ Complete |
+| Risk Control Engine       | ✅ Complete |
+| Volatility Guard          | ✅ Complete |
+| **Multi-Agent AI System** | ✅ Complete |
+| Trend Following Strategy  | ✅ Complete |
+| Mean Reversion Strategy   | 📋 Planned  |
+| Dashboard UI              | ✅ Complete |
+| Backtesting Framework     | 📋 Planned  |
+| Documentation             | ✅ Complete |
 
 ---
 
 ## 🗺️ Roadmap
 
 ### Phase 1: Hackathon MVP (Current)
+
 - ✅ WEEX API integration
 - 🔄 Basic regime classification (trending/range/volatile)
 - 🔄 Simple risk controls (position sizing, stop-loss)
 - 🔄 Dashboard with real-time monitoring
 
 ### Phase 2: Advanced AI (Post-Hackathon)
+
 - 📋 Deep learning regime classifier (LSTM/Transformer)
 - 📋 Reinforcement learning for risk optimization
 - 📋 Multi-asset correlation analysis
 - 📋 Sentiment analysis integration
 
 ### Phase 3: Production Deployment
+
 - 📋 WEEX AI Strategy Fund integration
 - 📋 Multi-account management
 - 📋 Advanced backtesting with Monte Carlo
 - 📋 Institutional-grade reporting
 
 ### Phase 4: Ecosystem Expansion
+
 - 📋 Open-source strategy marketplace
 - 📋 Community-contributed regime models
 - 📋 Cross-exchange support (Binance, Bybit)
