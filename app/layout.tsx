@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "@/client/providers/providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "RegimeGuard | AI-Driven Risk-Adaptive Trading Engine",
-  description: "An explainable AI-powered trading system for WEEX that prioritizes capital protection and risk-adjusted performance. AI controls risk, not greed.",
+  description:
+    "An explainable AI-powered trading system for WEEX that prioritizes capital protection and risk-adjusted performance. AI controls risk, not greed.",
   keywords: [
     "AI trading",
     "risk management",
@@ -76,10 +78,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
-  },
 };
 
 export default function RootLayout({
@@ -92,7 +90,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

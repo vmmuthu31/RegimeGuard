@@ -172,3 +172,129 @@ export function useHealthCheck() {
     staleTime: 15000,
   });
 }
+
+export function useMarketDataEndpoint<T>(
+  endpoint: string,
+  symbol?: TradingPair
+) {
+  return useQuery({
+    queryKey: ["market-data", endpoint, symbol],
+    queryFn: async () => {
+      const params = new URLSearchParams({ endpoint });
+      if (symbol) params.append("symbol", symbol);
+      const response = await fetch(`/api/market/data?${params}`);
+      return response.json() as Promise<{
+        success: boolean;
+        data: T;
+        error?: string;
+      }>;
+    },
+    staleTime: 5000,
+  });
+}
+
+export function useAllTickers() {
+  return useMarketDataEndpoint("tickers");
+}
+
+export function useTicker(symbol: TradingPair) {
+  return useMarketDataEndpoint("ticker", symbol);
+}
+
+export function useOrderBook(symbol: TradingPair) {
+  return useMarketDataEndpoint("depth", symbol);
+}
+
+export function useRecentTrades(symbol: TradingPair) {
+  return useMarketDataEndpoint("trades", symbol);
+}
+
+export function useCandles(
+  symbol: TradingPair,
+  granularity = "1m",
+  limit = 100
+) {
+  return useQuery({
+    queryKey: ["candles", symbol, granularity, limit],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        endpoint: "candles",
+        symbol,
+        granularity,
+        limit: limit.toString(),
+      });
+      const response = await fetch(`/api/market/data?${params}`);
+      return response.json();
+    },
+    staleTime: 10000,
+  });
+}
+
+export function useFundingRate(symbol: TradingPair) {
+  return useMarketDataEndpoint("currentFundingRate", symbol);
+}
+
+export function useOpenInterest(symbol: TradingPair) {
+  return useMarketDataEndpoint("openInterest", symbol);
+}
+
+export function useAccountEndpoint<T>(endpoint: string) {
+  return useQuery({
+    queryKey: ["account-data", endpoint],
+    queryFn: async () => {
+      const response = await fetch(`/api/account/data?endpoint=${endpoint}`);
+      return response.json() as Promise<{
+        success: boolean;
+        data: T;
+        error?: string;
+      }>;
+    },
+    staleTime: 10000,
+  });
+}
+
+export function useAccountAssets() {
+  return useAccountEndpoint("assets");
+}
+
+export function useAllPositions() {
+  return useAccountEndpoint("positions");
+}
+
+export function useAccountSettings() {
+  return useAccountEndpoint("settings");
+}
+
+export function useChangeLeverage() {
+  return useMutation({
+    mutationFn: async (params: {
+      symbol: TradingPair;
+      marginMode: 1 | 3;
+      longLeverage: number;
+      shortLeverage: number;
+    }) => {
+      const response = await fetch("/api/account/data?action=leverage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      });
+      return response.json();
+    },
+  });
+}
+
+export function useUploadAiLog() {
+  return useMutation({
+    mutationFn: async (params: {
+      type: "regime" | "risk" | "trade" | "volatility" | "custom";
+      data: Record<string, unknown>;
+    }) => {
+      const response = await fetch(`/api/ailog?type=${params.type}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params.data),
+      });
+      return response.json();
+    },
+  });
+}
