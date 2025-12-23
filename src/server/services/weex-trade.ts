@@ -7,9 +7,6 @@
 import { createHmac } from "crypto";
 import { WEEX_BASE_URL, TradingPair } from "@/shared/constants";
 
-// ============================================================================
-// Types
-// ============================================================================
 
 export interface WeexConfig {
     apiKey: string;
@@ -201,9 +198,7 @@ async function makeRequest<T>(
     return response.json();
 }
 
-// ============================================================================
 // Order Placement
-// ============================================================================
 
 /**
  * Place a single order
@@ -277,9 +272,7 @@ export async function placeBatchOrders(
     };
 }
 
-// ============================================================================
 // Order Cancellation
-// ============================================================================
 
 /**
  * Cancel a single order
@@ -394,9 +387,7 @@ export async function cancelAllOrders(
     return data;
 }
 
-// ============================================================================
 // Order Query
-// ============================================================================
 
 /**
  * Get single order info
@@ -637,9 +628,7 @@ export async function getOrderFills(
     };
 }
 
-// ============================================================================
 // Trigger/Plan Orders
-// ============================================================================
 
 /**
  * Place a trigger (plan) order
@@ -841,9 +830,7 @@ export async function getHistoryPlanOrders(
     };
 }
 
-// ============================================================================
 // Position Management
-// ============================================================================
 
 /**
  * Close all positions
@@ -873,9 +860,7 @@ export async function closeAllPositions(
     }));
 }
 
-// ============================================================================
 // Take Profit / Stop Loss Orders
-// ============================================================================
 
 /**
  * Place TP/SL order
@@ -933,9 +918,7 @@ export async function modifyTpSlOrder(
     return data;
 }
 
-// ============================================================================
-// High-Level Helper Functions for RegimeGuard
-// ============================================================================
+// Helper Functions 
 
 /**
  * Open a long position with optional TP/SL

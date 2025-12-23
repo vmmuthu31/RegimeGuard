@@ -13,7 +13,6 @@ export * from "./services/weex-market";
 export * from "./services/weex-account";
 export * from "./services/weex-ailog";
 
-// Export trade service functions (excluding WeexConfig to avoid duplicate)
 export {
   placeBatchOrders,
   cancelBatchOrders,
