@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Github,
   ChevronDown,
+  Bot,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -306,6 +307,90 @@ function ArchitectureFlow() {
   );
 }
 
+function AgentStatusPanel() {
+  const agents = [
+    {
+      type: "REGIME_DETECTOR",
+      name: "Regime Agent",
+      icon: Brain,
+      color: "from-purple-500 to-pink-500",
+      description: "Classifies market conditions",
+      status: "ANALYZING",
+    },
+    {
+      type: "RISK_CONTROLLER",
+      name: "Risk Agent",
+      icon: Shield,
+      color: "from-orange-500 to-amber-500",
+      description: "Controls position sizing",
+      status: "MONITORING",
+    },
+    {
+      type: "VOLATILITY_GUARD",
+      name: "Volatility Agent",
+      icon: Activity,
+      color: "from-red-500 to-rose-500",
+      description: "Monitors for anomalies",
+      status: "WATCHING",
+    },
+    {
+      type: "STRATEGY_EXECUTOR",
+      name: "Strategy Agent",
+      icon: Bot,
+      color: "from-emerald-500 to-green-500",
+      description: "Generates trade signals",
+      status: "READY",
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {agents.map((agent) => (
+        <Card
+          key={agent.type}
+          className="bg-zinc-900/50 border-zinc-800 backdrop-blur-xl overflow-hidden group hover:border-zinc-700 transition-all"
+        >
+          <div className={`h-1 w-full bg-gradient-to-r ${agent.color}`} />
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${agent.color} p-0.5`}
+              >
+                <div className="w-full h-full bg-zinc-900 rounded-xl flex items-center justify-center">
+                  <agent.icon className="w-5 h-5 text-white" />
+                </div>
+              </div>
+              <div>
+                <CardTitle className="text-sm font-semibold text-white">
+                  {agent.name}
+                </CardTitle>
+                <CardDescription className="text-xs text-zinc-500">
+                  {agent.description}
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs text-zinc-400 uppercase tracking-wide">
+                {agent.status}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+      <div className="lg:col-span-4 flex items-center justify-center gap-2 pt-4">
+        <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent flex-1" />
+        <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20">
+          Multi-Agent AI System
+        </Badge>
+        <div className="h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent flex-1" />
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -396,6 +481,19 @@ export default function LandingPage() {
             </p>
           </div>
           <ArchitectureFlow />
+        </section>
+
+        <section className="max-w-7xl mx-auto px-6 py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">
+              <AnimatedGradientText>AI Agents</AnimatedGradientText>
+            </h2>
+            <p className="text-zinc-400">
+              Specialized agents collaborate to make intelligent trading
+              decisions
+            </p>
+          </div>
+          <AgentStatusPanel />
         </section>
 
         <section className="max-w-7xl mx-auto px-6 py-20">

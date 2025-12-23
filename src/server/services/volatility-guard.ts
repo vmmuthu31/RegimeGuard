@@ -2,7 +2,7 @@ import { DEFAULT_RISK_PARAMS } from "@/shared/constants";
 import type { VolatilityGuardStatus, Candle } from "@/shared/types";
 import { calculateVolatility } from "@/shared/utils";
 
-interface VolatilityHistory {
+export interface VolatilityHistory {
   values: number[];
   maxSize: number;
 }
