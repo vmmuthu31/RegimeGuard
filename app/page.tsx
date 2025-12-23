@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+import { useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import {
   Shield,
@@ -306,11 +307,11 @@ function ArchitectureFlow() {
 }
 
 export default function LandingPage() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return (
