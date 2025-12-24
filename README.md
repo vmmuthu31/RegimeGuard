@@ -285,50 +285,91 @@ graph TB
 regimeguard/
 ├── app/
 │   ├── api/
-│   │   ├── market/           # WEEX market data endpoints
-│   │   ├── trading/          # Order placement, position management
-│   │   ├── regime/           # Regime classification API
-│   │   ├── risk/             # Risk control decisions
-│   │   └── analytics/        # Performance metrics
-│   ├── dashboard/            # Trading dashboard UI
+│   │   ├── account/          # Account balance & positions
+│   │   │   ├── route.ts      # GET: balance/positions, POST: risk evaluation
+│   │   │   └── data/
+│   │   │       └── route.ts  # Additional account data
+│   │   ├── agents/           # Multi-agent system status
+│   │   │   └── route.ts      # GET: orchestrator & agent states
+│   │   ├── ailog/            # AI decision logging (WEEX AiLog)
+│   │   │   └── route.ts      # POST: upload AI logs (regime/risk/trade/volatility)
+│   │   ├── health/           # System health check
+│   │   │   └── route.ts      # GET: server status & latency
+│   │   ├── market/           # Market data & regime analysis
+│   │   │   ├── route.ts      # GET: ticker, regime, indicators, signals
+│   │   │   └── data/
+│   │   │       └── route.ts  # Additional market data
+│   │   └── trade/            # Trade execution & management
+│   │       └── route.ts      # GET/POST/DELETE/PATCH: full trading operations
+│   ├── globals.css           # Global styles
+│   ├── layout.tsx            # Root layout
 │   └── page.tsx              # Landing page
-├── lib/
-│   ├── weex/
-│   │   ├── client.ts         # WEEX API client
-│   │   ├── auth.ts           # Signature generation
-│   │   └── types.ts          # API type definitions
-│   ├── ai/
-│   │   ├── regime-classifier.ts
-│   │   ├── risk-engine.ts
-│   │   └── volatility-guard.ts
-│   ├── strategy/
-│   │   ├── trend-following.ts
-│   │   ├── mean-reversion.ts
-│   │   └── position-sizing.ts
-│   └── utils/
-│       ├── indicators.ts     # Technical indicators (EMA, ATR, etc.)
-│       └── risk-calc.ts      # Risk calculations
-├── hooks/
-│   ├── use-market-data.ts    # Real-time price/volume hooks
-│   ├── use-regime.ts         # Regime classification state
-│   └── use-positions.ts      # Active positions tracking
 ├── components/
-│   ├── charts/               # TradingView-style charts
-│   ├── regime-indicator.tsx  # Visual regime display
-│   ├── risk-meter.tsx        # Real-time risk gauge
-│   └── trade-log.tsx         # Explainable trade history
-├── config/
-│   ├── trading.ts            # Strategy parameters
-│   ├── risk.ts               # Risk limits
-│   └── assets.ts             # Supported trading pairs
+│   └── ui/                   # shadcn/ui components
+│       ├── accordion.tsx
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── chart.tsx
+│       └── ... (30+ components)
 ├── docs/
-│   ├── ARCHITECTURE.md       # Detailed system design
-│   ├── AI_PARTICIPATION.md   # AI usage transparency
-│   ├── RISK_FRAMEWORK.md     # Risk management rules
-│   └── STRATEGY_RULES.md     # Execution logic
-└── tests/
-    ├── backtests/            # Historical performance tests
-    └── unit/                 # Component tests
+│   └── RegimeGuard.txt       # Project documentation
+├── hooks/
+│   └── use-mobile.ts         # Mobile responsive hook
+├── lib/
+│   └── utils.ts              # Utility functions
+├── public/
+│   └── banner.jpeg           # Project banner
+├── src/
+│   ├── client/
+│   │   ├── hooks/
+│   │   │   ├── use-trading.ts  # Trading state hooks
+│   │   │   └── index.ts
+│   │   ├── providers/
+│   │   │   └── providers.tsx   # React Query provider
+│   │   └── state/
+│   │       ├── atoms.ts        # Jotai atoms
+│   │       └── index.ts
+│   ├── server/
+│   │   ├── agents/
+│   │   │   ├── base-agent.ts        # Base agent class
+│   │   │   ├── orchestrator.ts      # Multi-agent coordinator
+│   │   │   ├── regime-agent.ts      # Regime classification agent
+│   │   │   ├── risk-agent.ts        # Risk management agent
+│   │   │   ├── strategy-agent.ts    # Strategy selection agent
+│   │   │   ├── volatility-agent.ts  # Volatility monitoring agent
+│   │   │   └── index.ts
+│   │   ├── config/
+│   │   │   ├── env.ts           # Environment config
+│   │   │   └── index.ts
+│   │   └── services/
+│   │       ├── regime-classifier.ts  # Market regime classification
+│   │       ├── risk-engine.ts        # Risk control engine
+│   │       ├── strategy-executor.ts  # Trade signal generation
+│   │       ├── volatility-guard.ts   # Volatility anomaly detection
+│   │       ├── weex-account.ts       # Account API wrapper
+│   │       ├── weex-ailog.ts         # AI logging service
+│   │       ├── weex-client.ts        # Core WEEX client
+│   │       ├── weex-market.ts        # Market data API
+│   │       └── weex-trade.ts         # Trading API wrapper
+│   └── shared/
+│       ├── constants/
+│       │   ├── trading.ts       # Trading pairs & constants
+│       │   └── index.ts
+│       ├── schemas/
+│       │   ├── trading.ts       # Zod schemas
+│       │   └── index.ts
+│       ├── types/
+│       │   ├── agents.ts        # Agent type definitions
+│       │   ├── trading.ts       # Trading type definitions
+│       │   └── index.ts
+│       └── utils/
+│           ├── calculations.ts   # Math utilities
+│           └── index.ts
+├── components.json
+├── env.example
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
 ---
@@ -405,36 +446,85 @@ Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 
 ## 📡 API Endpoints
 
-### Market Data
+### Health Check
 
-| Method | Endpoint                                             | Description                     |
-| ------ | ---------------------------------------------------- | ------------------------------- |
-| `GET`  | `/api/market/ticker?symbol=cmt_btcusdt`              | Latest price, volume, 24h stats |
-| `GET`  | `/api/market/candles?symbol=cmt_btcusdt&interval=1h` | OHLCV data                      |
-| `GET`  | `/api/market/depth?symbol=cmt_btcusdt`               | Order book                      |
+| Method | Endpoint      | Description                         |
+| ------ | ------------- | ----------------------------------- |
+| `GET`  | `/api/health` | System health, server time, latency |
 
-### Regime Classification
+### Account Management
 
-| Method | Endpoint                                 | Description                  |
-| ------ | ---------------------------------------- | ---------------------------- |
-| `GET`  | `/api/regime/current?symbol=cmt_btcusdt` | Current regime + confidence  |
-| `GET`  | `/api/regime/history?symbol=cmt_btcusdt` | Regime transitions over time |
+| Method | Endpoint            | Description                                   |
+| ------ | ------------------- | --------------------------------------------- |
+| `GET`  | `/api/account`      | Get USDT balance & open positions             |
+| `POST` | `/api/account`      | Evaluate risk for a given regime & volatility |
+| `GET`  | `/api/account/data` | Additional account data                       |
 
-### Trading
+### Market Data & Analysis
 
-| Method   | Endpoint                    | Description                       |
-| -------- | --------------------------- | --------------------------------- |
-| `POST`   | `/api/trading/order`        | Place order (with AI risk checks) |
-| `GET`    | `/api/trading/positions`    | Active positions                  |
-| `DELETE` | `/api/trading/position/:id` | Close position                    |
+| Method | Endpoint                         | Description                                           |
+| ------ | -------------------------------- | ----------------------------------------------------- |
+| `GET`  | `/api/market?symbol=cmt_btcusdt` | Ticker, regime, indicators, volatility, trade signals |
+| `GET`  | `/api/market/data`               | Additional market data endpoints                      |
 
-### Risk & Analytics
+**Response includes:**
 
-| Method | Endpoint                     | Description                     |
-| ------ | ---------------------------- | ------------------------------- |
-| `GET`  | `/api/risk/status`           | Current risk exposure, drawdown |
-| `GET`  | `/api/analytics/performance` | PnL, Sharpe ratio, win rate     |
-| `GET`  | `/api/analytics/trades`      | Trade history with explanations |
+- Latest ticker (price, volume, 24h stats)
+- Regime classification (trending/range-bound/high-volatility)
+- Technical indicators (RSI, EMA, ATR, VWAP)
+- Volatility guard status
+- Trade signal recommendations
+- Contract information
+
+### Trading Operations
+
+| Method   | Endpoint                               | Description                               |
+| -------- | -------------------------------------- | ----------------------------------------- |
+| `GET`    | `/api/trade?action=current`            | Get current open orders                   |
+| `GET`    | `/api/trade?action=history`            | Get order history                         |
+| `GET`    | `/api/trade?action=fills`              | Get order fills                           |
+| `GET`    | `/api/trade?action=detail&orderId=xxx` | Get specific order details                |
+| `GET`    | `/api/trade?action=planCurrent`        | Get current trigger orders                |
+| `GET`    | `/api/trade?action=planHistory`        | Get trigger order history                 |
+| `POST`   | `/api/trade?action=order`              | Place market/limit order (single)         |
+| `POST`   | `/api/trade?action=batchOrder`         | Place batch orders                        |
+| `POST`   | `/api/trade?action=openLong`           | Quick long position                       |
+| `POST`   | `/api/trade?action=openShort`          | Quick short position                      |
+| `POST`   | `/api/trade?action=triggerOrder`       | Place stop-loss/take-profit trigger order |
+| `POST`   | `/api/trade?action=tpsl`               | Place TP/SL order                         |
+| `DELETE` | `/api/trade?action=cancel&orderId=xxx` | Cancel specific order                     |
+| `DELETE` | `/api/trade?action=batchCancel`        | Cancel multiple orders                    |
+| `DELETE` | `/api/trade?action=cancelAll`          | Cancel all orders for a symbol            |
+| `DELETE` | `/api/trade?action=triggerCancel`      | Cancel trigger order                      |
+| `DELETE` | `/api/trade?action=closeLong`          | Close long position                       |
+| `DELETE` | `/api/trade?action=closeShort`         | Close short position                      |
+| `DELETE` | `/api/trade?action=closeAll`           | Close all positions                       |
+| `PATCH`  | `/api/trade?action=modifyTpSl`         | Modify TP/SL order                        |
+
+### Multi-Agent System
+
+| Method | Endpoint      | Description                                |
+| ------ | ------------- | ------------------------------------------ |
+| `GET`  | `/api/agents` | Get orchestrator status & all agent states |
+
+**Agent Types:**
+
+- Regime Agent (market condition classification)
+- Risk Agent (exposure management)
+- Strategy Agent (trade signal generation)
+- Volatility Agent (anomaly detection)
+
+### AI Decision Logging
+
+| Method | Endpoint                     | Description                        |
+| ------ | ---------------------------- | ---------------------------------- |
+| `POST` | `/api/ailog?type=regime`     | Log regime classification decision |
+| `POST` | `/api/ailog?type=risk`       | Log risk management decision       |
+| `POST` | `/api/ailog?type=trade`      | Log trade execution decision       |
+| `POST` | `/api/ailog?type=volatility` | Log volatility guard action        |
+| `POST` | `/api/ailog?type=custom`     | Log custom AI decision             |
+
+**Note:** All AI logs are uploaded to WEEX's AiLog system for transparency and compliance.
 
 ---
 
@@ -537,7 +627,7 @@ RegimeGuard aligns with WEEX's philosophy:
 ## 👥 Team
 
 - **Santhosh Kumar** — Full-Stack Developer, AI/ML Engineer
-- **[Add Team Members]**
+- **Vairamuthu M**- Full-Stack Developer, Blockchain Engineer
 
 ---
 
@@ -550,7 +640,6 @@ MIT License - see [LICENSE](LICENSE) for details
 ## 🙏 Acknowledgments
 
 - **WEEX** — For hosting the AI Wars hackathon
-- **Protocol Labs** — Inspiration from MemCoord architecture patterns
 - **Open-Source Community** — TensorFlow.js, React Query, shadcn/ui
 
 ---
