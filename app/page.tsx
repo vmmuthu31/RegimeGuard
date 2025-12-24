@@ -14,6 +14,8 @@ import { FaRocket, FaChartLine, FaShieldHalved, FaBolt, FaTrophy } from "react-i
 import ShinyCard from "@/src/components/nurui/shiny-card";
 import DynamicCard from "@/src/components/nurui/dynamic-card";
 import NavbarFlow, { HoverLink, FeatureItem } from "@/src/components/ui/navbar-flow";
+import GradientButton from "@/src/components/nurui/gradient-button";
+import BorderAnimationButton from "@/src/components/nurui/border-button";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -129,11 +131,11 @@ const Navbar = () => {
 
   const rightComponent = (
     <div className="flex items-center gap-4">
-      <button className="relative overflow-hidden bg-gradient-to-r from-emerald-600 to-emerald-400 text-zinc-950 px-8 py-2.5 rounded-full font-bold hover:shadow-[0_0_20px_-5px_rgba(16,185,129,0.5)] transition-all duration-300 group hover:scale-105 active:scale-95">
-        <span className="relative z-10 flex items-center gap-2 text-sm">
-          Sign In
-        </span>
-      </button>
+      <GradientButton
+        text="Sign In"
+        className="h-10"
+        borderRadius={9999}
+      />
     </div>
   );
 
@@ -308,15 +310,17 @@ export default function LandingPage() {
               Institutional-grade AI trading that <span className="text-white font-medium">adapts to market conditions</span> in real-time. [cite_start]Maximize returns while protecting your capital with intelligent risk management. [cite: 8, 9]
             </p>
 
-            <div className="flex flex-wrap gap-4">
-              <button className="group relative px-8 py-4 bg-white text-zinc-950 font-bold rounded-xl overflow-hidden hover:scale-105 transition-transform shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]">
-                <span className="relative z-10 flex items-center gap-2">
-                  Start Trading <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </span>
-              </button>
-              <button className="px-8 py-4 bg-zinc-900/50 border border-white/10 text-white font-medium rounded-xl hover:bg-white/5 transition-all flex items-center gap-2 backdrop-blur-sm group">
-                <BarChart3 className="w-4 h-4 group-hover:text-emerald-400 transition-colors" /> View Performance
-              </button>
+            <div className="flex flex-wrap gap-6 items-center">
+              <GradientButton
+                text="Start Trading"
+                className="h-14 px-10 shadow-[0_0_40px_-10px_rgba(16,185,129,0.4)]"
+                borderRadius={9999}
+                duration={2000}
+              />
+              <BorderAnimationButton
+                text="View Performance"
+                onClick={() => document.getElementById('performance')?.scrollIntoView({ behavior: 'smooth' })}
+              />
             </div>
           </motion.div>
 
