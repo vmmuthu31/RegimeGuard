@@ -293,7 +293,7 @@ function generatePrivateSignature(
   secretKey: string,
   timestamp: string
 ): string {
-  const message = timestamp + "GET" + "/v2/ws/private";
+  const message = timestamp + "/v2/ws/private";
   return createHmac("sha256", secretKey).update(message).digest("base64");
 }
 
