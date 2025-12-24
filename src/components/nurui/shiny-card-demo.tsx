@@ -1,6 +1,6 @@
 import React from "react";
 import { FaRocket } from "react-icons/fa6";
-import ShinyCard from "@/components/nurui/shiny-card";
+import ShinyCard from "./shiny-card";
 
 export default function ShinyCardDemo() {
   return (
