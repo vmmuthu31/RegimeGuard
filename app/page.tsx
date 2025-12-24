@@ -17,6 +17,8 @@ import NavbarFlow, { HoverLink, FeatureItem } from "@/src/components/ui/navbar-f
 import GradientButton from "@/src/components/nurui/gradient-button";
 import BorderAnimationButton from "@/src/components/nurui/border-button";
 import { InfoCard } from "@/src/components/nurui/info-card";
+import { GlowCard } from "@/src/components/nurui/spotlight-card";
+import { RevealText } from "@/src/components/ui/reveal-text";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -299,16 +301,30 @@ export default function LandingPage() {
               LIVE ON WEEX • AI WARS 2024
             </div>
 
-            {/* Gradient Text Hero */}
+            {/* Reveal Text Hero */}
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.95] mb-8">
-              Trade Smarter <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 animate-gradient bg-[length:200%_auto]">
+              <RevealText
+                mode="auto"
+                stagger={0.15}
+                className="text-white"
+                boxClassName="bg-emerald-500"
+              >
+                Trade Smarter
+              </RevealText>
+              <br />
+              <RevealText
+                mode="auto"
+                stagger={0.15}
+                delay={0.4}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 animate-gradient bg-[length:200%_auto]"
+                boxClassName="bg-cyan-500"
+              >
                 With AI.
-              </span>
+              </RevealText>
             </h1>
 
             <p className="text-lg text-zinc-400 max-w-xl leading-relaxed mb-10">
-              Institutional-grade AI trading that <span className="text-white font-medium">adapts to market conditions</span> in real-time. [cite_start]Maximize returns while protecting your capital with intelligent risk management. [cite: 8, 9]
+              Institutional-grade AI trading that <span className="text-white font-medium">adapts to market conditions</span> in real-time. Maximize returns while protecting your capital with intelligent risk management.
             </p>
 
             <div className="flex flex-wrap gap-6 items-center">
@@ -491,28 +507,36 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 perspective-1000">
             {[
-              { icon: Brain, name: "Regime Agent", role: "Market Classification", color: "purple" },
-              { icon: Shield, name: "Risk Agent", role: "Exposure Control", color: "orange" },
-              { icon: Activity, name: "Volatility Agent", role: "Anomaly Detection", color: "red" },
-              { icon: Cpu, name: "Strategy Agent", role: "Signal Generation", color: "emerald" }
+              { icon: Brain, name: "Regime Agent", role: "Market Classification", color: "purple" as const },
+              { icon: Shield, name: "Risk Agent", role: "Exposure Control", color: "orange" as const },
+              { icon: Activity, name: "Volatility Agent", role: "Anomaly Detection", color: "red" as const },
+              { icon: Cpu, name: "Strategy Agent", role: "Signal Generation", color: "green" as const }
             ].map((agent, i) => (
               <motion.div
                 key={agent.name}
-                whileHover={{ y: -10, rotateX: 5, scale: 1.05 }}
-                className={`p-6 rounded-2xl bg-zinc-900/50 border border-white/10 relative overflow-hidden group`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="h-full group"
               >
-                <div className={`absolute top-0 right-0 p-32 bg-${agent.color}-500/10 rounded-full blur-2xl group-hover:bg-${agent.color}-500/20 transition-all`} />
-                <div className="relative z-10">
-                  <div className={`w-12 h-12 rounded-xl bg-${agent.color}-500/20 flex items-center justify-center mb-4 text-${agent.color}-400 border border-${agent.color}-500/30`}>
-                    <agent.icon className="w-6 h-6" />
+                <GlowCard
+                  glowColor={agent.color}
+                  customSize={true}
+                  className="w-full h-full min-h-[200px] bg-zinc-900/50 border-white/5 flex flex-col p-6"
+                >
+                  <div className="relative z-10">
+                    <div className={`w-12 h-12 rounded-xl bg-${agent.color === 'green' ? 'emerald' : agent.color}-500/20 flex items-center justify-center mb-4 text-${agent.color === 'green' ? 'emerald' : agent.color}-400 border border-${agent.color === 'green' ? 'emerald' : agent.color}-500/30 group-hover:scale-110 transition-transform`}>
+                      <agent.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-1">{agent.name}</h3>
+                    <p className="text-zinc-500 text-xs uppercase tracking-wider mb-3">{agent.role}</p>
+                    <div className="flex items-center gap-2">
+                      <span className={`w-1.5 h-1.5 rounded-full bg-${agent.color === 'green' ? 'emerald' : agent.color}-500 animate-pulse`} />
+                      <span className="text-xs text-zinc-400 font-mono text-center">ACTIVE</span>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-1">{agent.name}</h3>
-                  <p className="text-zinc-500 text-xs uppercase tracking-wider mb-3">{agent.role}</p>
-                  <div className="flex items-center gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full bg-${agent.color}-500 animate-pulse`} />
-                    <span className="text-xs text-zinc-400 font-mono">ACTIVE</span>
-                  </div>
-                </div>
+                </GlowCard>
               </motion.div>
             ))}
           </div>
