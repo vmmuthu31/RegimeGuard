@@ -26,6 +26,7 @@ export interface InfoCardProps {
   rtlFontFamily?: string;
   effectBgColor?: string;
   contentPadding?: string;
+  icon?: React.ReactNode;
 }
 
 export const InfoCard: React.FC<InfoCardProps> = ({
@@ -33,17 +34,18 @@ export const InfoCard: React.FC<InfoCardProps> = ({
   description,
   width = 388,
   height = 378,
-  borderColor = "#80eeb4",
-  borderBgColor = "#242424",
+  borderColor = "#10b981",
+  borderBgColor = "rgba(16, 185, 129, 0.2)",
   borderWidth = 3,
   borderPadding = 14,
-  cardBgColor = "#000",
-  textColor = "#f5f5f5",
-  hoverTextColor = "#242424",
+  cardBgColor = "#09090b",
+  textColor = "#ffffff",
+  hoverTextColor = "#09090b",
   fontFamily = "'Roboto Mono', monospace",
   rtlFontFamily = "'Montserrat', sans-serif",
-  effectBgColor = "#80eeb4",
+  effectBgColor = "#10b981",
   contentPadding = "10px 16px",
+  icon,
 }) => {
   const [hovered, setHovered] = useState(false);
   const borderRef = useRef<HTMLDivElement>(null);
@@ -142,6 +144,7 @@ export const InfoCard: React.FC<InfoCardProps> = ({
               height: "100%",
             }}
           >
+            {icon && <span className="mr-2 inline-flex items-center">{icon}</span>}
             {title}
           </span>
           <span

@@ -16,6 +16,7 @@ import DynamicCard from "@/src/components/nurui/dynamic-card";
 import NavbarFlow, { HoverLink, FeatureItem } from "@/src/components/ui/navbar-flow";
 import GradientButton from "@/src/components/nurui/gradient-button";
 import BorderAnimationButton from "@/src/components/nurui/border-button";
+import { InfoCard } from "@/src/components/nurui/info-card";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -338,19 +339,26 @@ export default function LandingPage() {
       </section>
 
       {/* --- STATS TICKER (Bloomberg / High-Freq Style) --- */}
-      <section className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-6">
           {[
-            { label: "CURRENT REGIME", value: "TRENDING", icon: TrendingUp, color: "text-emerald-400" },
-            { label: "RISK EXPOSURE", value: "35%", icon: Activity, color: "text-yellow-400" },
-            { label: "DRAWDOWN PROT.", value: "ACTIVE", icon: Shield, color: "text-emerald-400" },
-            { label: "API LATENCY", value: "24ms", icon: Zap, color: "text-blue-400" }
+            { label: "CURRENT REGIME", value: "TRENDING_UP", icon: TrendingUp, color: "#10b981", desc: "Market bias detected" },
+            { label: "RISK EXPOSURE", value: "35%", icon: Activity, color: "#eab308", desc: "Capital utilization" },
+            { label: "DRAWDOWN PROT.", value: "ACTIVE", icon: Shield, color: "#10b981", desc: "Guardians engaged" },
+            { label: "API LATENCY", value: "24ms", icon: Zap, color: "#3b82f6", desc: "Ultra-low response" }
           ].map((stat, i) => (
-            <div key={i} className="flex flex-col items-center md:items-start border-r border-white/5 last:border-0 hover:bg-white/5 transition-colors p-4 rounded-lg cursor-default group">
-              <div className="text-zinc-500 text-[10px] font-mono mb-1 tracking-widest group-hover:text-white transition-colors">{stat.label}</div>
-              <div className={`text-xl font-bold ${stat.color} flex items-center gap-2`}>
-                <stat.icon className="w-4 h-4" /> {stat.value}
-              </div>
+            <div key={i} className="flex-1 min-w-[240px] max-w-[280px]">
+              <InfoCard
+                title={stat.value}
+                description={stat.label}
+                width={280}
+                height={160}
+                borderColor={stat.color}
+                borderBgColor={`${stat.color}33`}
+                effectBgColor={`${stat.color}66`}
+                icon={<stat.icon className="w-5 h-5" />}
+                contentPadding="12px 14px"
+              />
             </div>
           ))}
         </div>
@@ -553,20 +561,24 @@ export default function LandingPage() {
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative">
             {[
-              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", color: "blue" },
-              { icon: Brain, label: "Regime AI", desc: "Classification", color: "purple" },
-              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", color: "orange" },
-              { icon: Zap, label: "Execution", desc: "Trade Signals", color: "emerald" }
+              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", color: "#3b82f6", info: "Real-time ingestion" },
+              { icon: Brain, label: "Regime AI", desc: "Classification", color: "#a855f7", info: "Pattern recognition" },
+              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", color: "#f97316", info: "Capital protection" },
+              { icon: Zap, label: "Execution", desc: "Trade Signals", color: "#10b981", info: "Ultra-fast orders" }
             ].map((step, index) => (
               <React.Fragment key={step.label}>
-                <div className="relative z-10 flex flex-col items-center gap-3 p-6 rounded-2xl bg-zinc-900 border border-white/10 hover:border-emerald-500/50 hover:shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)] transition-all group w-full md:w-56">
-                  <div className={`w-14 h-14 rounded-xl bg-${step.color}-500/10 flex items-center justify-center text-${step.color}-400 border border-${step.color}-500/20 group-hover:scale-110 transition-transform`}>
-                    <step.icon className="w-7 h-7" />
-                  </div>
-                  <div className="text-center">
-                    <span className="block text-white font-bold mb-1">{step.label}</span>
-                    <span className="block text-zinc-500 text-xs font-mono">{step.desc}</span>
-                  </div>
+                <div className="relative z-10 w-full md:w-64">
+                  <InfoCard
+                    title={step.label}
+                    description={step.desc}
+                    width={256}
+                    height={220}
+                    borderColor={step.color}
+                    borderBgColor={`${step.color}22`}
+                    effectBgColor={`${step.color}44`}
+                    icon={<step.icon className="w-6 h-6" />}
+                    contentPadding="16px"
+                  />
                 </div>
                 {index < 3 && <AnimatedBeam delay={index * 0.5} />}
                 {index < 3 && <div className="md:hidden h-12 w-px bg-zinc-800" />}
