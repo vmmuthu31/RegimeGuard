@@ -157,6 +157,12 @@ export interface SystemStatus {
   lastUpdated: number;
 }
 
+export interface WeexConfig {
+  apiKey: string;
+  secretKey: string;
+  passphrase: string;
+}
+
 export {
   RegimeType,
   RiskLevel,

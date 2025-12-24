@@ -12,13 +12,8 @@ import type {
   AccountBalance,
   Position,
   Candle,
+  WeexConfig,
 } from "@/shared/types";
-
-interface WeexConfig {
-  apiKey: string;
-  secretKey: string;
-  passphrase: string;
-}
 
 function generateSignature(
   secretKey: string,
