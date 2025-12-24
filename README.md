@@ -250,12 +250,14 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 **NOT Used For:** Price prediction or Elliott Wave analysis. We use Fibonacci as mathematical support/resistance zones only.
 
 **Features:**
+
 - Automatic calculation of 7 standard levels (0%, 23.6%, 38.2%, 50%, 61.8%, 78.6%, 100%)
 - Computed from recent swing highs and lows
 - **+15% confidence boost** when price is within 0.5% of key levels
 - Take-profit targets automatically set to next Fibonacci level
 
 **Example:**
+
 ```typescript
 // Price at $95,000 near 61.8% Fibonacci level
 // → High-confidence mean reversion setup
@@ -267,11 +269,13 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 **Purpose:** Mathematical peak/valley detection for improved trend identification.
 
 **Algorithm:**
+
 - Scans price action with configurable lookback (default: 5 candles)
 - Identifies local highs and lows that are higher/lower than all neighbors
 - Calculates "strength" score based on prominence
 
 **Benefits:**
+
 - More accurate regime classification
 - Automatic support/resistance zone clustering
 - Better trend reversal detection
@@ -281,6 +285,7 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 **Component:** `<TradingChart />`
 
 **Features:**
+
 - ✅ Real-time candlestick rendering
 - ✅ Fibonacci level overlays (amber dashed lines)
 - ✅ Support zones (green lines)
@@ -291,6 +296,7 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 - ✅ Regime classification badge with confidence
 
 **Why This Matters:**
+
 - **Transparency:** Judges can visually verify AI decisions
 - **Auditability:** Every signal is explainable with chart context
 - **Professional:** Institutional-grade presentation
@@ -300,6 +306,7 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 **Component:** `<SignalConfidence />`
 
 **Features:**
+
 - Overall confidence meter with color-coded thresholds
 - Market regime context display
 - Technical indicator breakdown (RSI, Trend Strength, Momentum)
@@ -309,11 +316,13 @@ RegimeGuard includes advanced technical analysis features that strengthen signal
 - AI explanation in plain English
 
 **Confidence Tiers:**
+
 - **High (80%+):** Green badge → Full position size
 - **Medium (60-79%):** Yellow badge → Reduced position size
 - **Low (<60%):** Red badge → Skip trade
 
 **Example Signal Breakdown:**
+
 ```
 Overall Confidence: 87.5%
 
@@ -339,6 +348,7 @@ Candles → Technical Indicators + Fibonacci + Swing Points
 ```
 
 **System Performance:**
+
 - Signal confidence: 60-90%
 - Trade reasoning: 10+ decision factors per signal
 - Expected success rate: 65-70%
@@ -664,22 +674,22 @@ RegimeGuard aligns with WEEX's philosophy:
 
 ## 📊 Project Status
 
-| Component                      | Status      |
-| ------------------------------ | ----------- |
-| WEEX API Integration           | ✅ Complete |
-| Market Regime Classifier       | ✅ Complete |
-| Risk Control Engine            | ✅ Complete |
-| Volatility Guard               | ✅ Complete |
-| **Multi-Agent AI System**      | ✅ Complete |
-| Trend Following Strategy       | ✅ Complete |
-| Mean Reversion Strategy        | ✅ Complete |
-| Fibonacci Analysis             | ✅ Complete |
-| Swing Point Detection          | ✅ Complete |
+| Component                       | Status      |
+| ------------------------------- | ----------- |
+| WEEX API Integration            | ✅ Complete |
+| Market Regime Classifier        | ✅ Complete |
+| Risk Control Engine             | ✅ Complete |
+| Volatility Guard                | ✅ Complete |
+| **Multi-Agent AI System**       | ✅ Complete |
+| Trend Following Strategy        | ✅ Complete |
+| Mean Reversion Strategy         | ✅ Complete |
+| Fibonacci Analysis              | ✅ Complete |
+| Swing Point Detection           | ✅ Complete |
 | Interactive Chart Visualization | ✅ Complete |
-| Enhanced Confidence Scoring    | ✅ Complete |
-| Dashboard UI                   | ✅ Complete |
-| Backtesting Framework          | 📋 Planned  |
-| Documentation                  | ✅ Complete |
+| Enhanced Confidence Scoring     | ✅ Complete |
+| Dashboard UI                    | ✅ Complete |
+| Backtesting Framework           | 📋 Planned  |
+| Documentation                   | ✅ Complete |
 
 ---
 
