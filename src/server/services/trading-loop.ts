@@ -2,6 +2,10 @@ import {
   type TradingPair,
   StopLossAdjustment,
   RiskLevel,
+  OrderSide,
+  PositionSide,
+  StrategyType,
+  RegimeType,
 } from "@/shared/constants";
 import { getWeexConfig } from "@/server/config";
 import { getCandles, getTicker } from "@/server/services/weex-client";
@@ -21,6 +25,11 @@ import {
   generateTradeExplanation,
   isGroqAvailable,
 } from "@/server/services/groq-ai";
+import {
+  createTrade,
+  logAiDecision,
+  isSupabaseConfigured,
+} from "@/server/services/database";
 import type { TradingDecision, TradeSignal } from "@/shared/types";
 
 interface TradingLoopConfig {
@@ -222,6 +231,41 @@ export async function runSingleCycle(): Promise<{
           explanation
         );
         await uploadAiLog(config, tradeLog).catch(() => {});
+
+        if (isSupabaseConfigured()) {
+          await createTrade({
+            userId: "system",
+            symbol,
+            side: signal.side === "BUY" ? OrderSide.BUY : OrderSide.SELL,
+            positionSide:
+              signal.side === "BUY" ? PositionSide.LONG : PositionSide.SHORT,
+            strategy: signal.strategy as StrategyType,
+            regime: decision.regime.regime as RegimeType,
+            entryPrice: signal.entryPrice,
+            size: signal.size,
+            leverage: 5,
+            stopLoss: signal.stopLoss,
+            takeProfit: signal.takeProfit,
+            confidence: signal.confidence,
+            explanation,
+            orderId: orderResult.orderId,
+          }).catch(() => {});
+
+          await logAiDecision({
+            userId: "system",
+            symbol,
+            type: "TRADE",
+            regime: decision.regime.regime as RegimeType,
+            confidence: decision.regime.confidence,
+            riskLevel: decision.riskApproved ? RiskLevel.LOW : RiskLevel.HIGH,
+            decision: {
+              action: decision.action,
+              signal: signal,
+            },
+            explanation,
+            indicators: decision.indicators,
+          }).catch(() => {});
+        }
       }
     } catch (err) {
       errors.push(
