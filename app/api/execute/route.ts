@@ -5,6 +5,10 @@ import {
   TradingPair,
   StopLossAdjustment,
   RiskLevel,
+  OrderSide,
+  PositionSide,
+  StrategyType,
+  RegimeType,
 } from "@/shared/constants";
 import { getCandles, getTicker } from "@/server/services/weex-client";
 import {
@@ -24,6 +28,11 @@ import {
   generateTradeExplanation,
   isGroqAvailable,
 } from "@/server/services/groq-ai";
+import {
+  createTrade,
+  logAiDecision,
+  isSupabaseConfigured,
+} from "@/server/services/database";
 import type { TradeSignal } from "@/shared/types";
 
 interface ExecutionResult {
@@ -226,6 +235,43 @@ export async function POST(request: Request) {
             );
             await uploadAiLog(config, tradeLog);
             aiLogs.tradeLog = true;
+
+            if (isSupabaseConfigured()) {
+              const userId = body.userId || "anonymous";
+              await createTrade({
+                userId,
+                symbol,
+                side: signal.side === "BUY" ? OrderSide.BUY : OrderSide.SELL,
+                positionSide:
+                  signal.side === "BUY"
+                    ? PositionSide.LONG
+                    : PositionSide.SHORT,
+                strategy: signal.strategy as StrategyType,
+                regime: decision.regime.regime as RegimeType,
+                entryPrice: signal.entryPrice,
+                size: signal.size,
+                leverage: 5,
+                stopLoss: signal.stopLoss,
+                takeProfit: signal.takeProfit,
+                confidence: signal.confidence,
+                explanation,
+                orderId: orderResult.orderId,
+              }).catch(() => {});
+
+              await logAiDecision({
+                userId,
+                symbol,
+                type: "TRADE",
+                regime: decision.regime.regime as RegimeType,
+                confidence: decision.regime.confidence,
+                riskLevel: decision.riskApproved
+                  ? RiskLevel.LOW
+                  : RiskLevel.HIGH,
+                decision: { action: decision.action, signal },
+                explanation,
+                indicators: decision.indicators,
+              }).catch(() => {});
+            }
           } catch {}
         } catch (err) {
           execution.error =
