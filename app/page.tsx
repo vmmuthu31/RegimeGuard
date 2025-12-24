@@ -13,6 +13,7 @@ import { twMerge } from "tailwind-merge";
 import { FaRocket, FaChartLine, FaShieldHalved, FaBolt, FaTrophy } from "react-icons/fa6";
 import ShinyCard from "@/src/components/nurui/shiny-card";
 import DynamicCard from "@/src/components/nurui/dynamic-card";
+import NavbarFlow, { HoverLink, FeatureItem } from "@/src/components/ui/navbar-flow";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -113,42 +114,75 @@ const AnimatedIcon = ({ icon: Icon, className }: { icon: any, className?: string
 
 // --- 3. SUB-COMPONENTS ---
 
-const Navbar = () => (
-  <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-zinc-950/70 backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/50">
-    <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <div className="flex items-center gap-3 group cursor-pointer">
-        <div className="relative w-10 h-10 flex items-center justify-center overflow-hidden rounded-xl bg-zinc-900 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
-          <div className="absolute inset-0 bg-emerald-500/20 blur-lg group-hover:bg-emerald-500/30 transition-all" />
-          <img src="/logo.png" alt="RegimeGuard" className="w-8 h-8 relative z-10 object-contain" />
-        </div>
-        <span className="font-bold text-xl tracking-tight text-white group-hover:text-emerald-50 transition-colors">
-          Regime<span className="text-emerald-400">Guard</span>
-        </span>
+const Navbar = () => {
+  const emblem = (
+    <div className="flex items-center gap-2 group cursor-pointer">
+      <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-lg bg-zinc-900 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
+        <div className="absolute inset-0 bg-emerald-500/20 blur-lg" />
+        <img src="/logo.png" alt="RegimeGuard" className="w-6 h-6 relative z-10 object-contain" />
       </div>
-
-      <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-        {['Features', 'Performance', 'Security', 'Markets'].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-emerald-400 transition-colors relative group">
-            {item}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 transition-all group-hover:w-full" />
-          </a>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-4">
-        <button className="hidden md:block text-zinc-400 hover:text-white transition-colors text-sm font-medium">
-          Sign In
-        </button>
-        <button className="relative overflow-hidden bg-gradient-to-r from-emerald-600 to-emerald-400 text-zinc-950 px-6 py-2.5 rounded-lg font-bold hover:shadow-[0_0_20px_-5px_rgba(16,185,129,0.5)] transition-all duration-300 group hover:scale-105">
-          <span className="relative z-10 flex items-center gap-2">
-            Start Trading <ArrowRight className="w-4 h-4" />
-          </span>
-          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-        </button>
-      </div>
+      <span className="font-bold text-lg tracking-tight text-white hidden sm:block">
+        Regime<span className="text-emerald-400">Guard</span>
+      </span>
     </div>
-  </nav>
-);
+  );
+
+  const rightComponent = (
+    <div className="flex items-center gap-4">
+      <button className="relative overflow-hidden bg-gradient-to-r from-emerald-600 to-emerald-400 text-zinc-950 px-8 py-2.5 rounded-full font-bold hover:shadow-[0_0_20px_-5px_rgba(16,185,129,0.5)] transition-all duration-300 group hover:scale-105 active:scale-95">
+        <span className="relative z-10 flex items-center gap-2 text-sm">
+          Sign In
+        </span>
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-50 dark">
+      <NavbarFlow
+        emblem={emblem}
+        rightComponent={rightComponent}
+        links={[
+          {
+            text: "Features",
+            submenu: (
+              <div className="flex flex-col space-y-2">
+                <HoverLink url="#features">Architecture</HoverLink>
+                <HoverLink url="#security">Security Protocol</HoverLink>
+                <HoverLink url="#performance">Performance Metrics</HoverLink>
+                <HoverLink url="#markets">Available Markets</HoverLink>
+              </div>
+            ),
+          },
+          {
+            text: "System",
+            submenu: (
+              <div className="grid grid-cols-1 gap-2 w-64">
+                <FeatureItem
+                  heading="AI Engine"
+                  url="#"
+                  info="Multi-agent system with explainable decision logs."
+                />
+                <FeatureItem
+                  heading="Risk Adapter"
+                  url="#"
+                  info="Real-time volatility tracking and capital preservation."
+                />
+                <FeatureItem
+                  heading="Execution"
+                  url="#"
+                  info="Optimized for WEEX v2 API with ultra-low latency."
+                />
+              </div>
+            ),
+          },
+          { text: "Performance", url: "#performance" },
+          { text: "About", url: "#" },
+        ]}
+      />
+    </div>
+  );
+};
 
 const HeroTerminal = () => {
   // Use state to stage the animations so it feels like a real boot sequence
