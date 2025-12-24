@@ -743,9 +743,6 @@ RegimeGuard aligns with WEEX's philosophy:
 - ✅ Visual chart overlays (Fibonacci, support/resistance, signals)
 - ✅ Explainable AI decisions with comprehensive reasoning
 - ✅ Support/resistance zone clustering
-
-### Phase 1.5: Production Automation ✅ COMPLETE (NEW)
-
 - ✅ TypeScript enums for all constants (type-safe codebase)
 - ✅ Automated trading loop (`/api/loop`) with configurable intervals
 - ✅ Full pipeline execution endpoint (`/api/execute`)
