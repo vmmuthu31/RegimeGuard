@@ -39,3 +39,5 @@ export * from "./services/volatility-guard";
 export * from "./services/strategy-executor";
 export * from "./services/groq-ai";
 export * from "./services/trading-loop";
+export * from "./services/weex-websocket";
+export * from "./services/database";

@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { getWeexConfig } from "@/server/config";
-import { TRADING_PAIRS, TradingPair } from "@/shared/constants";
+import {
+  TRADING_PAIRS,
+  TradingPair,
+  StopLossAdjustment,
+  RiskLevel,
+  OrderSide,
+  PositionSide,
+  StrategyType,
+  RegimeType,
+} from "@/shared/constants";
 import { getCandles, getTicker } from "@/server/services/weex-client";
 import {
   getAccountAssets,
@@ -19,6 +28,11 @@ import {
   generateTradeExplanation,
   isGroqAvailable,
 } from "@/server/services/groq-ai";
+import {
+  createTrade,
+  logAiDecision,
+  isSupabaseConfigured,
+} from "@/server/services/database";
 import type { TradeSignal } from "@/shared/types";
 
 interface ExecutionResult {
@@ -87,19 +101,11 @@ export async function POST(request: Request) {
         symbol,
         currentPrice,
         regime: decision.regime,
-        indicators: {
-          atr: 0,
-          ema9: 0,
-          ema21: 0,
-          rsi: 50,
-          volatility: decision.regime.features.volatility,
-          momentum: decision.regime.features.momentum,
-          trendStrength: decision.regime.features.trendStrength,
-        },
+        indicators: decision.indicators,
         volatilityStatus: {
           spikeDetected: !decision.volatilityOk,
           anomalyDetected: false,
-          currentVolatility: decision.regime.features.volatility,
+          currentVolatility: decision.indicators.volatility,
         },
       });
     }
@@ -111,12 +117,12 @@ export async function POST(request: Request) {
         null,
         {
           symbol,
-          rsi: 50,
-          ema9: currentPrice,
-          ema21: currentPrice,
-          atr: currentPrice * 0.02,
-          volatility: decision.regime.features.volatility,
-          momentum: decision.regime.features.momentum,
+          rsi: decision.indicators.rsi,
+          ema9: decision.indicators.ema9,
+          ema21: decision.indicators.ema21,
+          atr: decision.indicators.atr,
+          volatility: decision.indicators.volatility,
+          momentum: decision.indicators.momentum,
         },
         {
           regime: decision.regime.regime,
@@ -136,7 +142,7 @@ export async function POST(request: Request) {
           symbol,
           regime: decision.regime.regime,
           regimeConfidence: decision.regime.confidence,
-          currentVolatility: decision.regime.features.volatility,
+          currentVolatility: decision.indicators.volatility,
           recentDrawdown: 0,
           dailyLossPercent: 0,
         },
@@ -194,10 +200,10 @@ export async function POST(request: Request) {
               regime: decision.regime,
               riskDecision: {
                 positionSizeMultiplier: 1,
-                stopLossAdjustment: "NORMAL",
+                stopLossAdjustment: StopLossAdjustment.NORMAL,
                 tradeCooldownActive: false,
                 tradeSuspended: false,
-                riskLevel: "LOW",
+                riskLevel: RiskLevel.LOW,
                 explanation: "",
                 timestamp: Date.now(),
               },
@@ -213,9 +219,9 @@ export async function POST(request: Request) {
                 strategy: signal.strategy,
                 entryPrice: signal.entryPrice,
                 indicators: {
-                  rsi: 50,
-                  ema9: currentPrice,
-                  ema21: currentPrice,
+                  rsi: decision.indicators.rsi,
+                  ema9: decision.indicators.ema9,
+                  ema21: decision.indicators.ema21,
                 },
               },
               {
@@ -229,6 +235,43 @@ export async function POST(request: Request) {
             );
             await uploadAiLog(config, tradeLog);
             aiLogs.tradeLog = true;
+
+            if (isSupabaseConfigured()) {
+              const userId = body.userId || "anonymous";
+              await createTrade({
+                userId,
+                symbol,
+                side: signal.side === "BUY" ? OrderSide.BUY : OrderSide.SELL,
+                positionSide:
+                  signal.side === "BUY"
+                    ? PositionSide.LONG
+                    : PositionSide.SHORT,
+                strategy: signal.strategy as StrategyType,
+                regime: decision.regime.regime as RegimeType,
+                entryPrice: signal.entryPrice,
+                size: signal.size,
+                leverage: 5,
+                stopLoss: signal.stopLoss,
+                takeProfit: signal.takeProfit,
+                confidence: signal.confidence,
+                explanation,
+                orderId: orderResult.orderId,
+              }).catch(() => {});
+
+              await logAiDecision({
+                userId,
+                symbol,
+                type: "TRADE",
+                regime: decision.regime.regime as RegimeType,
+                confidence: decision.regime.confidence,
+                riskLevel: decision.riskApproved
+                  ? RiskLevel.LOW
+                  : RiskLevel.HIGH,
+                decision: { action: decision.action, signal },
+                explanation,
+                indicators: decision.indicators,
+              }).catch(() => {});
+            }
           } catch {}
         } catch (err) {
           execution.error =

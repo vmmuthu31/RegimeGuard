@@ -1,8 +1,4 @@
-import {
-  REGIME_TYPES,
-  DEFAULT_RISK_PARAMS,
-  type RegimeType,
-} from "@/shared/constants";
+import { DEFAULT_RISK_PARAMS, RegimeType } from "@/shared/constants";
 import type {
   RegimeClassification,
   Candle,
@@ -99,7 +95,7 @@ function classifyRegimeFromIndicators(indicators: TechnicalIndicators): {
 
   if (volatility > volatilityThreshold * 1.5) {
     const confidence = Math.min(0.5 + volatility * 5, 0.95);
-    return { regime: REGIME_TYPES.HIGH_VOLATILITY, confidence };
+    return { regime: RegimeType.HIGH_VOLATILITY, confidence };
   }
 
   const isTrending = trendStrength > 0.3 && Math.abs(momentum) > 0.01;
@@ -107,7 +103,7 @@ function classifyRegimeFromIndicators(indicators: TechnicalIndicators): {
 
   if (isTrending && !isOverboughtOversold) {
     const confidence = Math.min(0.5 + trendStrength * 0.4, 0.9);
-    return { regime: REGIME_TYPES.TRENDING, confidence };
+    return { regime: RegimeType.TRENDING, confidence };
   }
 
   if (!isTrending && volatility < volatilityThreshold) {
@@ -116,14 +112,14 @@ function classifyRegimeFromIndicators(indicators: TechnicalIndicators): {
       0.5 + (1 - trendStrength) * 0.3 + meanReversionSignal,
       0.85
     );
-    return { regime: REGIME_TYPES.RANGE_BOUND, confidence };
+    return { regime: RegimeType.RANGE_BOUND, confidence };
   }
 
   if (trendStrength > 0.2) {
-    return { regime: REGIME_TYPES.TRENDING, confidence: 0.55 };
+    return { regime: RegimeType.TRENDING, confidence: 0.55 };
   }
 
-  return { regime: REGIME_TYPES.RANGE_BOUND, confidence: 0.5 };
+  return { regime: RegimeType.RANGE_BOUND, confidence: 0.5 };
 }
 
 export function classifyMarketRegime(candles: Candle[]): RegimeClassification {

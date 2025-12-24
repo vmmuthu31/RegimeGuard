@@ -87,5 +87,14 @@ export interface TradingDecision {
     volatility: string;
     strategy: string;
   };
+  indicators: {
+    atr: number;
+    ema9: number;
+    ema21: number;
+    rsi: number;
+    volatility: number;
+    momentum: number;
+    trendStrength: number;
+  };
   timestamp: number;
 }

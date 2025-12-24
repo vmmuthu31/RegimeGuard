@@ -1,4 +1,14 @@
-import { RegimeType, RiskLevel, StrategyType, TradingPair } from "../constants";
+import {
+  RegimeType,
+  RiskLevel,
+  StrategyType,
+  OrderSide,
+  PositionSide,
+  MarginMode,
+  StopLossAdjustment,
+  TradingAction,
+} from "../constants/enums";
+import type { TradingPair } from "../constants";
 
 export interface MarketData {
   symbol: TradingPair;
@@ -63,7 +73,7 @@ export interface RegimeClassification {
 
 export interface RiskDecision {
   positionSizeMultiplier: number;
-  stopLossAdjustment: "NORMAL" | "TIGHTENED" | "WIDENED";
+  stopLossAdjustment: StopLossAdjustment;
   tradeCooldownActive: boolean;
   tradeSuspended: boolean;
   riskLevel: RiskLevel;
@@ -82,7 +92,7 @@ export interface VolatilityGuardStatus {
 
 export interface TradeSignal {
   symbol: TradingPair;
-  side: "BUY" | "SELL";
+  side: OrderSide;
   strategy: StrategyType;
   entryPrice: number;
   stopLoss: number;
@@ -104,13 +114,13 @@ export interface TradeSignal {
 
 export interface Position {
   symbol: TradingPair;
-  side: "LONG" | "SHORT";
+  side: PositionSide;
   size: number;
   entryPrice: number;
   markPrice: number;
   unrealizedPnl: number;
   leverage: number;
-  marginMode: "CROSS" | "ISOLATED";
+  marginMode: MarginMode;
   liquidationPrice: number;
   timestamp: number;
 }
@@ -118,7 +128,7 @@ export interface Position {
 export interface Trade {
   id: string;
   symbol: TradingPair;
-  side: "BUY" | "SELL";
+  side: OrderSide;
   price: number;
   size: number;
   fee: number;
@@ -146,3 +156,20 @@ export interface SystemStatus {
   accountBalance: AccountBalance | null;
   lastUpdated: number;
 }
+
+export interface WeexConfig {
+  apiKey: string;
+  secretKey: string;
+  passphrase: string;
+}
+
+export {
+  RegimeType,
+  RiskLevel,
+  StrategyType,
+  OrderSide,
+  PositionSide,
+  MarginMode,
+  StopLossAdjustment,
+  TradingAction,
+};

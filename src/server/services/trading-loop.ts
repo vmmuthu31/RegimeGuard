@@ -1,4 +1,12 @@
-import type { TradingPair } from "@/shared/constants";
+import {
+  type TradingPair,
+  StopLossAdjustment,
+  RiskLevel,
+  OrderSide,
+  PositionSide,
+  StrategyType,
+  RegimeType,
+} from "@/shared/constants";
 import { getWeexConfig } from "@/server/config";
 import { getCandles, getTicker } from "@/server/services/weex-client";
 import {
@@ -17,6 +25,11 @@ import {
   generateTradeExplanation,
   isGroqAvailable,
 } from "@/server/services/groq-ai";
+import {
+  createTrade,
+  logAiDecision,
+  isSupabaseConfigured,
+} from "@/server/services/database";
 import type { TradingDecision, TradeSignal } from "@/shared/types";
 
 interface TradingLoopConfig {
@@ -185,10 +198,10 @@ export async function runSingleCycle(): Promise<{
             regime: decision.regime,
             riskDecision: {
               positionSizeMultiplier: 1,
-              stopLossAdjustment: "NORMAL",
+              stopLossAdjustment: StopLossAdjustment.NORMAL,
               tradeCooldownActive: false,
               tradeSuspended: false,
-              riskLevel: "LOW",
+              riskLevel: RiskLevel.LOW,
               explanation: "",
               timestamp: Date.now(),
             },
@@ -202,7 +215,11 @@ export async function runSingleCycle(): Promise<{
             regime: decision.regime.regime,
             strategy: signal.strategy,
             entryPrice: signal.entryPrice,
-            indicators: { rsi: 50, ema9: currentPrice, ema21: currentPrice },
+            indicators: {
+              rsi: decision.indicators.rsi,
+              ema9: decision.indicators.ema9,
+              ema21: decision.indicators.ema21,
+            },
           },
           {
             side: signal.side,
@@ -214,6 +231,41 @@ export async function runSingleCycle(): Promise<{
           explanation
         );
         await uploadAiLog(config, tradeLog).catch(() => {});
+
+        if (isSupabaseConfigured()) {
+          await createTrade({
+            userId: "system",
+            symbol,
+            side: signal.side === "BUY" ? OrderSide.BUY : OrderSide.SELL,
+            positionSide:
+              signal.side === "BUY" ? PositionSide.LONG : PositionSide.SHORT,
+            strategy: signal.strategy as StrategyType,
+            regime: decision.regime.regime as RegimeType,
+            entryPrice: signal.entryPrice,
+            size: signal.size,
+            leverage: 5,
+            stopLoss: signal.stopLoss,
+            takeProfit: signal.takeProfit,
+            confidence: signal.confidence,
+            explanation,
+            orderId: orderResult.orderId,
+          }).catch(() => {});
+
+          await logAiDecision({
+            userId: "system",
+            symbol,
+            type: "TRADE",
+            regime: decision.regime.regime as RegimeType,
+            confidence: decision.regime.confidence,
+            riskLevel: decision.riskApproved ? RiskLevel.LOW : RiskLevel.HIGH,
+            decision: {
+              action: decision.action,
+              signal: signal,
+            },
+            explanation,
+            indicators: decision.indicators,
+          }).catch(() => {});
+        }
       }
     } catch (err) {
       errors.push(

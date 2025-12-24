@@ -4,19 +4,16 @@ import {
   TradingPair,
   ORDER_SIDES,
   ORDER_TYPES,
+  PositionSide,
+  MarginMode,
 } from "@/shared/constants";
 import type {
   MarketData,
   AccountBalance,
   Position,
   Candle,
+  WeexConfig,
 } from "@/shared/types";
-
-interface WeexConfig {
-  apiKey: string;
-  secretKey: string;
-  passphrase: string;
-}
 
 function generateSignature(
   secretKey: string,
@@ -224,13 +221,14 @@ export async function getPositions(
 
   return data.map((item) => ({
     symbol: item.symbol as TradingPair,
-    side: item.positionSide as "LONG" | "SHORT",
+    side: item.positionSide === "LONG" ? PositionSide.LONG : PositionSide.SHORT,
     size: parseFloat(item.positionAmt),
     entryPrice: parseFloat(item.avgEntryPrice),
     markPrice: parseFloat(item.markPrice),
     unrealizedPnl: parseFloat(item.unrealizePnl),
     leverage: parseFloat(item.leverage),
-    marginMode: item.marginMode as "CROSS" | "ISOLATED",
+    marginMode:
+      item.marginMode === "CROSS" ? MarginMode.CROSS : MarginMode.ISOLATED,
     liquidationPrice: parseFloat(item.liquidationPrice),
     timestamp: parseInt(item.timestamp),
   }));
