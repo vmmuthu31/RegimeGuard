@@ -17,7 +17,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#22c55e",
-          logo: "/banner.jpeg",
+          logo: "/logo.png",
         },
         loginMethods: ["wallet", "email"],
         embeddedWallets: {
