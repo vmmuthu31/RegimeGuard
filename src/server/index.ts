@@ -38,3 +38,4 @@ export * from "./services/risk-engine";
 export * from "./services/volatility-guard";
 export * from "./services/strategy-executor";
 export * from "./services/groq-ai";
+export * from "./services/trading-loop";
