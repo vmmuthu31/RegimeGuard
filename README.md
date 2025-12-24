@@ -557,9 +557,9 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 📞 Contact & Support
 
-- **GitHub Issues:** [Report bugs or request features](https://github.com/yourusername/regimeguard/issues)
+- **GitHub Issues:** [Report bugs or request features](https://github.com/vmmuthu31/RegimeGuard/issues)
 - **Telegram:** [Join WEEX AI Wars support group](https://t.me/weex_support)
-- **Email:** your.email@example.com
+- **Email:** mvairamuthu2003@gmail.com
 
 ---
 
