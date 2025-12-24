@@ -31,6 +31,23 @@ export interface TechnicalIndicators {
   volatility: number;
   momentum: number;
   trendStrength: number;
+  vwap?: number;
+  fibonacciLevels?: {
+    high: number;
+    low: number;
+    levels: Array<{ level: number; price: number; label: string }>;
+  };
+  swingPoints?: Array<{
+    index: number;
+    timestamp: number;
+    price: number;
+    type: "high" | "low";
+    strength: number;
+  }>;
+  supportResistance?: {
+    support: number[];
+    resistance: number[];
+  };
 }
 
 export interface RegimeClassification {
@@ -73,6 +90,16 @@ export interface TradeSignal {
   size: number;
   confidence: number;
   timestamp: number;
+  reasons?: string[];
+  fibonacciContext?: {
+    nearestLevel: string;
+    distance: number;
+  };
+  technicalContext?: {
+    rsi: number;
+    trendStrength: number;
+    momentum: number;
+  };
 }
 
 export interface Position {

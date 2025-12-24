@@ -13,6 +13,9 @@ import {
   calculateEMA,
   calculateRSI,
   calculateVolatility,
+  calculateFibonacciLevels,
+  detectSwingPoints,
+  calculateSupportResistance,
 } from "@/shared/utils";
 
 export function computeTechnicalIndicators(
@@ -47,6 +50,31 @@ export function computeTechnicalIndicators(
   const emaDiff = (ema9 - ema21) / ema21;
   const trendStrength = Math.abs(emaDiff) * 10;
 
+  const vwap =
+    candles.reduce((sum, c) => sum + c.close * c.volume, 0) /
+    candles.reduce((sum, c) => sum + c.volume, 0);
+
+  const swingPoints = detectSwingPoints(candles, 5);
+
+  let fibonacciLevels;
+  if (swingPoints.length >= 2) {
+    const highs = swingPoints.filter((p) => p.type === "high");
+    const lows = swingPoints.filter((p) => p.type === "low");
+
+    if (highs.length > 0 && lows.length > 0) {
+      const recentHigh = highs[highs.length - 1].price;
+      const recentLow = lows[lows.length - 1].price;
+      fibonacciLevels = calculateFibonacciLevels(
+        Math.max(recentHigh, recentLow),
+        Math.min(recentHigh, recentLow)
+      );
+    }
+  }
+
+  const supportResistance = swingPoints.length
+    ? calculateSupportResistance(swingPoints, currentPrice)
+    : undefined;
+
   return {
     atr,
     ema9,
@@ -55,6 +83,10 @@ export function computeTechnicalIndicators(
     volatility,
     momentum,
     trendStrength: Math.min(trendStrength, 1),
+    vwap,
+    fibonacciLevels,
+    swingPoints,
+    supportResistance,
   };
 }
 

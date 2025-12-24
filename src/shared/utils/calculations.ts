@@ -91,3 +91,191 @@ export function calculateVolatility(returns: number[]): number {
 export function generateClientOid(): string {
   return `rg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
+
+export interface FibonacciLevels {
+  high: number;
+  low: number;
+  levels: {
+    level: number;
+    price: number;
+    label: string;
+  }[];
+}
+
+export function calculateFibonacciLevels(
+  high: number,
+  low: number
+): FibonacciLevels {
+  const range = high - low;
+  const fibRatios = [
+    { ratio: 0, label: "0%" },
+    { ratio: 0.236, label: "23.6%" },
+    { ratio: 0.382, label: "38.2%" },
+    { ratio: 0.5, label: "50%" },
+    { ratio: 0.618, label: "61.8%" },
+    { ratio: 0.786, label: "78.6%" },
+    { ratio: 1, label: "100%" },
+  ];
+
+  return {
+    high,
+    low,
+    levels: fibRatios.map((fib) => ({
+      level: fib.ratio,
+      price: high - range * fib.ratio,
+      label: fib.label,
+    })),
+  };
+}
+
+export function findNearestFibLevel(
+  currentPrice: number,
+  fibLevels: FibonacciLevels
+): { level: number; price: number; label: string; distance: number } | null {
+  if (!fibLevels.levels.length) return null;
+
+  let nearest = fibLevels.levels[0];
+  let minDistance = Math.abs(currentPrice - nearest.price);
+
+  for (const level of fibLevels.levels) {
+    const distance = Math.abs(currentPrice - level.price);
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearest = level;
+    }
+  }
+
+  return {
+    ...nearest,
+    distance: (minDistance / currentPrice) * 100,
+  };
+}
+
+export interface SwingPoint {
+  index: number;
+  timestamp: number;
+  price: number;
+  type: "high" | "low";
+  strength: number;
+}
+
+export function detectSwingPoints(
+  candles: Array<{
+    timestamp: number;
+    high: number;
+    low: number;
+    close: number;
+  }>,
+  lookback: number = 5
+): SwingPoint[] {
+  if (candles.length < lookback * 2 + 1) return [];
+
+  const swingPoints: SwingPoint[] = [];
+
+  for (let i = lookback; i < candles.length - lookback; i++) {
+    const current = candles[i];
+
+    let isSwingHigh = true;
+    for (let j = i - lookback; j <= i + lookback; j++) {
+      if (j !== i && candles[j].high >= current.high) {
+        isSwingHigh = false;
+        break;
+      }
+    }
+
+    if (isSwingHigh) {
+      const leftMax = Math.max(
+        ...candles.slice(i - lookback, i).map((c) => c.high)
+      );
+      const rightMax = Math.max(
+        ...candles.slice(i + 1, i + lookback + 1).map((c) => c.high)
+      );
+      const avgNeighbor = (leftMax + rightMax) / 2;
+      const strength = Math.min((current.high - avgNeighbor) / avgNeighbor, 1);
+
+      swingPoints.push({
+        index: i,
+        timestamp: current.timestamp,
+        price: current.high,
+        type: "high",
+        strength: Math.max(strength, 0.1),
+      });
+    }
+
+    let isSwingLow = true;
+    for (let j = i - lookback; j <= i + lookback; j++) {
+      if (j !== i && candles[j].low <= current.low) {
+        isSwingLow = false;
+        break;
+      }
+    }
+
+    if (isSwingLow) {
+      const leftMin = Math.min(
+        ...candles.slice(i - lookback, i).map((c) => c.low)
+      );
+      const rightMin = Math.min(
+        ...candles.slice(i + 1, i + lookback + 1).map((c) => c.low)
+      );
+      const avgNeighbor = (leftMin + rightMin) / 2;
+      const strength = Math.min((avgNeighbor - current.low) / avgNeighbor, 1);
+
+      swingPoints.push({
+        index: i,
+        timestamp: current.timestamp,
+        price: current.low,
+        type: "low",
+        strength: Math.max(strength, 0.1),
+      });
+    }
+  }
+
+  return swingPoints.sort((a, b) => a.timestamp - b.timestamp);
+}
+
+export function calculateSupportResistance(
+  swingPoints: SwingPoint[],
+  currentPrice: number,
+  tolerance: number = 0.02
+): {
+  support: number[];
+  resistance: number[];
+} {
+  if (!swingPoints.length) return { support: [], resistance: [] };
+
+  const highs = swingPoints.filter((p) => p.type === "high");
+  const lows = swingPoints.filter((p) => p.type === "low");
+
+  const clusterPrices = (points: SwingPoint[]): number[] => {
+    if (!points.length) return [];
+
+    const sorted = [...points].sort((a, b) => a.price - b.price);
+    const clusters: number[][] = [[sorted[0].price]];
+
+    for (let i = 1; i < sorted.length; i++) {
+      const lastCluster = clusters[clusters.length - 1];
+      const lastPrice = lastCluster[lastCluster.length - 1];
+
+      if (Math.abs(sorted[i].price - lastPrice) / lastPrice <= tolerance) {
+        lastCluster.push(sorted[i].price);
+      } else {
+        clusters.push([sorted[i].price]);
+      }
+    }
+    return clusters.map(
+      (cluster) => cluster.reduce((sum, p) => sum + p, 0) / cluster.length
+    );
+  };
+
+  const resistanceLevels = clusterPrices(highs).filter(
+    (price) => price > currentPrice
+  );
+  const supportLevels = clusterPrices(lows).filter(
+    (price) => price < currentPrice
+  );
+
+  return {
+    support: supportLevels.slice(-3).reverse(),
+    resistance: resistanceLevels.slice(0, 3),
+  };
+}
