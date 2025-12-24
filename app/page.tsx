@@ -19,6 +19,7 @@ import BorderAnimationButton from "@/src/components/nurui/border-button";
 import { InfoCard } from "@/src/components/nurui/info-card";
 import { GlowCard } from "@/src/components/nurui/spotlight-card";
 import { RevealText } from "@/src/components/ui/reveal-text";
+import { useAuth } from "@/src/client/hooks/use-auth";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -120,6 +121,8 @@ const AnimatedIcon = ({ icon: Icon, className }: { icon: any, className?: string
 // --- 3. SUB-COMPONENTS ---
 
 const Navbar = () => {
+  const { login, logout, authenticated, walletAddress } = useAuth();
+
   const emblem = (
     <div className="flex items-center gap-2 group cursor-pointer">
       <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-lg bg-zinc-900 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
@@ -134,11 +137,26 @@ const Navbar = () => {
 
   const rightComponent = (
     <div className="flex items-center gap-4">
-      <GradientButton
-        text="Sign In"
-        className="h-10"
-        borderRadius={9999}
-      />
+      {authenticated && walletAddress ? (
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-zinc-400 font-mono hidden md:block">
+            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+          </span>
+          <GradientButton
+            text="Logout"
+            className="h-10"
+            borderRadius={9999}
+            onClick={logout}
+          />
+        </div>
+      ) : (
+        <GradientButton
+          text="Sign In"
+          className="h-10"
+          borderRadius={9999}
+          onClick={login}
+        />
+      )}
     </div>
   );
 

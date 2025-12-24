@@ -11,6 +11,7 @@ interface GradientButtonProps {
   className?: string;
   bgColor?: string;
   text?: string;
+  onClick?: () => void;
 }
 
 const GradientButton: React.FC<GradientButtonProps> = ({
@@ -28,6 +29,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   className,
   bgColor = "#09090b", // Match zinc-950
   text = "Start Trading",
+  onClick,
 }) => {
   const gradientStyle = {
     "--allColors": colors.join(", "),
@@ -41,9 +43,10 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   return (
     <div className="inline-block">
       <button
+        onClick={onClick}
         style={gradientStyle}
         className={cn(
-          "relative flex items-center justify-center min-w-28 min-h-10 overflow-hidden rainbow-btn before:absolute before:-inset-[200%] animate-rainbow",
+          "relative flex items-center justify-center min-w-28 min-h-10 overflow-hidden rainbow-btn before:absolute before:-inset-[200%] animate-rainbow cursor-pointer",
           className,
         )}
       >
