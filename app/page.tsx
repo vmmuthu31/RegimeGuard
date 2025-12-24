@@ -493,15 +493,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- MULTI-AGENT SYSTEM (Stacks / Fan effect) --- */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              <span className="text-purple-400">Multi-Agent</span> System
+      <section className="py-32 relative overflow-hidden">
+        {/* Localized Backdrop Glows */}
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <RevealText mode="auto" stagger={0.1} boxClassName="bg-purple-500">
+                Multi-Agent AI Coordination
+              </RevealText>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
-              Four specialized AI agents work in coordination. [cite_start]Each has a specific role. [cite: 120]
+            <p className="text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed border-l-2 border-purple-500/30 pl-6 text-left">
+              Our proprietary <span className="text-white font-bold">Registry-Protocol</span> enables four specialized agents to work in a continuous feedback loop, ensuring every trade signal is vetted for both alpha potential and institutional risk tolerance.
             </p>
           </div>
 
@@ -543,43 +548,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- AVAILABLE MARKETS (Marquee style) --- */}
-      <section id="pairs" className="py-20 bg-zinc-900/30 border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Supported Markets</h2>
-          [cite_start]<p className="text-zinc-400">Optimized for high-liquidity WEEX pairs [cite: 280]</p>
-        </div>
 
-        <div className="relative flex overflow-x-hidden group">
-          <div className="animate-marquee whitespace-nowrap flex gap-8">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex gap-8">
-                {[{ s: "BTC", n: "Bitcoin" }, { s: "ETH", n: "Ethereum" }, { s: "SOL", n: "Solana" }, { s: "BNB", n: "Binance" }, { s: "XRP", n: "Ripple" }, { s: "ADA", n: "Cardano" }, { s: "DOGE", n: "Dogecoin" }, { s: "LTC", n: "Litecoin" }].map((pair) => (
-                  <div key={pair.s} className="flex items-center gap-3 px-6 py-3 rounded-full bg-zinc-900 border border-white/10 hover:border-emerald-500/50 transition-colors cursor-pointer">
-                    <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold">{pair.s[0]}</div>
-                    <div>
-                      <div className="font-bold text-sm">{pair.s}/USDT</div>
-                      <div className="text-[10px] text-zinc-500">{pair.n}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          {/* Fade edges */}
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950 to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950 to-transparent pointer-events-none" />
-        </div>
-      </section>
 
       {/* --- ARCHITECTURE (Animated Beams) --- */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Execution Pipeline</h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+      <section className="py-24 relative overflow-hidden border-t border-white/5">
+        {/* Technical Grid Decoration */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
-              [cite_start]A transparent, rule-based execution flow powered by AI risk analysis [cite: 33]
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono mb-4 animate-pulse">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> SYSTEM_LATENCY: 12MS
+            </div>
+            <h2 className="text-5xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+              Execution Pipeline
+            </h2>
+            <p className="text-zinc-400 max-w-2xl mx-auto font-medium">
+              A transparent, rule-based execution flow powered by real-time risk analysis and multi-regime intelligence.
             </p>
           </div>
 
@@ -628,7 +614,7 @@ export default function LandingPage() {
       </footer>
 
       {/* --- GLOBAL STYLES & ANIMATIONS --- */}
-      <style jsx global>{`
+      < style jsx global > {`
         @keyframes shine {
           to { transform: translateX(100%); }
         }
@@ -650,7 +636,7 @@ export default function LandingPage() {
         .perspective-1000 {
           perspective: 1000px;
         }
-      `}</style>
-    </div>
+      `}</style >
+    </div >
   );
 }
