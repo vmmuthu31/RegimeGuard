@@ -66,68 +66,30 @@ This creates a system that:
 ## 🏗️ System Architecture
 
 ```mermaid
-graph TB
-    subgraph "Data Layer"
-        A[WEEX Market Data API]
-        A --> B[Real-time Price Feed]
-        A --> C[Volume & Volatility Data]
-    end
-
-    subgraph "AI Intelligence Layer"
-        D[Market Regime Classifier]
-        E[Risk Control AI Engine]
-        F[Volatility Anomaly Guard]
-
-        B --> D
-        C --> D
-        D --> E
-        C --> F
-        F --> E
-    end
-
-    subgraph "Strategy Layer"
-        G{Regime Router}
-        H[Trend Following Strategy]
-        I[Mean Reversion Strategy]
-        J[Capital Preservation Mode]
-
-        D --> G
-        G -->|Trending| H
-        G -->|Range-Bound| I
-        G -->|High Volatility| J
-    end
-
-    subgraph "Execution Layer"
-        K[Position Sizing Calculator]
-        L[Risk Parameter Adjuster]
-        M[Order Execution Engine]
-        N[WEEX Trading API]
-
-        E --> K
-        E --> L
-        H --> M
-        I --> M
-        J --> M
-        K --> M
-        L --> M
-        M --> N
-    end
-
-    subgraph "Monitoring & Transparency"
-        O[Trade Logger]
-        P[Performance Analytics]
-        Q[Explainability Dashboard]
-
-        M --> O
-        O --> P
-        E --> Q
-        D --> Q
-    end
-
-    style D fill:#4CAF50
-    style E fill:#4CAF50
-    style F fill:#4CAF50
-    style Q fill:#2196F3
+flowchart LR
+    A[📊 WEEX Market Data] --> B{🧠 AI Analysis}
+    
+    B --> C[Regime Classifier]
+    B --> D[Risk Engine]
+    B --> E[Volatility Guard]
+    
+    C & D & E --> F{📈 Strategy Router}
+    
+    F -->|Trending| G[Trend Following]
+    F -->|Range-Bound| H[Mean Reversion]
+    F -->|High Vol| I[Capital Guard]
+    
+    G & H & I --> J[🎯 Trade Execution]
+    J --> K[WEEX Trading API]
+    
+    J -.-> L[📝 AI Logger]
+    
+    style B fill:#22c55e,stroke:#16a34a,stroke-width:3px
+    style C fill:#22c55e,stroke:#16a34a
+    style D fill:#22c55e,stroke:#16a34a
+    style E fill:#22c55e,stroke:#16a34a
+    style F fill:#3b82f6,stroke:#2563eb
+    style L fill:#f59e0b,stroke:#d97706
 ```
 
 ### Architecture Layers
@@ -753,7 +715,7 @@ RegimeGuard aligns with WEEX's philosophy:
 
 ## 👥 Team
 
-- **Santhosh Kumar** — Full-Stack Developer, AI/ML Engineer
+- **Santhosh Kumar** — Full-Stack Developer, Blockchain Engineer
 - **Vairamuthu M**- Full-Stack Developer, Blockchain Engineer
 
 ---
@@ -775,7 +737,8 @@ MIT License - see [LICENSE](LICENSE) for details
 
 - **GitHub Issues:** [Report bugs or request features](https://github.com/vmmuthu31/RegimeGuard/issues)
 - **Telegram:** [Join WEEX AI Wars support group](https://t.me/weex_support)
-- **Email:** mvairamuthu2003@gmail.com
+- **Email:** santhoshkumar0918.dev@gmail.com
+- **X (Twitter):** [@RegimeGuard](https://x.com/RegimeGuard)
 
 ---
 
