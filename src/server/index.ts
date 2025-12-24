@@ -37,3 +37,4 @@ export * from "./services/regime-classifier";
 export * from "./services/risk-engine";
 export * from "./services/volatility-guard";
 export * from "./services/strategy-executor";
+export * from "./services/groq-ai";

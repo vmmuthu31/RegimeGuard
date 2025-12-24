@@ -6,6 +6,10 @@ const envSchema = z.object({
   WEEX_PASSPHRASE: z.string().min(1),
 });
 
+const groqEnvSchema = z.object({
+  GROQ_API_KEY: z.string().min(1),
+});
+
 export function getWeexConfig() {
   const parsed = envSchema.safeParse({
     WEEX_API_KEY: process.env.WEEX_API_KEY,
@@ -22,4 +26,20 @@ export function getWeexConfig() {
     secretKey: parsed.data.WEEX_SECRET_KEY,
     passphrase: parsed.data.WEEX_PASSPHRASE,
   };
+}
+
+export function getGroqConfig(): { apiKey: string } | null {
+  const parsed = groqEnvSchema.safeParse({
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+  });
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return { apiKey: parsed.data.GROQ_API_KEY };
+}
+
+export function isGroqConfigured(): boolean {
+  return getGroqConfig() !== null;
 }
