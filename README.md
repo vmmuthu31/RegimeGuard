@@ -635,6 +635,44 @@ Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 | `POST` | `/api/websocket (subscribe)`   | Subscribe to ticker/kline/depth/trades |
 | `POST` | `/api/websocket (unsubscribe)` | Unsubscribe from channels              |
 
+### Database (Supabase)
+
+| Table              | Purpose                                             |
+| ------------------ | --------------------------------------------------- |
+| `users`            | Wallet addresses, settings, risk profiles           |
+| `trades`           | Full trade history with PnL, strategy, explanations |
+| `positions`        | Real-time position tracking                         |
+| `ai_decisions`     | All AI decision logs for transparency               |
+| `trading_sessions` | Automated loop tracking and analytics               |
+
+---
+
+## 🏆 WEEX AI Wars Criteria Mapping
+
+### Trading Performance
+
+| Metric           | How RegimeGuard Addresses It                              |
+| ---------------- | --------------------------------------------------------- |
+| **ROI**          | Risk-first approach maximizes risk-adjusted returns       |
+| **PnL**          | All trades logged with entry/exit prices and realized PnL |
+| **Max Drawdown** | Volatility Guard kill-switch prevents excessive drawdowns |
+
+### AI Strategy Quality
+
+| Criterion        | Implementation                                                  |
+| ---------------- | --------------------------------------------------------------- |
+| **Logic**        | Clear regime → strategy → risk flow with full transparency      |
+| **Innovation**   | AI controls RISK, not direction — unique approach               |
+| **Risk Control** | Multi-layer: Position sizing, stop-loss, cooldowns, kill-switch |
+
+### Technical Execution
+
+| Criterion         | Implementation                                                 |
+| ----------------- | -------------------------------------------------------------- |
+| **Stability**     | TypeScript strict mode, error handling, WebSocket reconnection |
+| **Documentation** | Comprehensive README, API docs, code comments                  |
+| **Architecture**  | Clean separation: server/client/shared, proper exports         |
+
 ---
 
 ## 🎬 Demo Scenario: BTC Trending Market
