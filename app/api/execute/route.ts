@@ -87,19 +87,11 @@ export async function POST(request: Request) {
         symbol,
         currentPrice,
         regime: decision.regime,
-        indicators: {
-          atr: 0,
-          ema9: 0,
-          ema21: 0,
-          rsi: 50,
-          volatility: decision.regime.features.volatility,
-          momentum: decision.regime.features.momentum,
-          trendStrength: decision.regime.features.trendStrength,
-        },
+        indicators: decision.indicators,
         volatilityStatus: {
           spikeDetected: !decision.volatilityOk,
           anomalyDetected: false,
-          currentVolatility: decision.regime.features.volatility,
+          currentVolatility: decision.indicators.volatility,
         },
       });
     }
@@ -111,12 +103,12 @@ export async function POST(request: Request) {
         null,
         {
           symbol,
-          rsi: 50,
-          ema9: currentPrice,
-          ema21: currentPrice,
-          atr: currentPrice * 0.02,
-          volatility: decision.regime.features.volatility,
-          momentum: decision.regime.features.momentum,
+          rsi: decision.indicators.rsi,
+          ema9: decision.indicators.ema9,
+          ema21: decision.indicators.ema21,
+          atr: decision.indicators.atr,
+          volatility: decision.indicators.volatility,
+          momentum: decision.indicators.momentum,
         },
         {
           regime: decision.regime.regime,
@@ -136,7 +128,7 @@ export async function POST(request: Request) {
           symbol,
           regime: decision.regime.regime,
           regimeConfidence: decision.regime.confidence,
-          currentVolatility: decision.regime.features.volatility,
+          currentVolatility: decision.indicators.volatility,
           recentDrawdown: 0,
           dailyLossPercent: 0,
         },
@@ -213,9 +205,9 @@ export async function POST(request: Request) {
                 strategy: signal.strategy,
                 entryPrice: signal.entryPrice,
                 indicators: {
-                  rsi: 50,
-                  ema9: currentPrice,
-                  ema21: currentPrice,
+                  rsi: decision.indicators.rsi,
+                  ema9: decision.indicators.ema9,
+                  ema21: decision.indicators.ema21,
                 },
               },
               {

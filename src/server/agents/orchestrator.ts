@@ -78,7 +78,12 @@ export function runTradingPipeline(
   ctx.allMessages.push(...volatilityResult.context.messageLog.slice(-1));
 
   if (isKillSwitchActive(ctx.volatilityAgent)) {
-    const decision = createHoldDecision(symbol, "KILL_SWITCH_ACTIVE", ctx);
+    const decision = createHoldDecision(
+      symbol,
+      "KILL_SWITCH_ACTIVE",
+      ctx,
+      indicators
+    );
     ctx.decisionHistory.push(decision);
     return decision;
   }
@@ -116,7 +121,8 @@ export function runTradingPipeline(
     regimeResult,
     riskResult,
     volatilityResult,
-    strategyResult
+    strategyResult,
+    indicators
   );
 
   ctx.decisionHistory.push(decision);
@@ -136,7 +142,8 @@ function createTradingDecision(
   regimeResult: ReturnType<typeof analyzeRegime>,
   riskResult: ReturnType<typeof evaluateTradeRisk>,
   volatilityResult: ReturnType<typeof monitorVolatility>,
-  strategyResult: ReturnType<typeof generateStrategy>
+  strategyResult: ReturnType<typeof generateStrategy>,
+  indicators: ReturnType<typeof computeTechnicalIndicators>
 ): TradingDecision {
   const signal = strategyResult.output.signal;
 
@@ -165,6 +172,15 @@ function createTradingDecision(
       volatility: `Alert level: ${volatilityResult.output.alertLevel}`,
       strategy: strategyResult.output.reasoning,
     },
+    indicators: {
+      atr: indicators.atr,
+      ema9: indicators.ema9,
+      ema21: indicators.ema21,
+      rsi: indicators.rsi,
+      volatility: indicators.volatility,
+      momentum: indicators.momentum,
+      trendStrength: indicators.trendStrength,
+    },
     timestamp: Date.now(),
   };
 }
@@ -172,7 +188,8 @@ function createTradingDecision(
 function createHoldDecision(
   symbol: TradingPair,
   reason: string,
-  ctx: OrchestratorContext
+  ctx: OrchestratorContext,
+  indicators: ReturnType<typeof computeTechnicalIndicators>
 ): TradingDecision {
   const regimeState = getRegimeAgentState(ctx.regimeAgent);
 
@@ -195,6 +212,15 @@ function createHoldDecision(
       risk: "Trading suspended",
       volatility: "KILL SWITCH ACTIVE",
       strategy: "No signals generated during suspension",
+    },
+    indicators: {
+      atr: indicators.atr,
+      ema9: indicators.ema9,
+      ema21: indicators.ema21,
+      rsi: indicators.rsi,
+      volatility: indicators.volatility,
+      momentum: indicators.momentum,
+      trendStrength: indicators.trendStrength,
     },
     timestamp: Date.now(),
   };

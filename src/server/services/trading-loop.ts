@@ -202,7 +202,11 @@ export async function runSingleCycle(): Promise<{
             regime: decision.regime.regime,
             strategy: signal.strategy,
             entryPrice: signal.entryPrice,
-            indicators: { rsi: 50, ema9: currentPrice, ema21: currentPrice },
+            indicators: {
+              rsi: decision.indicators.rsi,
+              ema9: decision.indicators.ema9,
+              ema21: decision.indicators.ema21,
+            },
           },
           {
             side: signal.side,
