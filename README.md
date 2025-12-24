@@ -68,22 +68,22 @@ This creates a system that:
 ```mermaid
 flowchart LR
     A[📊 WEEX Market Data] --> B{🧠 AI Analysis}
-    
+
     B --> C[Regime Classifier]
     B --> D[Risk Engine]
     B --> E[Volatility Guard]
-    
+
     C & D & E --> F{📈 Strategy Router}
-    
+
     F -->|Trending| G[Trend Following]
     F -->|Range-Bound| H[Mean Reversion]
     F -->|High Vol| I[Capital Guard]
-    
+
     G & H & I --> J[🎯 Trade Execution]
     J --> K[WEEX Trading API]
-    
+
     J -.-> L[📝 AI Logger]
-    
+
     style B fill:#22c55e,stroke:#16a34a,stroke-width:3px
     style C fill:#22c55e,stroke:#16a34a
     style D fill:#22c55e,stroke:#16a34a
@@ -604,6 +604,37 @@ Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 
 **Note:** All AI logs are uploaded to WEEX's AiLog system for transparency and compliance.
 
+### Automated Trading Pipeline
+
+| Method | Endpoint                     | Description                        |
+| ------ | ---------------------------- | ---------------------------------- |
+| `POST` | `/api/execute`               | Run complete trading pipeline once |
+| `GET`  | `/api/loop?action=status`    | Get trading loop status            |
+| `POST` | `/api/loop?action=start`     | Start automated trading loop       |
+| `POST` | `/api/loop?action=stop`      | Stop automated trading loop        |
+| `POST` | `/api/loop?action=cycle`     | Run single trading cycle           |
+| `POST` | `/api/loop?action=configure` | Configure loop parameters          |
+
+### Groq AI Integration
+
+| Method | Endpoint                      | Description                 |
+| ------ | ----------------------------- | --------------------------- |
+| `GET`  | `/api/ai?action=status`       | Check Groq AI availability  |
+| `POST` | `/api/ai?action=analyze`      | AI-powered market analysis  |
+| `POST` | `/api/ai?action=explain`      | Generate trade explanations |
+| `POST` | `/api/ai?action=fullAnalysis` | Complete AI analysis        |
+
+### WebSocket Real-time Data
+
+| Method | Endpoint                       | Description                            |
+| ------ | ------------------------------ | -------------------------------------- |
+| `GET`  | `/api/websocket?action=status` | Get connection status                  |
+| `GET`  | `/api/websocket?action=data`   | Get latest cached data                 |
+| `POST` | `/api/websocket (connect)`     | Connect to WEEX WebSocket              |
+| `POST` | `/api/websocket (disconnect)`  | Disconnect WebSocket                   |
+| `POST` | `/api/websocket (subscribe)`   | Subscribe to ticker/kline/depth/trades |
+| `POST` | `/api/websocket (unsubscribe)` | Unsubscribe from channels              |
+
 ---
 
 ## 🎬 Demo Scenario: BTC Trending Market
@@ -650,6 +681,11 @@ RegimeGuard aligns with WEEX's philosophy:
 | Interactive Chart Visualization | ✅ Complete |
 | Enhanced Confidence Scoring     | ✅ Complete |
 | Dashboard UI                    | ✅ Complete |
+| TypeScript Enums                | ✅ Complete |
+| Automated Trading Loop          | ✅ Complete |
+| Groq AI Integration             | ✅ Complete |
+| WebSocket Real-time             | ✅ Complete |
+| Full Pipeline API               | ✅ Complete |
 | Backtesting Framework           | 📋 Planned  |
 | Documentation                   | ✅ Complete |
 
@@ -669,6 +705,16 @@ RegimeGuard aligns with WEEX's philosophy:
 - ✅ Visual chart overlays (Fibonacci, support/resistance, signals)
 - ✅ Explainable AI decisions with comprehensive reasoning
 - ✅ Support/resistance zone clustering
+
+### Phase 1.5: Production Automation ✅ COMPLETE (NEW)
+
+- ✅ TypeScript enums for all constants (type-safe codebase)
+- ✅ Automated trading loop (`/api/loop`) with configurable intervals
+- ✅ Full pipeline execution endpoint (`/api/execute`)
+- ✅ Groq AI integration for enhanced explanations (`/api/ai`)
+- ✅ WebSocket real-time market data (`/api/websocket`)
+- ✅ Dynamic indicators in trading decisions
+- ✅ AI logging integration for WEEX compliance
 
 ### Phase 2: Performance Optimization
 

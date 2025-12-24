@@ -1,4 +1,5 @@
 import WebSocket from "ws";
+import { createHmac } from "crypto";
 import type { TradingPair } from "@/shared/constants";
 
 const WS_PUBLIC_URL = "wss://ws-contract.weex.com/v2/ws/public";
@@ -260,6 +261,275 @@ export function getSubscriptions(): string[] {
   return Array.from(clientState.subscriptions);
 }
 
+const WS_PRIVATE_URL = "wss://ws-contract.weex.com/v2/ws/private";
+
+interface PrivateClientState {
+  ws: WebSocket | null;
+  isConnected: boolean;
+  subscriptions: Set<string>;
+  handlers: Map<string, MessageHandler<unknown>>;
+  reconnectAttempts: number;
+  maxReconnectAttempts: number;
+}
+
+const privateClientState: PrivateClientState = {
+  ws: null,
+  isConnected: false,
+  subscriptions: new Set(),
+  handlers: new Map(),
+  reconnectAttempts: 0,
+  maxReconnectAttempts: 5,
+};
+
+interface PrivateConfig {
+  apiKey: string;
+  secretKey: string;
+  passphrase: string;
+}
+
+let privateConfig: PrivateConfig | null = null;
+
+function generatePrivateSignature(
+  secretKey: string,
+  timestamp: string
+): string {
+  const message = timestamp + "GET" + "/v2/ws/private";
+  return createHmac("sha256", secretKey).update(message).digest("base64");
+}
+
+function createPrivateConnection(config: PrivateConfig): Promise<WebSocket> {
+  return new Promise((resolve, reject) => {
+    const timestamp = Date.now().toString();
+    const signature = generatePrivateSignature(config.secretKey, timestamp);
+
+    const ws = new WebSocket(WS_PRIVATE_URL, {
+      headers: {
+        "ACCESS-KEY": config.apiKey,
+        "ACCESS-SIGN": signature,
+        "ACCESS-TIMESTAMP": timestamp,
+        "ACCESS-PASSPHRASE": config.passphrase,
+        "User-Agent": "regimeguard-trading-bot/1.0",
+      },
+    });
+
+    ws.on("open", () => {
+      privateClientState.isConnected = true;
+      privateClientState.reconnectAttempts = 0;
+      resolve(ws);
+    });
+
+    ws.on("message", (data: Buffer) => {
+      try {
+        const msg = JSON.parse(data.toString());
+        handlePrivateMessage(msg);
+      } catch {}
+    });
+
+    ws.on("close", () => {
+      privateClientState.isConnected = false;
+      handlePrivateDisconnect();
+    });
+
+    ws.on("error", (error: Error) => {
+      if (!privateClientState.isConnected) {
+        reject(error);
+      }
+    });
+  });
+}
+
+function handlePrivateMessage(msg: {
+  event: string;
+  channel?: string;
+  data?: unknown[];
+  time?: string;
+}): void {
+  if (msg.event === "ping" && msg.time) {
+    privateClientState.ws?.send(
+      JSON.stringify({ event: "pong", time: msg.time })
+    );
+    return;
+  }
+
+  if (msg.event === "payload" && msg.channel && msg.data) {
+    const handler = privateClientState.handlers.get(msg.channel);
+    if (handler) {
+      msg.data.forEach((item) => handler(item));
+    }
+  }
+}
+
+function handlePrivateDisconnect(): void {
+  if (
+    privateClientState.reconnectAttempts <
+      privateClientState.maxReconnectAttempts &&
+    privateConfig
+  ) {
+    privateClientState.reconnectAttempts++;
+    setTimeout(() => {
+      reconnectPrivate();
+    }, 1000 * privateClientState.reconnectAttempts);
+  }
+}
+
+async function reconnectPrivate(): Promise<void> {
+  if (!privateConfig) return;
+  try {
+    privateClientState.ws = await createPrivateConnection(privateConfig);
+    for (const channel of privateClientState.subscriptions) {
+      privateClientState.ws.send(
+        JSON.stringify({ event: "subscribe", channel })
+      );
+    }
+  } catch {}
+}
+
+export async function initPrivateWebSocket(
+  config: PrivateConfig
+): Promise<boolean> {
+  if (privateClientState.ws && privateClientState.isConnected) {
+    return true;
+  }
+
+  privateConfig = config;
+  try {
+    privateClientState.ws = await createPrivateConnection(config);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function closePrivateWebSocket(): void {
+  if (privateClientState.ws) {
+    privateClientState.ws.close();
+    privateClientState.ws = null;
+    privateClientState.isConnected = false;
+    privateClientState.subscriptions.clear();
+    privateClientState.handlers.clear();
+    privateConfig = null;
+  }
+}
+
+export function isPrivateWebSocketConnected(): boolean {
+  return privateClientState.isConnected;
+}
+
+function subscribePrivate(channel: string): boolean {
+  if (!privateClientState.ws || !privateClientState.isConnected) {
+    return false;
+  }
+
+  privateClientState.ws.send(JSON.stringify({ event: "subscribe", channel }));
+  privateClientState.subscriptions.add(channel);
+  return true;
+}
+
+function unsubscribePrivate(channel: string): boolean {
+  if (!privateClientState.ws || !privateClientState.isConnected) {
+    return false;
+  }
+
+  privateClientState.ws.send(JSON.stringify({ event: "unsubscribe", channel }));
+  privateClientState.subscriptions.delete(channel);
+  privateClientState.handlers.delete(channel);
+  return true;
+}
+
+interface WsAccountUpdate {
+  coinId: string;
+  marginMode: string;
+  amount: string;
+  pendingDepositAmount: string;
+  pendingWithdrawAmount: string;
+  liquidating: boolean;
+  updatedTime: string;
+}
+
+interface WsPositionUpdate {
+  id: string;
+  contractId: string;
+  side: "LONG" | "SHORT";
+  leverage: string;
+  size: string;
+  openValue: string;
+  isolatedMargin: string;
+  updatedTime: string;
+}
+
+interface WsOrderUpdate {
+  id: string;
+  contractId: string;
+  orderSide: string;
+  positionSide: string;
+  price: string;
+  size: string;
+  status: string;
+  cumFillSize: string;
+  updatedTime: string;
+}
+
+interface WsFillUpdate {
+  id: string;
+  orderId: string;
+  fillSize: string;
+  fillValue: string;
+  fillFee: string;
+  realizePnl: string;
+  direction: "MAKER" | "TAKER";
+  createdTime: string;
+}
+
+export function subscribeAccount(
+  handler: MessageHandler<WsAccountUpdate>
+): boolean {
+  const channel = "account";
+  privateClientState.handlers.set(channel, handler as MessageHandler<unknown>);
+  return subscribePrivate(channel);
+}
+
+export function unsubscribeAccount(): boolean {
+  return unsubscribePrivate("account");
+}
+
+export function subscribePositions(
+  handler: MessageHandler<WsPositionUpdate>
+): boolean {
+  const channel = "positions";
+  privateClientState.handlers.set(channel, handler as MessageHandler<unknown>);
+  return subscribePrivate(channel);
+}
+
+export function unsubscribePositions(): boolean {
+  return unsubscribePrivate("positions");
+}
+
+export function subscribeOrders(
+  handler: MessageHandler<WsOrderUpdate>
+): boolean {
+  const channel = "orders";
+  privateClientState.handlers.set(channel, handler as MessageHandler<unknown>);
+  return subscribePrivate(channel);
+}
+
+export function unsubscribeOrders(): boolean {
+  return unsubscribePrivate("orders");
+}
+
+export function subscribeFills(handler: MessageHandler<WsFillUpdate>): boolean {
+  const channel = "fill";
+  privateClientState.handlers.set(channel, handler as MessageHandler<unknown>);
+  return subscribePrivate(channel);
+}
+
+export function unsubscribeFills(): boolean {
+  return unsubscribePrivate("fill");
+}
+
+export function getPrivateSubscriptions(): string[] {
+  return Array.from(privateClientState.subscriptions);
+}
+
 export type {
   TickerData as WsTickerData,
   KlineData as WsKlineData,
@@ -268,4 +538,8 @@ export type {
   KlineInterval,
   DepthLevel,
   PriceType as WsPriceType,
+  WsAccountUpdate,
+  WsPositionUpdate,
+  WsOrderUpdate,
+  WsFillUpdate,
 };
