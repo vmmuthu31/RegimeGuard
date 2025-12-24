@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getWeexConfig } from "@/server/config";
-import { TRADING_PAIRS, TradingPair } from "@/shared/constants";
+import {
+  TRADING_PAIRS,
+  TradingPair,
+  StopLossAdjustment,
+  RiskLevel,
+} from "@/shared/constants";
 import { getCandles, getTicker } from "@/server/services/weex-client";
 import {
   getAccountAssets,
@@ -186,10 +191,10 @@ export async function POST(request: Request) {
               regime: decision.regime,
               riskDecision: {
                 positionSizeMultiplier: 1,
-                stopLossAdjustment: "NORMAL",
+                stopLossAdjustment: StopLossAdjustment.NORMAL,
                 tradeCooldownActive: false,
                 tradeSuspended: false,
-                riskLevel: "LOW",
+                riskLevel: RiskLevel.LOW,
                 explanation: "",
                 timestamp: Date.now(),
               },

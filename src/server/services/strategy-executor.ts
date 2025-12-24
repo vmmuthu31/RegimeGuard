@@ -1,7 +1,8 @@
 import {
   REGIME_STRATEGY_MAP,
-  STRATEGY_TYPES,
   type TradingPair,
+  OrderSide,
+  StrategyType,
 } from "@/shared/constants";
 import type {
   RegimeClassification,
@@ -34,7 +35,7 @@ export function generateTrendFollowingSignal(
     return null;
   }
 
-  const side: "BUY" | "SELL" = ema9 > ema21 ? "BUY" : "SELL";
+  const side: OrderSide = ema9 > ema21 ? OrderSide.BUY : OrderSide.SELL;
   const stopDistance = atr * 2;
   const takeProfitDistance = atr * 3;
 
@@ -66,14 +67,14 @@ export function generateTrendFollowingSignal(
   return {
     symbol,
     side,
-    strategy: STRATEGY_TYPES.TREND_FOLLOWING,
+    strategy: StrategyType.TREND_FOLLOWING,
     entryPrice: currentPrice,
     stopLoss:
-      side === "BUY"
+      side === OrderSide.BUY
         ? currentPrice - stopDistance
         : currentPrice + stopDistance,
     takeProfit:
-      side === "BUY"
+      side === OrderSide.BUY
         ? currentPrice + takeProfitDistance
         : currentPrice - takeProfitDistance,
     size: 0,
@@ -104,7 +105,7 @@ export function generateMeanReversionSignal(
     return null;
   }
 
-  const side: "BUY" | "SELL" = isOversold ? "BUY" : "SELL";
+  const side: OrderSide = isOversold ? OrderSide.BUY : OrderSide.SELL;
   const stopDistance = atr * 1.5;
 
   const reasons: string[] = [
@@ -134,7 +135,7 @@ export function generateMeanReversionSignal(
           `Strong support/resistance at Fibonacci ${nearestFib.label}`
         );
 
-        const targetLevel = side === "BUY" ? 0.5 : 0.382;
+        const targetLevel = side === OrderSide.BUY ? 0.5 : 0.382;
         const fibTarget = fibonacciLevels.levels.find(
           (l) => l.level === targetLevel
         );
@@ -151,13 +152,16 @@ export function generateMeanReversionSignal(
   }
 
   if (supportResistance) {
-    if (side === "BUY" && supportResistance.support.length > 0) {
+    if (side === OrderSide.BUY && supportResistance.support.length > 0) {
       const nearestSupport = supportResistance.support[0];
       if (Math.abs(currentPrice - nearestSupport) / currentPrice < 0.01) {
         confidenceBoost += 0.1;
         reasons.push(`At strong support zone: $${nearestSupport.toFixed(2)}`);
       }
-    } else if (side === "SELL" && supportResistance.resistance.length > 0) {
+    } else if (
+      side === OrderSide.SELL &&
+      supportResistance.resistance.length > 0
+    ) {
       const nearestResistance = supportResistance.resistance[0];
       if (Math.abs(currentPrice - nearestResistance) / currentPrice < 0.01) {
         confidenceBoost += 0.1;
@@ -173,10 +177,10 @@ export function generateMeanReversionSignal(
   return {
     symbol,
     side,
-    strategy: STRATEGY_TYPES.MEAN_REVERSION,
+    strategy: StrategyType.MEAN_REVERSION,
     entryPrice: currentPrice,
     stopLoss:
-      side === "BUY"
+      side === OrderSide.BUY
         ? currentPrice - stopDistance
         : currentPrice + stopDistance,
     takeProfit: takeProfitPrice,
@@ -201,17 +205,17 @@ export function generateTradeSignal(
 ): TradeSignal | null {
   const strategy = selectStrategy(regime);
 
-  if (strategy === STRATEGY_TYPES.NO_TRADE) {
+  if (strategy === StrategyType.NO_TRADE) {
     return null;
   }
 
   const atr = indicators.atr;
 
-  if (strategy === STRATEGY_TYPES.TREND_FOLLOWING) {
+  if (strategy === StrategyType.TREND_FOLLOWING) {
     return generateTrendFollowingSignal(symbol, indicators, currentPrice, atr);
   }
 
-  if (strategy === STRATEGY_TYPES.MEAN_REVERSION) {
+  if (strategy === StrategyType.MEAN_REVERSION) {
     return generateMeanReversionSignal(symbol, indicators, currentPrice, atr);
   }
 

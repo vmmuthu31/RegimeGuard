@@ -4,7 +4,7 @@ import type {
   AgentMessage,
   AgentState,
 } from "@/shared/types";
-import type { TradingPair } from "@/shared/constants";
+import { type TradingPair, RegimeType } from "@/shared/constants";
 import type { Candle, Position, AccountBalance } from "@/shared/types";
 import { computeTechnicalIndicators } from "../services/regime-classifier";
 import {
@@ -199,7 +199,7 @@ function createHoldDecision(
     action: "HOLD",
     signal: null,
     regime: {
-      regime: "HIGH_VOLATILITY",
+      regime: RegimeType.HIGH_VOLATILITY,
       confidence: 0,
       features: { momentum: 0, volatility: 1, trendStrength: 0 },
       timestamp: Date.now(),

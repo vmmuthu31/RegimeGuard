@@ -1,4 +1,8 @@
-import type { TradingPair } from "@/shared/constants";
+import {
+  type TradingPair,
+  StopLossAdjustment,
+  RiskLevel,
+} from "@/shared/constants";
 import { getWeexConfig } from "@/server/config";
 import { getCandles, getTicker } from "@/server/services/weex-client";
 import {
@@ -185,10 +189,10 @@ export async function runSingleCycle(): Promise<{
             regime: decision.regime,
             riskDecision: {
               positionSizeMultiplier: 1,
-              stopLossAdjustment: "NORMAL",
+              stopLossAdjustment: StopLossAdjustment.NORMAL,
               tradeCooldownActive: false,
               tradeSuspended: false,
-              riskLevel: "LOW",
+              riskLevel: RiskLevel.LOW,
               explanation: "",
               timestamp: Date.now(),
             },

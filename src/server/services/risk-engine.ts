@@ -1,7 +1,8 @@
 import {
-  RISK_LEVELS,
   DEFAULT_RISK_PARAMS,
-  type RiskLevel,
+  RiskLevel,
+  StopLossAdjustment,
+  RegimeType,
 } from "@/shared/constants";
 import type {
   RegimeClassification,
@@ -26,19 +27,19 @@ export function evaluateRisk(
 ): RiskDecision {
   const explanations: string[] = [];
   let positionSizeMultiplier = 1.0;
-  let stopLossAdjustment: "NORMAL" | "TIGHTENED" | "WIDENED" = "NORMAL";
+  let stopLossAdjustment: StopLossAdjustment = StopLossAdjustment.NORMAL;
   let tradeCooldownActive = false;
   let tradeSuspended = false;
-  let riskLevel: RiskLevel = RISK_LEVELS.LOW;
+  let riskLevel: RiskLevel = RiskLevel.LOW;
 
-  if (regime.regime === "HIGH_VOLATILITY") {
+  if (regime.regime === RegimeType.HIGH_VOLATILITY) {
     positionSizeMultiplier = 0.25;
-    stopLossAdjustment = "TIGHTENED";
-    riskLevel = RISK_LEVELS.HIGH;
+    stopLossAdjustment = StopLossAdjustment.TIGHTENED;
+    riskLevel = RiskLevel.HIGH;
     explanations.push(
       "High volatility regime detected. Position size reduced to 25%."
     );
-  } else if (regime.regime === "RANGE_BOUND") {
+  } else if (regime.regime === RegimeType.RANGE_BOUND) {
     positionSizeMultiplier = 0.6;
     explanations.push("Range-bound regime. Position size set to 60%.");
   }
@@ -57,7 +58,7 @@ export function evaluateRisk(
       currentVolatility / DEFAULT_RISK_PARAMS.volatilityThreshold;
     const volatilityPenalty = Math.min(volatilityExcess * 0.2, 0.5);
     positionSizeMultiplier *= 1 - volatilityPenalty;
-    stopLossAdjustment = "TIGHTENED";
+    stopLossAdjustment = StopLossAdjustment.TIGHTENED;
     explanations.push(
       `Elevated volatility (${(currentVolatility * 100).toFixed(
         2
@@ -79,14 +80,14 @@ export function evaluateRisk(
     riskState.dailyLossPercent >
     DEFAULT_RISK_PARAMS.maxDailyLossPercent * 0.7
   ) {
-    stopLossAdjustment = "TIGHTENED";
-    riskLevel = RISK_LEVELS.HIGH;
+    stopLossAdjustment = StopLossAdjustment.TIGHTENED;
+    riskLevel = RiskLevel.HIGH;
     explanations.push("Approaching daily loss limit. Risk level elevated.");
   }
 
   if (riskState.dailyLossPercent >= DEFAULT_RISK_PARAMS.maxDailyLossPercent) {
     tradeSuspended = true;
-    riskLevel = RISK_LEVELS.CRITICAL;
+    riskLevel = RiskLevel.CRITICAL;
     explanations.push("Daily loss limit reached. Trading suspended.");
   }
 
@@ -113,7 +114,7 @@ export function evaluateRisk(
 
   if (totalPositionValue > maxPositionValue * 0.8) {
     positionSizeMultiplier *= 0.3;
-    riskLevel = riskLevel === RISK_LEVELS.LOW ? RISK_LEVELS.MEDIUM : riskLevel;
+    riskLevel = riskLevel === RiskLevel.LOW ? RiskLevel.MEDIUM : riskLevel;
     explanations.push(
       "Approaching position size limit. New positions reduced."
     );
@@ -121,12 +122,11 @@ export function evaluateRisk(
 
   positionSizeMultiplier = Math.max(0.1, Math.min(positionSizeMultiplier, 1.0));
 
-  if (!tradeSuspended && riskLevel !== RISK_LEVELS.CRITICAL) {
+  if (!tradeSuspended && riskLevel !== RiskLevel.CRITICAL) {
     if (positionSizeMultiplier < 0.3) {
-      riskLevel = RISK_LEVELS.HIGH;
+      riskLevel = RiskLevel.HIGH;
     } else if (positionSizeMultiplier < 0.7) {
-      riskLevel =
-        riskLevel === RISK_LEVELS.LOW ? RISK_LEVELS.MEDIUM : riskLevel;
+      riskLevel = riskLevel === RiskLevel.LOW ? RiskLevel.MEDIUM : riskLevel;
     }
   }
 
@@ -163,14 +163,14 @@ export function calculateStopLoss(
   entryPrice: number,
   side: "LONG" | "SHORT",
   atr: number,
-  stopLossAdjustment: "NORMAL" | "TIGHTENED" | "WIDENED"
+  stopLossAdjustment: StopLossAdjustment
 ): number {
   const baseStopPercent = DEFAULT_RISK_PARAMS.defaultStopLossPercent;
   let adjustmentMultiplier = 1.0;
 
-  if (stopLossAdjustment === "TIGHTENED") {
+  if (stopLossAdjustment === StopLossAdjustment.TIGHTENED) {
     adjustmentMultiplier = 0.7;
-  } else if (stopLossAdjustment === "WIDENED") {
+  } else if (stopLossAdjustment === StopLossAdjustment.WIDENED) {
     adjustmentMultiplier = 1.3;
   }
 
