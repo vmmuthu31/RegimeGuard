@@ -21,6 +21,8 @@ import { GlowCard } from "@/src/components/nurui/spotlight-card";
 import { RevealText } from "@/src/components/ui/reveal-text";
 import { useAuth } from "@/src/client/hooks/use-auth";
 import GlowingBorderCard from "@/src/components/ui/glowingbordercard";
+import SystemArchitecture from "@/src/components/sections/system-architecture";
+import ProductTour from "@/src/components/ui/product-tour";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -295,13 +297,16 @@ const HeroTerminal = () => {
 // --- MAIN PAGE ---
 
 export default function LandingPage() {
+  const [runTour, setRunTour] = useState(false);
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white overflow-hidden selection:bg-emerald-500/30 font-sans">
       <NoiseOverlay />
       <Navbar />
+      <ProductTour run={runTour} onFinish={() => setRunTour(false)} />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-40 pb-32 px-6">
+      <section id="hero-section" className="relative pt-40 pb-32 px-6">
         {/* Dynamic Mesh Gradient (Drapes.cc style) */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-pulse" />
         <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
@@ -357,6 +362,17 @@ export default function LandingPage() {
                 text="View Performance"
                 onClick={() => document.getElementById('performance')?.scrollIntoView({ behavior: 'smooth' })}
               />
+              <button
+                onClick={() => setRunTour(true)}
+                className="text-emerald-400 hover:text-emerald-300 transition-colors text-sm font-semibold flex items-center gap-2 group"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Take a Tour
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
           </motion.div>
 
@@ -374,7 +390,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- STATS TICKER (Bloomberg / High-Freq Style) --- */}
-      <section className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm overflow-hidden">
+      <section id="stats-ticker" className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-6">
           {[
             { label: "CURRENT REGIME", value: "TRENDING_UP", icon: TrendingUp, color: "#10b981", desc: "Market bias detected" },
@@ -399,45 +415,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- FEATURES (Bento Grid with Spotlight) --- */}
-      <section id="features" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Placeholder for Video/GIF Background - Positioned behind DynamicCard */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none radial-gradient-fade z-0">
-            {/* User to replace with actual video/gif later: "Abstract Data Flow HUD" or "Digital Network" */}
-            <div className="w-full h-full bg-[url('/grid-noise.png')] bg-repeat opacity-20" />
-          </div>
-
-          <DynamicCard
-            normalTitle="Architecture of"
-            colorfulTitle="Control"
-            description="Our proprietary Orchestrator manages the lifecycle of every trade, enforcing a strict hierarchy of risk over reward. The AI doesn't just guess; it validates."
-            buttonText="Explore System Logic"
-            features={[
-              {
-                title: "Regime Identification",
-                description: "Real-time classification of market states (Bull, Bear, Sideways) using multi-frame EMA & RSI logic.",
-                icon: <Brain className="w-6 h-6" />
-              },
-              {
-                title: "Volatility Guard",
-                description: "Automated Kill-Switch protocol activates instantly if ATR or variance breaches safety thresholds.",
-                icon: <Shield className="w-6 h-6" />
-              },
-              {
-                title: "Risk Validation",
-                description: "Position sizing is dynamically adjusted based on regime confidence scores, not just capital.",
-                icon: <Activity className="w-6 h-6" />
-              },
-              {
-                title: "Signal Consensus",
-                description: "Execution occurs only when Strategy & Risk agents align, ensuring 100% rule-based compliance.",
-                icon: <Zap className="w-6 h-6" />
-              }
-            ]}
-          />
-        </div>
-      </section>
+      {/* --- SYSTEM ARCHITECTURE HUD --- */}
+      <div id="neural-core">
+        <SystemArchitecture />
+      </div>
 
       {/* --- PERFORMANCE METRICS --- */}
       <section id="performance" className="py-20 bg-zinc-900/30 border-t border-white/5 relative overflow-hidden">
@@ -518,7 +499,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-32 relative overflow-hidden">
+      <section id="multi-agent" className="py-32 relative overflow-hidden">
         {/* Localized Backdrop Glows */}
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
@@ -574,58 +555,8 @@ export default function LandingPage() {
       </section>
 
 
-
-      {/* --- ARCHITECTURE (Animated Beams) --- */}
-      <section className="py-24 relative overflow-hidden border-t border-white/5">
-        {/* Technical Grid Decoration */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono mb-4 animate-pulse">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> SYSTEM_LATENCY: 12MS
-            </div>
-            <h2 className="text-5xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Execution Pipeline
-            </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto font-medium">
-              A transparent, rule-based execution flow powered by real-time risk analysis and multi-regime intelligence.
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative">
-            {[
-              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", gradient: "bg-gradient-to-r from-blue-500 to-cyan-500" },
-              { icon: Brain, label: "Regime AI", desc: "Classification", gradient: "bg-gradient-to-r from-purple-500 to-indigo-500" },
-              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", gradient: "bg-gradient-to-r from-orange-500 to-red-500" },
-              { icon: Zap, label: "Execution", desc: "Trade Signals", gradient: "bg-gradient-to-r from-emerald-500 to-green-500" }
-            ].map((step, index) => (
-              <React.Fragment key={step.label}>
-                <div className="relative z-10 w-full md:w-64">
-                  <GlowingBorderCard
-                    gradientClassName={step.gradient}
-                    className="w-full h-full min-h-[14rem]"
-                  >
-                    <div className="flex flex-col items-center text-center h-full justify-center relative z-20">
-                      <div className={`w-12 h-12 rounded-full bg-${step.gradient.split('from-')[1].split('-')[0]}-500/10 flex items-center justify-center mb-4 text-${step.gradient.split('from-')[1].split('-')[0]}-400 ring-1 ring-${step.gradient.split('from-')[1].split('-')[0]}-500/30`}>
-                        <step.icon className="w-6 h-6" />
-                      </div>
-                      <h3 className="text-lg font-bold text-white">{step.label}</h3>
-                      <p className="text-xs text-zinc-500 mt-1">{step.desc}</p>
-                    </div>
-                  </GlowingBorderCard>
-                </div>
-                {index < 3 && <AnimatedBeam delay={index * 0.5} />}
-                {index < 3 && <div className="md:hidden h-12 w-px bg-zinc-800" />}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* --- FOOTER --- */}
-      <footer className="py-12 border-t border-white/5 bg-zinc-950 text-center relative">
+      < footer className="py-12 border-t border-white/5 bg-zinc-950 text-center relative" >
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center relative z-10">
           <div className="flex items-center gap-2 mb-6 opacity-60 hover:opacity-100 transition-opacity">
@@ -637,7 +568,7 @@ export default function LandingPage() {
             System execution depends on API latency and market conditions.
           </p>
         </div>
-      </footer>
+      </footer >
 
       {/* --- GLOBAL STYLES & ANIMATIONS --- */}
       < style jsx global > {`
