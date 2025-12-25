@@ -361,17 +361,6 @@ export default function LandingPage() {
                 text="View Performance"
                 onClick={() => document.getElementById('performance')?.scrollIntoView({ behavior: 'smooth' })}
               />
-              <button
-                onClick={() => setRunTour(true)}
-                className="text-emerald-400 hover:text-emerald-300 transition-colors text-sm font-semibold flex items-center gap-2 group"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                Take a Tour
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
             </div>
           </motion.div>
 
