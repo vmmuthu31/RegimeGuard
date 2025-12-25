@@ -20,6 +20,7 @@ import { InfoCard } from "@/src/components/nurui/info-card";
 import { GlowCard } from "@/src/components/nurui/spotlight-card";
 import { RevealText } from "@/src/components/ui/reveal-text";
 import { useAuth } from "@/src/client/hooks/use-auth";
+import GlowingBorderCard from "@/src/components/ui/glowingbordercard";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -401,30 +402,36 @@ export default function LandingPage() {
       {/* --- FEATURES (Bento Grid with Spotlight) --- */}
       <section id="features" className="py-32 relative">
         <div className="max-w-7xl mx-auto px-6">
+          {/* Placeholder for Video/GIF Background - Positioned behind DynamicCard */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none radial-gradient-fade z-0">
+            {/* User to replace with actual video/gif later: "Abstract Data Flow HUD" or "Digital Network" */}
+            <div className="w-full h-full bg-[url('/grid-noise.png')] bg-repeat opacity-20" />
+          </div>
+
           <DynamicCard
             normalTitle="Architecture of"
             colorfulTitle="Control"
-            description='RegimeGuard is designed with a "Risk-First" philosophy. The AI doesn’t gamble; it calculates probability and manages capital preservation.'
-            buttonText="Explore Architecture"
+            description="Our proprietary Orchestrator manages the lifecycle of every trade, enforcing a strict hierarchy of risk over reward. The AI doesn't just guess; it validates."
+            buttonText="Explore System Logic"
             features={[
               {
-                title: "Context-Aware Intelligence",
-                description: "Identifies if market is Trending, Range-Bound, or Volatile and switches strategies.",
+                title: "Regime Identification",
+                description: "Real-time classification of market states (Bull, Bear, Sideways) using multi-frame EMA & RSI logic.",
                 icon: <Brain className="w-6 h-6" />
               },
               {
-                title: "Volatility Kill-Switch",
-                description: "Automatically halts trading during flash crashes or abnormal API latency.",
+                title: "Volatility Guard",
+                description: "Automated Kill-Switch protocol activates instantly if ATR or variance breaches safety thresholds.",
                 icon: <Shield className="w-6 h-6" />
               },
               {
-                title: "100% Explainable",
-                description: "No 'Black Box' trades. Every decision comes with a human-readable reason log.",
-                icon: <TerminalIcon className="w-6 h-6" />
+                title: "Risk Validation",
+                description: "Position sizing is dynamically adjusted based on regime confidence scores, not just capital.",
+                icon: <Activity className="w-6 h-6" />
               },
               {
-                title: "WEEX API Optimized",
-                description: "Built specifically for the WEEX v2 API, ensuring millisecond-latency execution.",
+                title: "Signal Consensus",
+                description: "Execution occurs only when Strategy & Risk agents align, ensuring 100% rule-based compliance.",
                 icon: <Zap className="w-6 h-6" />
               }
             ]}
@@ -589,24 +596,25 @@ export default function LandingPage() {
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative">
             {[
-              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", color: "#3b82f6", info: "Real-time ingestion" },
-              { icon: Brain, label: "Regime AI", desc: "Classification", color: "#a855f7", info: "Pattern recognition" },
-              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", color: "#f97316", info: "Capital protection" },
-              { icon: Zap, label: "Execution", desc: "Trade Signals", color: "#10b981", info: "Ultra-fast orders" }
+              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", gradient: "bg-gradient-to-r from-blue-500 to-cyan-500" },
+              { icon: Brain, label: "Regime AI", desc: "Classification", gradient: "bg-gradient-to-r from-purple-500 to-indigo-500" },
+              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", gradient: "bg-gradient-to-r from-orange-500 to-red-500" },
+              { icon: Zap, label: "Execution", desc: "Trade Signals", gradient: "bg-gradient-to-r from-emerald-500 to-green-500" }
             ].map((step, index) => (
               <React.Fragment key={step.label}>
                 <div className="relative z-10 w-full md:w-64">
-                  <InfoCard
-                    title={step.label}
-                    description={step.desc}
-                    width={256}
-                    height={220}
-                    borderColor={step.color}
-                    borderBgColor={`${step.color}22`}
-                    effectBgColor={`${step.color}44`}
-                    icon={<step.icon className="w-6 h-6" />}
-                    contentPadding="16px"
-                  />
+                  <GlowingBorderCard
+                    gradientClassName={step.gradient}
+                    className="w-full h-full min-h-[14rem]"
+                  >
+                    <div className="flex flex-col items-center text-center h-full justify-center relative z-20">
+                      <div className={`w-12 h-12 rounded-full bg-${step.gradient.split('from-')[1].split('-')[0]}-500/10 flex items-center justify-center mb-4 text-${step.gradient.split('from-')[1].split('-')[0]}-400 ring-1 ring-${step.gradient.split('from-')[1].split('-')[0]}-500/30`}>
+                        <step.icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white">{step.label}</h3>
+                      <p className="text-xs text-zinc-500 mt-1">{step.desc}</p>
+                    </div>
+                  </GlowingBorderCard>
                 </div>
                 {index < 3 && <AnimatedBeam delay={index * 0.5} />}
                 {index < 3 && <div className="md:hidden h-12 w-px bg-zinc-800" />}
