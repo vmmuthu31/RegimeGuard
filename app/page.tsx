@@ -19,7 +19,6 @@ import BorderAnimationButton from "@/src/components/nurui/border-button";
 import { InfoCard } from "@/src/components/nurui/info-card";
 import { GlowCard } from "@/src/components/nurui/spotlight-card";
 import { RevealText } from "@/src/components/ui/reveal-text";
-import { useAuth } from "@/src/client/hooks/use-auth";
 import GlowingBorderCard from "@/src/components/ui/glowingbordercard";
 import SystemArchitecture from "@/src/components/sections/system-architecture";
 import ProductTour from "@/src/components/ui/product-tour";
@@ -124,8 +123,6 @@ const AnimatedIcon = ({ icon: Icon, className }: { icon: any, className?: string
 // --- 3. SUB-COMPONENTS ---
 
 const Navbar = () => {
-  const { login, logout, authenticated, walletAddress } = useAuth();
-
   const emblem = (
     <div className="flex items-center gap-2 group cursor-pointer">
       <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-lg bg-zinc-900 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
@@ -140,26 +137,12 @@ const Navbar = () => {
 
   const rightComponent = (
     <div className="flex items-center gap-4">
-      {authenticated && walletAddress ? (
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-zinc-400 font-mono hidden md:block">
-            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-          </span>
-          <GradientButton
-            text="Logout"
-            className="h-10"
-            borderRadius={9999}
-            onClick={logout}
-          />
-        </div>
-      ) : (
-        <GradientButton
-          text="Sign In"
-          className="h-10"
-          borderRadius={9999}
-          onClick={login}
-        />
-      )}
+      <GradientButton
+        text="Sign In"
+        className="h-10"
+        borderRadius={9999}
+        onClick={() => alert("Sign In coming soon!")}
+      />
     </div>
   );
 
@@ -299,11 +282,27 @@ const HeroTerminal = () => {
 export default function LandingPage() {
   const [runTour, setRunTour] = useState(false);
 
+  // Auto-start tour after 5 seconds on first visit
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('regimeguard_tour_seen');
+    if (!hasSeenTour) {
+      const timer = setTimeout(() => {
+        setRunTour(true);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleTourFinish = () => {
+    setRunTour(false);
+    localStorage.setItem('regimeguard_tour_seen', 'true');
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white overflow-hidden selection:bg-emerald-500/30 font-sans">
       <NoiseOverlay />
       <Navbar />
-      <ProductTour run={runTour} onFinish={() => setRunTour(false)} />
+      <ProductTour run={runTour} onFinish={handleTourFinish} />
 
       {/* --- HERO SECTION --- */}
       <section id="hero-section" className="relative pt-40 pb-32 px-6">
