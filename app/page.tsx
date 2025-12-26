@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/src/client/hooks/use-auth";
 
+import { useDashboardData } from "@/src/client/hooks/useDashboardData";
+import { formatPrice } from "@/src/shared/utils/formatters";
+
 function Navbar() {
   const { login, authenticated, walletAddress, logout } = useAuth();
 
@@ -78,6 +81,10 @@ function Navbar() {
 }
 
 function Hero() {
+  const { tickers } = useDashboardData();
+  const btcTicker = tickers["cmt_btcusdt"];
+  const btcPrice = btcTicker ? formatPrice(btcTicker.lastPrice) : "---";
+
   return (
     <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
       {/* Dynamic Background */}
@@ -143,7 +150,7 @@ function Hero() {
                   ))}
                 </div>
                 <div className="absolute top-2 left-3 text-emerald-500">
-                  BTC/USDT <span className="text-white ml-2">$98,420.50</span>
+                  BTC/USDT <span className="text-white ml-2">${btcPrice}</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -458,7 +465,7 @@ function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 text-center text-xs text-zinc-600">
-        © 2024 RegimeGuard Inc. All rights reserved.
+        © 2026 RegimeGuard Inc. All rights reserved.
       </div>
     </footer>
   );
