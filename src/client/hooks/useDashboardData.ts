@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import type { Time } from "lightweight-charts";
+import type { WeexRawOrder } from "@/src/shared/types/trading";
 
 export interface TickerData {
   symbol: string;
@@ -67,6 +68,15 @@ export function useDashboardData() {
   const [market, setMarket] = useState<MarketData | null>(null);
   const [loopRunning, setLoopRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [orders, setOrders] = useState<WeexRawOrder[]>([]);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const response = await fetch("/api/trade?action=current");
+      const data = await response.json();
+      if (data.success) setOrders(data.data);
+    } catch {}
+  }, []);
 
   const connectAndSubscribe = useCallback(async () => {
     try {
@@ -124,7 +134,7 @@ export function useDashboardData() {
   const fetchKlineData = useCallback(async (symbol: string) => {
     try {
       const response = await fetch(
-        `/api/market/data?symbol=${symbol}&type=candles&limit=100`
+        `/api/market/data?symbol=${symbol}&endpoint=candles&limit=100`
       );
       const data = await response.json();
       if (data.success && data.data) {
@@ -180,7 +190,8 @@ export function useDashboardData() {
     void connectAndSubscribe();
     void fetchAccountData();
     void fetchMarketData();
-  }, [connectAndSubscribe, fetchAccountData, fetchMarketData]);
+    void fetchOrders();
+  }, [connectAndSubscribe, fetchAccountData, fetchMarketData, fetchOrders]);
 
   useEffect(() => {
     if (!connected) return;
@@ -188,11 +199,18 @@ export function useDashboardData() {
       void fetchWebSocketData();
       void fetchAccountData();
       void fetchMarketData();
+      void fetchOrders();
     }, 1500);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchWebSocketData();
     return () => clearInterval(interval);
-  }, [connected, fetchWebSocketData, fetchAccountData, fetchMarketData]);
+  }, [
+    connected,
+    fetchWebSocketData,
+    fetchAccountData,
+    fetchMarketData,
+    fetchOrders,
+  ]);
 
   return {
     connected,
@@ -201,9 +219,11 @@ export function useDashboardData() {
     lastUpdate,
     account,
     market,
+    orders,
     loopRunning,
     error,
     fetchKlineData,
+    fetchOrders,
     toggleTradingLoop,
   };
 }

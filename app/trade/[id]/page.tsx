@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { FaArrowLeft, FaBitcoin, FaEthereum, FaBolt } from "react-icons/fa";
@@ -29,10 +29,16 @@ export default function TradePage({ params }: PageProps) {
   // Unwrap params
   const { id } = use(params);
 
-  const { connected, tickers, klines, lastUpdate, account, fetchKlineData } =
-    useDashboardData();
-
-  const [orders, setOrders] = useState<Order[]>([]);
+  const {
+    connected,
+    tickers,
+    klines,
+    lastUpdate,
+    account,
+    fetchKlineData,
+    orders,
+    fetchOrders,
+  } = useDashboardData();
 
   // Map generic ID (btc) or full ID (btcusdt) to full symbol object
   const symbol =
@@ -61,30 +67,77 @@ export default function TradePage({ params }: PageProps) {
     }
   }, [connected, symbol.id, fetchKlineData, candleData.length]);
 
-  const handlePlaceOrder = (
+  // Map Weex orders to UI format
+  const mappedOrders: Order[] = orders.map((o) => ({
+    id: o.orderId,
+    time: new Date(parseInt(o.cTime)).toLocaleTimeString(),
+    symbol: o.symbol,
+    type: o.orderType?.toLowerCase() === "market" ? "Market" : "Limit",
+    side: o.side === "buy" ? "Buy" : "Sell",
+    price: o.price,
+    amount: o.size,
+    filled: o.filledQty || "0",
+    status: "Open",
+  }));
+
+  // Normalize symbol for comparison (remove cmt_, /, -, and lowercase)
+  const normalizeSymbol = (s: string) =>
+    s.toLowerCase().replace("cmt_", "").replace("/", "").replace("-", "");
+
+  // Filter for current symbol with robust matching
+  const currentSymbolOrders = mappedOrders.filter(
+    (o) => normalizeSymbol(o.symbol) === normalizeSymbol(symbol.id)
+  );
+
+  const handlePlaceOrder = async (
     side: "Buy" | "Sell",
     price: string,
     amount: string
   ) => {
-    const newOrder: Order = {
-      id: Math.random().toString(36).substr(2, 9),
-      time: new Date().toLocaleTimeString(),
-      symbol: symbol.name,
-      type: "Market",
-      side,
-      price: price || "Market",
-      amount,
-      filled: "0%",
-      status: "Open",
-    };
-
-    setOrders((prev) => [newOrder, ...prev]);
-    toast.success(`${side} Order Placed for ${amount} ${symbol.name}`);
+    try {
+      const response = await fetch("/api/trade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "placeOrder",
+          symbol: symbol.id,
+          size: amount,
+          side: side.toLowerCase(), // 'buy' | 'sell'
+          type: "market", // Assuming market orders for quick trade
+          price: "0", // Market order
+        }),
+      });
+      if ((await response.json()).success) {
+        toast.success(`${side} Order Placed for ${amount} ${symbol.name}`);
+        setTimeout(() => fetchOrders(), 500); // Activity update
+      } else {
+        toast.error("Order failed");
+      }
+    } catch {
+      toast.error("Failed to place order");
+    }
   };
 
-  const handleCancelOrder = (orderId: string) => {
-    setOrders((prev) => prev.filter((o) => o.id !== orderId));
-    toast.info("Order Cancelled");
+  const handleCancelOrder = async (orderId: string) => {
+    try {
+      const response = await fetch("/api/trade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "cancelOrder",
+          orderId,
+          clientOid: null, // Assuming we don't track this locally yet
+        }),
+      });
+      if ((await response.json()).success) {
+        toast.info("Order Cancelled");
+        setTimeout(() => fetchOrders(), 500);
+      } else {
+        toast.error("Cancel failed");
+      }
+    } catch {
+      toast.error("Failed to cancel");
+    }
   };
 
   return (
@@ -203,7 +256,10 @@ export default function TradePage({ params }: PageProps) {
             </div>
 
             {/* Active Orders */}
-            <ActiveOrders orders={orders} onCancelOrder={handleCancelOrder} />
+            <ActiveOrders
+              orders={currentSymbolOrders}
+              onCancelOrder={handleCancelOrder}
+            />
           </div>
 
           {/* Right Column: Order Form (4/12) */}
