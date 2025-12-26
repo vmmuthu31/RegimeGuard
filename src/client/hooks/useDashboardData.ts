@@ -176,6 +176,7 @@ export function useDashboardData() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void connectAndSubscribe();
     void fetchAccountData();
     void fetchMarketData();
@@ -188,6 +189,7 @@ export function useDashboardData() {
       void fetchAccountData();
       void fetchMarketData();
     }, 1500);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchWebSocketData();
     return () => clearInterval(interval);
   }, [connected, fetchWebSocketData, fetchAccountData, fetchMarketData]);

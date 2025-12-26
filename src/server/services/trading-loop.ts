@@ -148,12 +148,10 @@ export async function runSingleCycle(): Promise<{
         continue;
       }
 
-      const [candles, ticker] = await Promise.all([
+      const [candles] = await Promise.all([
         getCandles(symbol, "1m", 100),
         getTicker(symbol),
       ]);
-
-      const currentPrice = ticker.last;
 
       const decision = runTradingPipeline(
         symbol,

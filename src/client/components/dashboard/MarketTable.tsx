@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FaBitcoin, FaEthereum, FaBolt, FaCoins } from "react-icons/fa";
+import { FaBitcoin, FaEthereum, FaCoins } from "react-icons/fa";
 import {
   SiSolana,
   SiDogecoin,

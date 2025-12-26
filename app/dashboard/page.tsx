@@ -2,14 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Wallet,
-  Brain,
-  Volume2,
-  Play,
-  Square,
-  AlertTriangle,
-} from "lucide-react";
+import { Brain, Volume2, Play, Square, AlertTriangle } from "lucide-react";
 
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";

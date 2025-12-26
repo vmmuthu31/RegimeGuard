@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { formatPrice } from "@/src/shared/utils/formatters";
 
 // Mock Data
 const ACTIVE_ORDERS = [
