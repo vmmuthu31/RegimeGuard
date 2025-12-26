@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowRight,
-  BarChart3,
-  Zap,
-  TrendingUp,
-  BarChart2,
-  Shield,
-} from "lucide-react";
+import { ArrowRight, Zap, TrendingUp, BarChart2, Shield } from "lucide-react";
 import { useAuth } from "@/src/client/hooks/use-auth";
 
 import { useDashboardData } from "@/src/client/hooks/useDashboardData";
@@ -101,7 +94,6 @@ function Hero() {
         className="relative flex flex-col gap-4 items-center justify-center px-4"
       >
         <div className="max-w-5xl mx-auto text-center relative z-10 pt-20">
-          {/* Status Badge */}
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-800/60 backdrop-blur-md text-zinc-300 text-sm font-medium mb-10 shadow-lg shadow-emerald-500/5 hover:scale-105 transition-transform cursor-default">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -143,7 +135,6 @@ function Hero() {
             </button>
           </div>
 
-          {/* CSS-only Dashboard Preview */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, rotateX: 20 }}
             whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
@@ -209,7 +200,6 @@ function Hero() {
                   ))}
                 </div>
               </div>
-              {/* Scanline */}
               <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-500/5 to-transparent h-[10px] w-full animate-scan pointer-events-none" />
               <div className="absolute inset-0 bg-[radial-gradient(transparent_0%,#000_100%)] opacity-50 pointer-events-none" />
             </div>
@@ -276,7 +266,6 @@ function Features() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
-          {/* Main Feature - Large */}
           <SpotlightCard className="md:col-span-2 row-span-2 p-10 group bg-zinc-950/40">
             <div className="absolute top-0 right-0 p-10 opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none">
               <BarChart2 className="w-64 h-64 text-emerald-500" />
@@ -308,7 +297,6 @@ function Features() {
             </div>
           </SpotlightCard>
 
-          {/* Feature 2 */}
           <SpotlightCard className="p-8 group bg-zinc-950/40">
             <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center mb-6 px-1 border border-white/5 group-hover:border-emerald-500/50 transition-colors">
               <Shield className="w-6 h-6 text-zinc-300 group-hover:text-emerald-400 transition-colors" />
@@ -322,7 +310,6 @@ function Features() {
             </p>
           </SpotlightCard>
 
-          {/* Feature 3 */}
           <SpotlightCard className="p-8 group bg-zinc-950/40">
             <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center mb-6 border border-white/5 group-hover:border-yellow-500/50 transition-colors">
               <Zap className="w-6 h-6 text-zinc-300 group-hover:text-yellow-400 transition-colors" />
@@ -336,7 +323,6 @@ function Features() {
             </p>
           </SpotlightCard>
 
-          {/* Wide Feature */}
           <SpotlightCard className="md:col-span-3 p-8 group flex flex-col md:flex-row items-center gap-8 bg-zinc-950/40">
             <div className="flex-1 pointer-events-none">
               <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center mb-6 border border-white/5">
@@ -355,7 +341,6 @@ function Features() {
                 Model Architecture Visualization
               </div>
               <div className="absolute inset-0 bg-linear-to-r from-transparent via-emerald-500/10 to-transparent animate-pulse" />
-              {/* Grid Background */}
               <div
                 className="absolute inset-x-0 top-0 h-full w-full bg-transparent opacity-30"
                 style={{
@@ -375,7 +360,6 @@ function Features() {
 function HowItWorks() {
   return (
     <section className="md:py-16 px-6 border-t border-white/5 relative bg-zinc-950 overflow-hidden">
-      {/* Background Beams */}
       <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-24 hidden md:block max-w-7xl mx-auto opacity-50 pointer-events-none">
         <BeamPath />
       </div>
@@ -395,7 +379,6 @@ function HowItWorks() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-12 md:gap-4 relative">
-          {/* Step 1 */}
           <div className="relative group">
             <div className="w-16 h-16 mx-auto bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 relative z-10 group-hover:border-emerald-500/50 group-hover:scale-110 transition-all duration-300 shadow-2xl shadow-black">
               <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
@@ -411,7 +394,6 @@ function HowItWorks() {
             </div>
           </div>
 
-          {/* Step 2 */}
           <div className="relative group">
             <div className="w-16 h-16 mx-auto bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 relative z-10 group-hover:border-emerald-500/50 group-hover:scale-110 transition-all duration-300 shadow-2xl shadow-black">
               <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
@@ -429,7 +411,6 @@ function HowItWorks() {
             </div>
           </div>
 
-          {/* Step 3 */}
           <div className="relative group">
             <div className="w-16 h-16 mx-auto bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 relative z-10 group-hover:border-emerald-500/50 group-hover:scale-110 transition-all duration-300 shadow-2xl shadow-black">
               <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
@@ -445,7 +426,6 @@ function HowItWorks() {
             </div>
           </div>
 
-          {/* Step 4 */}
           <div className="relative group">
             <div className="w-16 h-16 mx-auto bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center mb-6 relative z-10 group-hover:border-emerald-500/50 group-hover:scale-110 transition-all duration-300 shadow-2xl shadow-black">
               <div className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
