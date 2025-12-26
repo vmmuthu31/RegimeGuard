@@ -19,7 +19,9 @@ import BorderAnimationButton from "@/src/components/nurui/border-button";
 import { InfoCard } from "@/src/components/nurui/info-card";
 import { GlowCard } from "@/src/components/nurui/spotlight-card";
 import { RevealText } from "@/src/components/ui/reveal-text";
-import { useAuth } from "@/src/client/hooks/use-auth";
+import GlowingBorderCard from "@/src/components/ui/glowingbordercard";
+import SystemArchitecture from "@/src/components/sections/system-architecture";
+import ProductTour from "@/src/components/ui/product-tour";
 
 // --- 1. UTILITIES & ANIMATION HOOKS ---
 
@@ -121,8 +123,6 @@ const AnimatedIcon = ({ icon: Icon, className }: { icon: any, className?: string
 // --- 3. SUB-COMPONENTS ---
 
 const Navbar = () => {
-  const { login, logout, authenticated, walletAddress } = useAuth();
-
   const emblem = (
     <div className="flex items-center gap-2 group cursor-pointer">
       <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-lg bg-zinc-900 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
@@ -137,26 +137,12 @@ const Navbar = () => {
 
   const rightComponent = (
     <div className="flex items-center gap-4">
-      {authenticated && walletAddress ? (
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-zinc-400 font-mono hidden md:block">
-            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-          </span>
-          <GradientButton
-            text="Logout"
-            className="h-10"
-            borderRadius={9999}
-            onClick={logout}
-          />
-        </div>
-      ) : (
-        <GradientButton
-          text="Sign In"
-          className="h-10"
-          borderRadius={9999}
-          onClick={login}
-        />
-      )}
+      <GradientButton
+        text="Sign In"
+        className="h-10"
+        borderRadius={9999}
+        onClick={() => alert("Sign In coming soon!")}
+      />
     </div>
   );
 
@@ -294,13 +280,32 @@ const HeroTerminal = () => {
 // --- MAIN PAGE ---
 
 export default function LandingPage() {
+  const [runTour, setRunTour] = useState(false);
+
+  // Auto-start tour after 5 seconds on first visit
+  useEffect(() => {
+    const hasSeenTour = localStorage.getItem('regimeguard_tour_seen');
+    if (!hasSeenTour) {
+      const timer = setTimeout(() => {
+        setRunTour(true);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleTourFinish = () => {
+    setRunTour(false);
+    localStorage.setItem('regimeguard_tour_seen', 'true');
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white overflow-hidden selection:bg-emerald-500/30 font-sans">
       <NoiseOverlay />
       <Navbar />
+      <ProductTour run={runTour} onFinish={handleTourFinish} />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-40 pb-32 px-6">
+      <section id="hero-section" className="relative pt-40 pb-32 px-6">
         {/* Dynamic Mesh Gradient (Drapes.cc style) */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-pulse" />
         <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
@@ -373,7 +378,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- STATS TICKER (Bloomberg / High-Freq Style) --- */}
-      <section className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm overflow-hidden">
+      <section id="stats-ticker" className="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-wrap justify-center gap-6">
           {[
             { label: "CURRENT REGIME", value: "TRENDING_UP", icon: TrendingUp, color: "#10b981", desc: "Market bias detected" },
@@ -398,39 +403,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- FEATURES (Bento Grid with Spotlight) --- */}
-      <section id="features" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <DynamicCard
-            normalTitle="Architecture of"
-            colorfulTitle="Control"
-            description='RegimeGuard is designed with a "Risk-First" philosophy. The AI doesn’t gamble; it calculates probability and manages capital preservation.'
-            buttonText="Explore Architecture"
-            features={[
-              {
-                title: "Context-Aware Intelligence",
-                description: "Identifies if market is Trending, Range-Bound, or Volatile and switches strategies.",
-                icon: <Brain className="w-6 h-6" />
-              },
-              {
-                title: "Volatility Kill-Switch",
-                description: "Automatically halts trading during flash crashes or abnormal API latency.",
-                icon: <Shield className="w-6 h-6" />
-              },
-              {
-                title: "100% Explainable",
-                description: "No 'Black Box' trades. Every decision comes with a human-readable reason log.",
-                icon: <TerminalIcon className="w-6 h-6" />
-              },
-              {
-                title: "WEEX API Optimized",
-                description: "Built specifically for the WEEX v2 API, ensuring millisecond-latency execution.",
-                icon: <Zap className="w-6 h-6" />
-              }
-            ]}
-          />
-        </div>
-      </section>
+      {/* --- SYSTEM ARCHITECTURE HUD --- */}
+      <div id="neural-core">
+        <SystemArchitecture />
+      </div>
 
       {/* --- PERFORMANCE METRICS --- */}
       <section id="performance" className="py-20 bg-zinc-900/30 border-t border-white/5 relative overflow-hidden">
@@ -511,7 +487,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-32 relative overflow-hidden">
+      <section id="multi-agent" className="py-32 relative overflow-hidden">
         {/* Localized Backdrop Glows */}
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
@@ -567,57 +543,8 @@ export default function LandingPage() {
       </section>
 
 
-
-      {/* --- ARCHITECTURE (Animated Beams) --- */}
-      <section className="py-24 relative overflow-hidden border-t border-white/5">
-        {/* Technical Grid Decoration */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono mb-4 animate-pulse">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> SYSTEM_LATENCY: 12MS
-            </div>
-            <h2 className="text-5xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Execution Pipeline
-            </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto font-medium">
-              A transparent, rule-based execution flow powered by real-time risk analysis and multi-regime intelligence.
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative">
-            {[
-              { icon: BarChart3, label: "Market Data", desc: "WEEX API Feed", color: "#3b82f6", info: "Real-time ingestion" },
-              { icon: Brain, label: "Regime AI", desc: "Classification", color: "#a855f7", info: "Pattern recognition" },
-              { icon: Shield, label: "Risk Engine", desc: "Exposure Control", color: "#f97316", info: "Capital protection" },
-              { icon: Zap, label: "Execution", desc: "Trade Signals", color: "#10b981", info: "Ultra-fast orders" }
-            ].map((step, index) => (
-              <React.Fragment key={step.label}>
-                <div className="relative z-10 w-full md:w-64">
-                  <InfoCard
-                    title={step.label}
-                    description={step.desc}
-                    width={256}
-                    height={220}
-                    borderColor={step.color}
-                    borderBgColor={`${step.color}22`}
-                    effectBgColor={`${step.color}44`}
-                    icon={<step.icon className="w-6 h-6" />}
-                    contentPadding="16px"
-                  />
-                </div>
-                {index < 3 && <AnimatedBeam delay={index * 0.5} />}
-                {index < 3 && <div className="md:hidden h-12 w-px bg-zinc-800" />}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* --- FOOTER --- */}
-      <footer className="py-12 border-t border-white/5 bg-zinc-950 text-center relative">
+      < footer className="py-12 border-t border-white/5 bg-zinc-950 text-center relative" >
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center relative z-10">
           <div className="flex items-center gap-2 mb-6 opacity-60 hover:opacity-100 transition-opacity">
@@ -629,7 +556,7 @@ export default function LandingPage() {
             System execution depends on API latency and market conditions.
           </p>
         </div>
-      </footer>
+      </footer >
 
       {/* --- GLOBAL STYLES & ANIMATIONS --- */}
       < style jsx global > {`

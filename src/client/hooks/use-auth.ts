@@ -1,8 +1,7 @@
 "use client";
 
-import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useAtom, useSetAtom } from "jotai";
-import { useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { userSettingsAtom, systemStatusAtom } from "../state/atoms";
 
 interface UserData {
@@ -17,113 +16,39 @@ interface UserData {
   };
 }
 
+// Simple mock auth hook - no Privy dependency
 export function useAuth() {
-  const { ready, authenticated, user, login, logout } = usePrivy();
-  const { wallets } = useWallets();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userSettings, setUserSettings] = useAtom(userSettingsAtom);
   const setSystemStatus = useSetAtom(systemStatusAtom);
 
-  const walletAddress = wallets[0]?.address || user?.wallet?.address || null;
+  const login = useCallback(() => {
+    // For demo purposes, just set authenticated state
+    setIsAuthenticated(true);
+    setSystemStatus("operational");
+  }, [setSystemStatus]);
+
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+  }, []);
 
   const createOrGetUser = useCallback(async (): Promise<UserData | null> => {
-    if (!walletAddress) return null;
-
-    try {
-      const response = await fetch("/api/user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "getByWallet",
-          walletAddress,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success && data.data?.user) {
-        return {
-          id: data.data.user.id,
-          walletAddress: data.data.user.wallet_address,
-          settings: data.data.user.settings,
-        };
-      }
-
-      const createResponse = await fetch("/api/user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create",
-          walletAddress,
-        }),
-      });
-
-      const createData = await createResponse.json();
-
-      if (createData.success && createData.data?.user) {
-        return {
-          id: createData.data.user.id,
-          walletAddress: createData.data.user.wallet_address,
-          settings: createData.data.user.settings,
-        };
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Error creating/getting user:", error);
-      return null;
-    }
-  }, [walletAddress]);
-
-  useEffect(() => {
-    if (authenticated && walletAddress) {
-      createOrGetUser().then((userData) => {
-        if (userData?.settings) {
-          setUserSettings(userData.settings);
-          setSystemStatus("operational");
-        }
-      });
-    }
-  }, [
-    authenticated,
-    walletAddress,
-    createOrGetUser,
-    setUserSettings,
-    setSystemStatus,
-  ]);
+    return null;
+  }, []);
 
   const updateSettings = useCallback(
     async (userId: string, newSettings: typeof userSettings) => {
-      try {
-        const response = await fetch("/api/user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "updateSettings",
-            userId,
-            settings: newSettings,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          setUserSettings(newSettings);
-          return true;
-        }
-
-        return false;
-      } catch {
-        return false;
-      }
+      setUserSettings(newSettings);
+      return true;
     },
     [setUserSettings]
   );
 
   return {
-    ready,
-    authenticated,
-    user,
-    walletAddress,
+    ready: true,
+    authenticated: isAuthenticated,
+    user: null,
+    walletAddress: null,
     login,
     logout,
     createOrGetUser,
