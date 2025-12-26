@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Brain, Volume2, Play, Square, AlertTriangle } from "lucide-react";
+import { Brain, Volume2, Play, AlertTriangle } from "lucide-react";
 
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
+import { AuroraBackground } from "@/src/components/landing/aurora-background";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
 import { StatsCard } from "@/src/client/components/dashboard/StatsCard";
 import { TickerCard } from "@/src/client/components/dashboard/TickerCard";
@@ -31,14 +32,8 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white overflow-x-hidden selection:bg-emerald-500/30">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/10 rounded-full blur-[120px] mix-blend-screen animate-pulse duration-4000" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/5 rounded-full blur-[120px] mix-blend-screen" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
+    <AuroraBackground className="min-h-screen h-auto! overflow-x-hidden selection:bg-emerald-500/30">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
         <DashboardHeader
           connected={connected}
           lastUpdate={lastUpdate}
@@ -49,103 +44,110 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-red-400 text-sm flex items-center gap-3"
+            className="mb-8 p-4 bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-2xl text-red-400 text-sm flex items-center gap-3 shadow-[0_0_20px_-5px_rgba(239,68,68,0.2)]"
           >
             <AlertTriangle className="w-5 h-5 shrink-0" />
-            <span className="font-medium">{error}</span>
+            <span className="font-medium text-red-200">{error}</span>
           </motion.div>
         )}
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Main Stats Area - 2 Columns */}
-          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2">
-              <PortfolioChart balance={account?.balance.available || 0} />
+        {/* Command Center Grid */}
+        <div className="grid grid-cols-12 gap-6 mb-8">
+          {/* Row 1: Tickers (Full Width for quick glance) */}
+          <div className="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {SYMBOLS.map((sym, index) => (
+              <div key={sym.id} className="h-40">
+                <TickerCard symbol={sym} data={tickers[sym.id]} index={index} />
+              </div>
+            ))}
+          </div>
+
+          {/* Row 2: Charts & Stats Mix */}
+          {/* Main Portfolio Chart */}
+          <div className="col-span-12 lg:col-span-8 h-[400px]">
+            <PortfolioChart balance={account?.balance.available || 0} />
+          </div>
+
+          {/* Side Panel: Quick Stats & Controls */}
+          <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 flex-1">
+              <StatsCard
+                label="AI Regime"
+                icon={Brain}
+                value={
+                  market?.regime.regime.replace("_", " ") || "Analyzing..."
+                }
+                subValue={
+                  market
+                    ? `${(market.regime.confidence * 100).toFixed(
+                        0
+                      )}% confidence`
+                    : "Waiting for signal..."
+                }
+                valueClassName={
+                  market?.regime.regime === "TRENDING"
+                    ? "text-emerald-400"
+                    : market?.regime.regime === "HIGH_VOLATILITY"
+                    ? "text-red-400"
+                    : "text-amber-400"
+                }
+              />
+              <StatsCard
+                label="24h Volume"
+                icon={Volume2}
+                value={formatVolume(totalVolume.toString())}
+                subValue="Combined 3 pairs"
+              />
             </div>
 
-            <StatsCard
-              label="AI Regime"
-              icon={Brain}
-              value={market?.regime.regime.replace("_", " ") || "Analyzing..."}
-              subValue={
-                market
-                  ? `${(market.regime.confidence * 100).toFixed(0)}% confidence`
-                  : "Waiting for signal..."
-              }
-              valueClassName={
-                market?.regime.regime === "TRENDING"
-                  ? "text-emerald-400"
-                  : market?.regime.regime === "HIGH_VOLATILITY"
-                  ? "text-red-400"
-                  : "text-amber-400"
-              }
-            />
-
-            <StatsCard
-              label="24h Volume"
-              icon={Volume2}
-              value={formatVolume(totalVolume.toString())}
-              subValue="Combined 3 pairs"
-            />
-          </div>
-
-          {/* Quick Trade Widget - 1 Column */}
-          <div className="lg:col-span-1 grid grid-cols-1 gap-6">
-            {/* Moved Auto-Trade here or keep in main grid? Let's stack it under Quick Trade or keep it in main grid. 
-                 The user layout had 3 columns. 
-                 Left (2 cols): Balance (now full width), Regime, Volume.
-                 Right (1 col): QuickTrade.
-                 
-                 Let's put AI Regime and Volume in one row under Balance.
-                 And Auto-Trade? It was in the main grid before.
-             */}
-
-            <QuickTradeWidget />
-
-            <StatsCard
-              label="Auto-Trade"
-              icon={Play}
-              value={loopRunning ? "ACTIVE" : "OFF"}
-              subValue={loopRunning ? "Strategy Executing" : "Strategy Paused"}
-              valueClassName={
-                loopRunning ? "text-emerald-400" : "text-zinc-500"
-              }
-              action={
-                <button
-                  onClick={toggleTradingLoop}
-                  className={`p-2 rounded-lg transition-all duration-300 ${
-                    loopRunning
-                      ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                      : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+            {/* Auto-Trade Control */}
+            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-2xl p-5 flex items-center justify-between hover:border-white/10 transition-colors">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`p-2 rounded-lg ${
+                    loopRunning ? "bg-emerald-500/20" : "bg-zinc-800"
                   }`}
                 >
-                  {loopRunning ? (
-                    <Square className="w-4 h-4 fill-current" />
-                  ) : (
-                    <Play className="w-4 h-4 fill-current" />
-                  )}
-                </button>
-              }
+                  <Play
+                    className={`w-5 h-5 ${
+                      loopRunning ? "text-emerald-400" : "text-zinc-500"
+                    }`}
+                  />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white">Auto-Pilot</h3>
+                  <p className="text-xs text-zinc-500">
+                    {loopRunning ? "Active Strategy" : "System Paused"}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={toggleTradingLoop}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                  loopRunning
+                    ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
+                    : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                }`}
+              >
+                {loopRunning ? "STOP ENGINE" : "START ENGINE"}
+              </button>
+            </div>
+          </div>
+
+          {/* Row 3: Market Overview & Quick Trade */}
+          <div className="col-span-12 lg:col-span-8">
+            <MarketOverview
+              tickers={tickers}
+              market={market}
+              symbols={SYMBOLS}
             />
           </div>
+          <div className="col-span-12 lg:col-span-4">
+            <QuickTradeWidget />
+          </div>
         </div>
-
-        {/* Tickers */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {SYMBOLS.map((sym, index) => (
-            <TickerCard
-              key={sym.id}
-              symbol={sym}
-              data={tickers[sym.id]}
-              index={index}
-            />
-          ))}
-        </div>
-
-        {/* Market Overview */}
-        <MarketOverview tickers={tickers} market={market} symbols={SYMBOLS} />
       </div>
-    </div>
+    </AuroraBackground>
   );
 }
