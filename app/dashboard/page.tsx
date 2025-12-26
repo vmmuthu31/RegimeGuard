@@ -14,6 +14,8 @@ import { QuickTradeWidget } from "@/src/client/components/dashboard/QuickTradeWi
 import { PortfolioChart } from "@/src/client/components/dashboard/PortfolioChart";
 import { formatVolume } from "@/src/shared/utils/formatters";
 
+import { SpotlightCard } from "@/src/components/landing/spotlight-card";
+
 export default function DashboardPage() {
   const {
     connected,
@@ -51,101 +53,136 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* Command Center Grid */}
-        <div className="grid grid-cols-12 gap-6 mb-8">
-          {/* Row 1: Tickers (Full Width for quick glance) */}
-          <div className="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {SYMBOLS.map((sym, index) => (
-              <div key={sym.id} className="h-40">
-                <TickerCard symbol={sym} data={tickers[sym.id]} index={index} />
-              </div>
-            ))}
-          </div>
-
-          {/* Row 2: Charts & Stats Mix */}
-          {/* Main Portfolio Chart */}
-          <div className="col-span-12 lg:col-span-8 h-[400px]">
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+          {/* 1. Main Chart Area (Top Left) */}
+          <SpotlightCard className="col-span-1 md:col-span-8 row-span-2 h-[560px] border-zinc-800 bg-zinc-900/50">
             <PortfolioChart balance={account?.balance.available || 0} />
-          </div>
+          </SpotlightCard>
 
-          {/* Side Panel: Quick Stats & Controls */}
-          <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 flex-1">
-              <StatsCard
-                label="AI Regime"
-                icon={Brain}
-                value={
-                  market?.regime.regime.replace("_", " ") || "Analyzing..."
-                }
-                subValue={
-                  market
-                    ? `${(market.regime.confidence * 100).toFixed(
-                        0
-                      )}% confidence`
-                    : "Waiting for signal..."
-                }
-                valueClassName={
-                  market?.regime.regime === "TRENDING"
-                    ? "text-emerald-400"
-                    : market?.regime.regime === "HIGH_VOLATILITY"
-                    ? "text-red-400"
-                    : "text-amber-400"
-                }
-              />
-              <StatsCard
-                label="24h Volume"
-                icon={Volume2}
-                value={formatVolume(totalVolume.toString())}
-                subValue="Combined 3 pairs"
-              />
+          {/* 2. Quick Execution Terminal (Top Right - PROMOTED) */}
+          <SpotlightCard className="col-span-1 md:col-span-4 row-span-2 h-[560px] border-zinc-800 bg-zinc-900/50 p-2 relative overflow-visible">
+            <div className="absolute -top-3 -right-3 z-20 bg-emerald-500 text-zinc-950 text-[10px] font-bold px-2 py-1 rounded-sm shadow-lg rotate-12">
+              LIVE
             </div>
+            <QuickTradeWidget
+              symbol="BTC/USDT"
+              currentPrice={parseFloat(
+                tickers["cmt_btcusdt"]?.lastPrice || "0"
+              )}
+              userBalance={account?.balance.available || 0}
+            />
+          </SpotlightCard>
 
-            {/* Auto-Trade Control */}
-            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-2xl p-5 flex items-center justify-between hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`p-2 rounded-lg ${
-                    loopRunning ? "bg-emerald-500/20" : "bg-zinc-800"
-                  }`}
+          {/* 3. Intelligence Row (Regime, AutoPilot, Volume) */}
+          {/* Heroic Regime Card */}
+          <SpotlightCard
+            className="col-span-1 md:col-span-4 h-[220px] border-blue-500/20 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-violet-900/20 via-zinc-900/50 to-zinc-900/50"
+            spotlightColor="rgba(139, 92, 246, 0.3)"
+          >
+            <StatsCard
+              label="AI Regime Analysis"
+              icon={Brain}
+              value={
+                <span
+                  className={
+                    market?.regime.regime === "TRENDING"
+                      ? "text-emerald-400"
+                      : market?.regime.regime === "HIGH_VOLATILITY"
+                      ? "text-red-400"
+                      : "text-blue-400"
+                  }
                 >
-                  <Play
-                    className={`w-5 h-5 ${
-                      loopRunning ? "text-emerald-400" : "text-zinc-500"
-                    }`}
-                  />
+                  {market?.regime.regime.replace("_", " ") || "Analyzing..."}
+                </span>
+              }
+              subValue={
+                market
+                  ? `${(market.regime.confidence * 100).toFixed(
+                      0
+                    )}% confidence model output`
+                  : "Waiting for signal..."
+              }
+            />
+          </SpotlightCard>
+
+          {/* Technical AutoPilot Card */}
+          <SpotlightCard
+            className="col-span-1 md:col-span-4 h-[220px] border-zinc-800 bg-[linear-gradient(45deg,#18181b_25%,#09090b_25%,#09090b_50%,#18181b_50%,#18181b_75%,#09090b_75%,#09090b_100%)] bg-size-[20px_20px] border-dashed"
+            spotlightColor="rgba(16, 185, 129, 0.1)"
+          >
+            <div className="flex flex-col justify-between p-6 bg-zinc-900/80 backdrop-blur-sm h-full">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                    <Play
+                      className={`w-4 h-4 ${
+                        loopRunning ? "text-emerald-400" : "text-zinc-500"
+                      }`}
+                    />
+                  </div>
+                  <span className="text-zinc-400 text-sm font-medium tracking-wide">
+                    Auto-Pilot
+                  </span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-white">Auto-Pilot</h3>
-                  <p className="text-xs text-zinc-500">
-                    {loopRunning ? "Active Strategy" : "System Paused"}
-                  </p>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    loopRunning
+                      ? "bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"
+                      : "bg-zinc-600"
+                  }`}
+                />
+              </div>
+              <div className="flex-1 flex flex-col justify-center py-2">
+                <div className="text-2xl font-bold text-white font-mono tracking-tighter">
+                  {loopRunning ? "SYSTEM_ACTIVE" : "STANDBY_MODE"}
                 </div>
               </div>
-
               <button
                 onClick={toggleTradingLoop}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all duration-300 border ${
                   loopRunning
-                    ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
-                    : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                    ? "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20"
+                    : "bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 hover:text-white"
                 }`}
               >
-                {loopRunning ? "STOP ENGINE" : "START ENGINE"}
+                {loopRunning ? "TERMINATE" : "ENGAGE SYSTEM"}
               </button>
             </div>
-          </div>
+          </SpotlightCard>
 
-          {/* Row 3: Market Overview & Quick Trade */}
-          <div className="col-span-12 lg:col-span-8">
+          <SpotlightCard className="col-span-1 md:col-span-4 h-[220px] border-zinc-800 bg-zinc-900/50">
+            <StatsCard
+              label="24h Volume"
+              icon={Volume2}
+              value={formatVolume(totalVolume.toString())}
+              subValue="3 Pairs Aggr."
+            />
+          </SpotlightCard>
+
+          {/* 4. Ticker Tape */}
+          {SYMBOLS.map((sym, index) => (
+            <SpotlightCard
+              key={sym.id}
+              className="col-span-1 md:col-span-4 h-40 border-zinc-800 bg-zinc-950"
+              spotlightColor={sym.color + "40"}
+            >
+              <TickerCard symbol={sym} data={tickers[sym.id]} index={index} />
+            </SpotlightCard>
+          ))}
+
+          {/* 5. Market Depth */}
+          <SpotlightCard className="col-span-1 md:col-span-12 min-h-[400px] border-zinc-800 bg-zinc-900/50 p-6">
+            <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+              <div className="w-1 h-6 bg-emerald-500 rounded-full" />
+              Market Overview
+            </h3>
             <MarketOverview
               tickers={tickers}
               market={market}
               symbols={SYMBOLS}
             />
-          </div>
-          <div className="col-span-12 lg:col-span-4">
-            <QuickTradeWidget />
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </AuroraBackground>
