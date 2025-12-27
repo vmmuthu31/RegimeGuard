@@ -48,7 +48,8 @@ function Navbar() {
           {authenticated && walletAddress ? (
             <div className="flex items-center gap-3">
               <span className="text-xs text-zinc-500 font-mono hidden sm:block">
-                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                {String(walletAddress).slice(0, 6)}...
+                {String(walletAddress).slice(-4)}
               </span>
               <button
                 onClick={logout}
