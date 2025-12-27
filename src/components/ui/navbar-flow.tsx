@@ -62,7 +62,7 @@ const ListItem: React.FC<ListItemProps> = ({
       className="relative"
       onMouseEnter={() => setSelected(element)}
       onMouseLeave={(e) => {
-        const dropdown = e.currentTarget.querySelector('.dropdown-content');
+        const dropdown = e.currentTarget.querySelector(".dropdown-content");
         if (dropdown) {
           const dropdownRect = dropdown.getBoundingClientRect();
           if (e.clientY < dropdownRect.top - 20) {
@@ -90,7 +90,7 @@ const ListItem: React.FC<ListItemProps> = ({
                 layoutId="selected"
                 className="dropdown-content bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-2xl"
                 style={{
-                  maxWidth: 'min(90vw, 400px)',
+                  maxWidth: "min(90vw, 400px)",
                 }}
                 onMouseEnter={() => setSelected(element)}
                 onMouseLeave={() => setSelected(null)}
@@ -107,7 +107,11 @@ const ListItem: React.FC<ListItemProps> = ({
   );
 };
 
-export const HoverLink: React.FC<HoverLinkProps> = ({ url, children, onPress }) => {
+export const HoverLink: React.FC<HoverLinkProps> = ({
+  url,
+  children,
+  onPress,
+}) => {
   return (
     <a
       href={url}
@@ -159,6 +163,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
   const svgMotion = useAnimation();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -612,12 +617,12 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
           >
             <div className="container py-4 px-4">
               <nav className="flex flex-col space-y-3">
-                {links.map((element, idx) => (
+                {links.map((element) => (
                   <div key={element.text} className="space-y-2">
                     {element.submenu ? (
                       <>
                         <button
-                          className="flex items-center justify-between w-full text-gray-800 dark:text-gray-200 font-medium text-base py-2 px-4 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800"
+                          className="flex items-center justify-between w-full text-gray-800 dark:text-gray-200 font-medium text-base py-2 px-4 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors"
                           onClick={() => toggleSection(element.text)}
                         >
                           <span>{element.text}</span>

@@ -163,6 +163,18 @@ export interface WeexConfig {
   passphrase: string;
 }
 
+export interface WeexRawOrder {
+  orderId: string;
+  cTime: string;
+  symbol: string;
+  side: "buy" | "sell";
+  orderType?: string;
+  price: string;
+  size: string;
+  filledQty?: string;
+  state?: string;
+}
+
 export {
   RegimeType,
   RiskLevel,

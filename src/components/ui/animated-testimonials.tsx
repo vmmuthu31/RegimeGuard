@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import NextImage from "next/image";
 
 interface Testimonial {
   name: string;
@@ -72,10 +73,11 @@ const TestimonialCard = ({
   >
     <div className="flex items-start gap-3">
       <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-gray-200 dark:border-gray-600">
-        <img
+        <NextImage
           src={testimonial.image}
           alt={testimonial.name}
-          className="h-full w-full not-prose object-cover"
+          fill
+          className="not-prose object-cover"
         />
       </div>
       <div className="flex-1">
