@@ -13,14 +13,10 @@ import { OrderForm } from "@/src/client/components/trade/OrderForm";
 import { ActiveOrders, Order } from "@/src/client/components/trade/ActiveOrders";
 import { TerminalPanel } from "@/src/client/components/dashboard/TerminalPanel";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
+import { MarketSwitcher } from "@/src/client/components/trade/MarketSwitcher";
 import { OrderBook } from "@/src/client/components/trade/OrderBook";
 import { formatPrice, formatPercent, formatVolume } from "@/src/shared/utils/formatters";
 
-const IconMap: Record<string, React.ReactNode> = {
-  BTC: <FaBitcoin />,
-  ETH: <FaEthereum />,
-  SOL: <SiSolana />,
-};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -134,23 +130,13 @@ export default function TradePage({ params }: PageProps) {
       </div>
 
       {/* 2. Market Info Bar (New) */}
-      <div className="h-14 border-b border-white/10 bg-zinc-950/90 backdrop-blur-xl flex items-center px-4 shrink-0 justify-between relative overflow-hidden sticky top-0 z-50 shadow-2xl">
+      <div className="h-14 border-b border-white/10 bg-zinc-950/90 backdrop-blur-xl flex items-center px-4 shrink-0 justify-between relative sticky top-0 z-50 shadow-2xl">
         {/* Subtle Bottom Glow for Header */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-emerald-500/20 to-transparent" />
 
         <div className="flex items-center gap-6">
-          {/* Symbol Selector Pill */}
-          <div className="flex items-center gap-3 cursor-pointer hover:bg-white/[0.03] pl-2 pr-4 py-1.5 rounded-full border border-white/[0.05] bg-white/[0.01] transition-all group hover:border-emerald-500/40 hover:shadow-[0_0_25px_rgba(16,185,129,0.15)] active:scale-95">
-            <div className="w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center text-emerald-500 shadow-inner group-hover:text-emerald-400 transition-colors">
-              {IconMap[symbol.iconKey || "BTC"]}
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors tracking-tight uppercase">{symbol.name}</h1>
-                <FaChevronDown className="w-2 h-2 text-zinc-600 group-hover:text-emerald-500/50 transition-colors" />
-              </div>
-            </div>
-          </div>
+          {/* Market Switcher Drodown */}
+          <MarketSwitcher currentSymbol={symbol.name} />
 
           <div className="h-4 w-px bg-white/5 mx-1" />
 
