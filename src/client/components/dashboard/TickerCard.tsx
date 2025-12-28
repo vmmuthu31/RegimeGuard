@@ -47,9 +47,9 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shadow-inner border border-white/5"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shadow-[0_0_15px_rgba(255,255,255,0.03)] border"
             style={{
-              backgroundColor: `${symbol.color}10`,
+              backgroundColor: `${symbol.color}05`,
               color: symbol.color,
               borderColor: `${symbol.color}20`,
             }}
@@ -57,7 +57,7 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
             {symbol.iconKey ? IconMap[symbol.iconKey] : <FaBolt />}
           </div>
           <div>
-            <h3 className="font-bold text-sm text-white leading-tight">
+            <h3 className="font-bold text-[11px] text-white leading-tight uppercase tracking-tight">
               {symbol.name}
             </h3>
             <p className="text-zinc-500 text-[9px] font-mono tracking-wider uppercase">
@@ -68,8 +68,8 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
         {data && (
           <div
             className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPositive
-                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                : "bg-red-500/10 text-red-400 border-red-500/20"
+              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+              : "bg-red-500/10 text-red-400 border-red-500/20"
               }`}
           >
             {isPositive ? (
@@ -85,7 +85,7 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
       {data ? (
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-lg font-bold tracking-tight text-white font-mono">
+            <div className="text-lg font-bold tracking-tight text-white font-mono drop-shadow-[0_0_10px_rgba(255,255,255,0.05)]">
               ${formatPrice(data.lastPrice)}
             </div>
             <div className="text-[10px] text-zinc-500 font-mono">
