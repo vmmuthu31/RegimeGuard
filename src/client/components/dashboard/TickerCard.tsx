@@ -41,13 +41,13 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
   return (
     <div
       onClick={handleOpenChart}
-      className={`group cursor-pointer relative h-full p-5 flex flex-col justify-between ${className}`}
+      className={`group cursor-pointer relative h-full flex flex-col justify-between ${className}`}
     >
       {/* Visual Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center text-xl shadow-inner border border-white/5"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shadow-inner border border-white/5"
             style={{
               backgroundColor: `${symbol.color}10`,
               color: symbol.color,
@@ -57,26 +57,25 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
             {symbol.iconKey ? IconMap[symbol.iconKey] : <FaBolt />}
           </div>
           <div>
-            <h3 className="font-bold text-base text-white leading-tight">
+            <h3 className="font-bold text-sm text-white leading-tight">
               {symbol.name}
             </h3>
-            <p className="text-zinc-500 text-[10px] font-mono tracking-wider uppercase">
-              PERPETUAL
+            <p className="text-zinc-500 text-[9px] font-mono tracking-wider uppercase">
+              PERP
             </p>
           </div>
         </div>
         {data && (
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-bold border ${
-              isPositive
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPositive
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                 : "bg-red-500/10 text-red-400 border-red-500/20"
-            }`}
+              }`}
           >
             {isPositive ? (
-              <FaArrowUp className="w-2.5 h-2.5" />
+              <FaArrowUp className="w-2 h-2" />
             ) : (
-              <FaArrowDown className="w-2.5 h-2.5" />
+              <FaArrowDown className="w-2 h-2" />
             )}
             {formatPercent(data.priceChangePercent)}
           </div>
@@ -84,42 +83,20 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
       </div>
 
       {data ? (
-        <>
-          <div className="mb-4">
-            <div className="text-2xl font-bold tracking-tight text-white font-mono">
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="text-lg font-bold tracking-tight text-white font-mono">
               ${formatPrice(data.lastPrice)}
             </div>
-            <div className="text-xs text-zinc-500 font-mono mt-1">
+            <div className="text-[10px] text-zinc-500 font-mono">
               Vol: {formatVolume(data.value)}
             </div>
           </div>
-
-          {/* Mini Sparkline Visualization (CSS only for now) */}
-          <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden mb-4 flex">
-            <div
-              className={`h-full ${
-                isPositive ? "bg-emerald-500" : "bg-red-500"
-              }`}
-              style={{ width: "60%", opacity: 0.8 }}
-            />
-            <div
-              className={`h-full ${
-                isPositive ? "bg-emerald-500" : "bg-red-500"
-              }`}
-              style={{ width: "20%", opacity: 0.4 }}
-            />
+          <div className="text-[9px] text-zinc-600 font-mono text-right">
+            <div>H: ${formatPrice(data.high)}</div>
+            <div>L: ${formatPrice(data.low)}</div>
           </div>
-
-          <div className="flex items-center justify-between text-[10px] text-zinc-500 font-mono border-t border-white/5 pt-3 group-hover:border-white/10 transition-colors">
-            <div>
-              L: <span className="text-zinc-300">${formatPrice(data.low)}</span>
-            </div>
-            <div>
-              H:{" "}
-              <span className="text-zinc-300">${formatPrice(data.high)}</span>
-            </div>
-          </div>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center flex-1 gap-2 text-zinc-600 my-4">
           <div className="w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />

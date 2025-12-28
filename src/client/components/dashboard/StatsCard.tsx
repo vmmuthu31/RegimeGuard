@@ -24,8 +24,8 @@ export function StatsCard({
   return (
     <div className={`flex flex-col h-full justify-between p-6 ${className}`}>
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
               <Icon className="w-4 h-4 text-emerald-400" />
             </div>
@@ -36,13 +36,13 @@ export function StatsCard({
           {action}
         </div>
         <div
-          className={`text-3xl font-bold tracking-tight ${valueClassName} drop-shadow-sm font-mono`}
+          className={`text-2xl font-bold tracking-tight ${valueClassName} drop-shadow-sm font-mono`}
         >
           {value}
         </div>
       </div>
       {subValue && (
-        <div className="text-xs text-zinc-500 font-medium mt-3 flex items-center gap-1.5 font-mono">
+        <div className="text-[10px] text-zinc-500 font-medium mt-2 flex items-center gap-1.5 font-mono">
           {subValue}
         </div>
       )}

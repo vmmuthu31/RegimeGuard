@@ -32,34 +32,32 @@ export function QuickTradeWidget({
 
   return (
     <div
-      className={`flex flex-col h-full relative overflow-hidden bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ${className}`}
+      className={`flex flex-col h-full relative overflow-hidden bg-zinc-900/80 backdrop-blur-sm rounded-xl border border-white/10 ${className}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-bold text-white tracking-wide">
             {symbol} Quick Trade
           </span>
         </div>
-        <div className="flex bg-zinc-900/50 rounded-lg p-0.5 border border-white/5">
+        <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/5">
           <button
             onClick={() => setMode("buy")}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${
-              isBuy
-                ? "bg-emerald-500 text-white shadow-lg"
-                : "text-zinc-500 hover:text-white"
-            }`}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${isBuy
+              ? "bg-emerald-500 text-white shadow-lg"
+              : "text-zinc-500 hover:text-white"
+              }`}
           >
             Buy
           </button>
           <button
             onClick={() => setMode("sell")}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${
-              !isBuy
-                ? "bg-red-500 text-white shadow-lg"
-                : "text-zinc-500 hover:text-white"
-            }`}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${!isBuy
+              ? "bg-red-500 text-white shadow-lg"
+              : "text-zinc-500 hover:text-white"
+              }`}
           >
             Sell
           </button>
@@ -67,7 +65,7 @@ export function QuickTradeWidget({
       </div>
 
       {/* Input Area */}
-      <div className="flex-1 p-6 flex flex-col justify-center gap-6">
+      <div className="flex-1 p-5 flex flex-col justify-center gap-5">
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-xs text-zinc-500 font-mono uppercase tracking-wider">
@@ -126,13 +124,12 @@ export function QuickTradeWidget({
       </div>
 
       {/* Action Button */}
-      <div className="p-4 bg-zinc-900/30 border-t border-white/5">
+      <div className="p-4 bg-zinc-900/50 border-t border-white/5">
         <button
-          className={`w-full py-4 rounded-xl font-bold text-lg shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${
-            isBuy
-              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/20"
-              : "bg-red-500 hover:bg-red-400 text-white shadow-red-500/20"
-          }`}
+          className={`w-full py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${isBuy
+            ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/20"
+            : "bg-red-500 hover:bg-red-400 text-white shadow-red-500/20"
+            }`}
         >
           {isBuy ? "Confirm Buy" : "Confirm Sell"}
         </button>
