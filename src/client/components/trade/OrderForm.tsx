@@ -95,7 +95,7 @@ export function OrderForm({
           </div>
 
           {/* Price View */}
-          <div className={`relative group/input rounded-xl border transition-all duration-300 ${focused === 'price' ? 'bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]' : 'bg-zinc-900/30 border-white/[0.03] hover:border-white/10'}`}>
+          <div className={`relative group/input rounded-xl border transition-all duration-300 ${focused === 'price' ? 'bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]' : 'bg-zinc-900/30 border-white/10'}`}>
             <input
               type="text"
               value={currentPrice}
@@ -113,7 +113,7 @@ export function OrderForm({
           </div>
 
           {/* Amount Input */}
-          <div className={`relative group/input rounded-xl border transition-all duration-500 ${focused === 'amount' ? (side === 'buy' ? 'bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]' : 'bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]') : 'bg-zinc-900/30 border-white/[0.03] hover:border-white/10'}`}>
+          <div className={`relative group/input rounded-xl border transition-all duration-500 ${focused === 'amount' ? (side === 'buy' ? 'bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]' : 'bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]') : 'bg-zinc-900/30 border-white/10'}`}>
             <input
               type="text"
               value={amount}

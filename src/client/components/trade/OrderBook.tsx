@@ -75,13 +75,13 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
                             style={{ width: `${ask.depth}%`, borderLeft: "2px solid rgba(239, 68, 68, 0.15)" }}
                         />
 
-                        <span className="text-[11px] font-bold text-red-500/80 relative z-10 w-1/3 text-left group-hover:text-red-400 transition-colors">
+                        <span className="text-[11px] font-bold text-red-500 relative z-10 w-1/3 text-left">
                             {formatPrice(ask.price.toString())}
                         </span>
-                        <span className="text-[11px] text-zinc-400 relative z-10 w-1/3 text-right group-hover:text-zinc-200">
+                        <span className="text-[11px] text-zinc-300 relative z-10 w-1/3 text-right">
                             {ask.amount.toFixed(4)}
                         </span>
-                        <span className="text-[10px] text-zinc-600 relative z-10 w-1/3 text-right group-hover:text-zinc-500">
+                        <span className="text-[10px] text-zinc-500 relative z-10 w-1/3 text-right">
                             {ask.total.toFixed(2)}
                         </span>
                     </div>
@@ -121,13 +121,13 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
                             style={{ width: `${bid.depth}%`, borderLeft: "2px solid rgba(16, 185, 129, 0.15)" }}
                         />
 
-                        <span className="text-[11px] font-bold text-emerald-500/80 relative z-10 w-1/3 text-left group-hover:text-emerald-400 transition-colors">
+                        <span className="text-[11px] font-bold text-emerald-500 relative z-10 w-1/3 text-left">
                             {formatPrice(bid.price.toString())}
                         </span>
-                        <span className="text-[11px] text-zinc-400 relative z-10 w-1/3 text-right group-hover:text-zinc-200">
+                        <span className="text-[11px] text-zinc-300 relative z-10 w-1/3 text-right">
                             {bid.amount.toFixed(4)}
                         </span>
-                        <span className="text-[10px] text-zinc-600 relative z-10 w-1/3 text-right group-hover:text-zinc-500">
+                        <span className="text-[10px] text-zinc-500 relative z-10 w-1/3 text-right">
                             {bid.total.toFixed(2)}
                         </span>
                     </div>

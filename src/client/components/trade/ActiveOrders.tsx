@@ -49,8 +49,8 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
           <tbody className="divide-y divide-white/[0.02]">
             {orders.map((order) => (
               <tr key={order.id} className="group hover:bg-white/[0.015] transition-all duration-300 relative border-b border-white/[0.01]">
-                {/* Visual Accent on Hover */}
-                <td className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/0 group-hover:bg-emerald-500/40 transition-all duration-500 shadow-[2px_0_10px_rgba(16,185,129,0.1)]" />
+                {/* Visual Accent - Permanent */}
+                <td className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/20 transition-all duration-500 shadow-[2px_0_10px_rgba(16,185,129,0.1)]" />
 
                 <td className="px-4 py-3 text-[11px] text-zinc-500 group-hover:text-zinc-400 transition-colors uppercase">
                   {order.time}
@@ -58,13 +58,13 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500/20 ring-1 ring-blue-500/40" />
-                    <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white transition-colors tracking-tight">{order.symbol}</span>
+                    <span className="text-[11px] font-bold text-white tracking-tight">{order.symbol}</span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-950 border border-white/5 text-zinc-500 uppercase font-bold tracking-tighter">{order.type}</span>
                 </td>
-                <td className={`px-4 py-3 text-[11px] font-bold transition-all ${order.side === "Buy" ? "text-emerald-500/90 group-hover:text-emerald-400" : "text-red-500/90 group-hover:text-red-400"}`}>
+                <td className={`px-4 py-3 text-[11px] font-bold transition-all ${order.side === "Buy" ? "text-emerald-400" : "text-red-400"}`}>
                   <span className="flex items-center gap-1.5">
                     {order.side === "Buy" ? "↑" : "↓"}
                     {order.side}

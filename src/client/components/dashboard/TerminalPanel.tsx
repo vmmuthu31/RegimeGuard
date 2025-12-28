@@ -23,10 +23,9 @@ export function TerminalPanel({
     return (
         <div
             className={cn(
-                "relative group bg-[#09090b]/40 backdrop-blur-xl border border-white/10 flex flex-col transition-all duration-300",
+                "relative group bg-[#09090b]/40 backdrop-blur-xl border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.05)] flex flex-col transition-all duration-300",
                 !autoHeight && "overflow-hidden h-full",
                 autoHeight && "h-auto overflow-visible",
-                "hover:border-emerald-500/20 hover:shadow-[0_0_30px_rgba(16,185,129,0.05)]",
                 className
             )}
             {...props}
@@ -39,8 +38,8 @@ export function TerminalPanel({
             {title && (
                 <div className="relative flex items-center justify-between px-3 py-2 border-b border-white/5 bg-white/[0.02] backdrop-blur-sm shrink-0">
                     {/* Title Glow */}
-                    <div className="absolute inset-0 bg-linear-to-r from-emerald-500/[0.02] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <h3 className="relative text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em] font-mono group-hover:text-emerald-400 transition-colors">
+                    <div className="absolute inset-0 bg-linear-to-r from-emerald-500/[0.04] via-transparent to-transparent opacity-100 transition-opacity duration-500" />
+                    <h3 className="relative text-[10px] font-bold text-emerald-400 uppercase tracking-[0.1em] font-mono transition-colors">
                         {title}
                     </h3>
                     <div className="relative">

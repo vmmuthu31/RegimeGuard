@@ -124,7 +124,7 @@ export default function TradePage({ params }: PageProps) {
       </div>
 
       {/* 1. Common Dashboard Header (Compact) */}
-      <div className="px-4 shrink-0 bg-zinc-950/80 backdrop-blur-xl border-b border-white/[0.03] relative z-10">
+      <div className="px-4 shrink-0 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 relative z-10">
         <DashboardHeader
           connected={connected}
           lastUpdate={lastUpdate}
@@ -134,7 +134,7 @@ export default function TradePage({ params }: PageProps) {
       </div>
 
       {/* 2. Market Info Bar (New) */}
-      <div className="h-14 border-b border-white/[0.05] bg-zinc-950/90 backdrop-blur-xl flex items-center px-4 shrink-0 justify-between relative overflow-hidden sticky top-0 z-50 shadow-2xl">
+      <div className="h-14 border-b border-white/10 bg-zinc-950/90 backdrop-blur-xl flex items-center px-4 shrink-0 justify-between relative overflow-hidden sticky top-0 z-50 shadow-2xl">
         {/* Subtle Bottom Glow for Header */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-emerald-500/20 to-transparent" />
 
@@ -259,7 +259,7 @@ export default function TradePage({ params }: PageProps) {
         {/* COLUMN 3: Quick Order (Right Hand Sidebar) */}
         <div className="w-full lg:w-[380px] flex flex-col gap-0 shrink-0 bg-[#050505] border-l border-white/10">
           {/* Order Form - Sticky */}
-          <div className="sticky top-14 z-40 bg-[#050505] h-fit p-[1px] bg-linear-to-b from-white/10 to-transparent">
+          <div className="sticky top-14 z-40 bg-[#050505] h-fit">
             <div className="bg-[#050505] neon-highlight-emerald transition-all duration-500">
               <OrderForm
                 symbol={symbol.name}
