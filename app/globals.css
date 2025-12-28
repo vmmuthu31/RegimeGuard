@@ -133,6 +133,7 @@
   from {
     background-position: 50% 50%, 50% 50%;
   }
+
   to {
     background-position: 350% 50%, 350% 50%;
   }
@@ -140,4 +141,36 @@
 
 .animate-aurora {
   animation: aurora 60s linear infinite;
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #18181b;
+    /* zinc-900 */
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #27272a;
+    /* zinc-800 */
+  }
+
+  .neon-highlight-emerald {
+    box-shadow: 0 0 15px -3px rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  .neon-highlight-red {
+    box-shadow: 0 0 15px -3px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
 }
