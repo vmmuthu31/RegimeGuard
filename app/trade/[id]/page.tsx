@@ -3,20 +3,21 @@
 import React, { use, useEffect } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { FaArrowLeft, FaBitcoin, FaEthereum, FaBolt, FaChevronDown } from "react-icons/fa";
-import { SiSolana } from "react-icons/si";
+import { FaArrowLeft } from "react-icons/fa";
 import { Settings, Maximize2 } from "lucide-react";
 
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
 import { CandleChart } from "@/src/client/components/trade/CandleChart";
 import { OrderForm } from "@/src/client/components/trade/OrderForm";
-import { ActiveOrders, Order } from "@/src/client/components/trade/ActiveOrders";
+import {
+  ActiveOrders,
+  Order,
+} from "@/src/client/components/trade/ActiveOrders";
 import { TerminalPanel } from "@/src/client/components/dashboard/TerminalPanel";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
 import { MarketSwitcher } from "@/src/client/components/trade/MarketSwitcher";
 import { OrderBook } from "@/src/client/components/trade/OrderBook";
-import { formatPrice, formatPercent, formatVolume } from "@/src/shared/utils/formatters";
-
+import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -24,11 +25,23 @@ interface PageProps {
 
 export default function TradePage({ params }: PageProps) {
   const { id } = use(params);
-  const { connected, tickers, klines, account, fetchKlineData, orders, fetchOrders, lastUpdate } = useDashboardData();
+  const {
+    connected,
+    tickers,
+    klines,
+    account,
+    fetchKlineData,
+    orders,
+    fetchOrders,
+    lastUpdate,
+  } = useDashboardData();
 
-  const symbol = SYMBOLS.find(
-    (s) => s.id.replace("cmt_", "") === id || s.id.replace("cmt_", "").replace("usdt", "") === id
-  ) || SYMBOLS[0];
+  const symbol =
+    SYMBOLS.find(
+      (s) =>
+        s.id.replace("cmt_", "") === id ||
+        s.id.replace("cmt_", "").replace("usdt", "") === id
+    ) || SYMBOLS[0];
 
   const tickerData = tickers[symbol.id];
   const candleData = klines[symbol.id] || [];
@@ -58,10 +71,17 @@ export default function TradePage({ params }: PageProps) {
     status: "Open",
   }));
 
-  const normalizeSymbol = (s: string) => s.toLowerCase().replace("cmt_", "").replace("/", "").replace("-", "");
-  const currentSymbolOrders = mappedOrders.filter((o) => normalizeSymbol(o.symbol) === normalizeSymbol(symbol.id));
+  const normalizeSymbol = (s: string) =>
+    s.toLowerCase().replace("cmt_", "").replace("/", "").replace("-", "");
+  const currentSymbolOrders = mappedOrders.filter(
+    (o) => normalizeSymbol(o.symbol) === normalizeSymbol(symbol.id)
+  );
 
-  const handlePlaceOrder = async (side: "Buy" | "Sell", price: string, amount: string) => {
+  const handlePlaceOrder = async (
+    side: "Buy" | "Sell",
+    price: string,
+    amount: string
+  ) => {
     try {
       const response = await fetch("/api/trade", {
         method: "POST",
@@ -91,7 +111,11 @@ export default function TradePage({ params }: PageProps) {
       const response = await fetch("/api/trade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "cancelOrder", orderId, clientOid: null }),
+        body: JSON.stringify({
+          action: "cancelOrder",
+          orderId,
+          clientOid: null,
+        }),
       });
       if ((await response.json()).success) {
         toast.info("Order Cancelled");
@@ -113,7 +137,14 @@ export default function TradePage({ params }: PageProps) {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/5 blur-[150px] rounded-full" />
 
         {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)",
+            backgroundSize: "40px 40px",
+          }}
+        />
 
         {/* Vignette */}
         <div className="absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.8)]" />
@@ -144,24 +175,49 @@ export default function TradePage({ params }: PageProps) {
           {tickerData && (
             <div className="flex items-center gap-8">
               <div className="flex flex-col">
-                <div className={`text-base font-bold font-mono leading-none tracking-tight ${parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                <div
+                  className={`text-base font-bold font-mono leading-none tracking-tight ${
+                    parseFloat(tickerData.priceChangePercent) >= 0
+                      ? "text-emerald-400"
+                      : "text-red-400"
+                  }`}
+                >
                   ${formatPrice(tickerData.lastPrice)}
                 </div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-700 font-bold mt-1">Price Index</div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-700 font-bold mt-1">
+                  Price Index
+                </div>
               </div>
               <div className="flex flex-col">
-                <div className={`text-xs font-bold font-mono leading-none ${parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-500" : "text-red-500"}`}>
-                  {parseFloat(tickerData.priceChangePercent) >= 0 ? "+" : ""}{formatPercent(tickerData.priceChangePercent)}
+                <div
+                  className={`text-xs font-bold font-mono leading-none ${
+                    parseFloat(tickerData.priceChangePercent) >= 0
+                      ? "text-emerald-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {parseFloat(tickerData.priceChangePercent) >= 0 ? "+" : ""}
+                  {formatPercent(tickerData.priceChangePercent)}
                 </div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-700 font-bold mt-1">24h Volatility</div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-700 font-bold mt-1">
+                  24h Volatility
+                </div>
               </div>
               <div className="hidden md:flex flex-col">
-                <div className="text-xs font-mono text-zinc-400 leading-none">{formatPrice(tickerData.high)}</div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-800 font-bold mt-1">Daily High</div>
+                <div className="text-xs font-mono text-zinc-400 leading-none">
+                  {formatPrice(tickerData.high)}
+                </div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-800 font-bold mt-1">
+                  Daily High
+                </div>
               </div>
               <div className="hidden md:flex flex-col">
-                <div className="text-xs font-mono text-zinc-400 leading-none">{formatPrice(tickerData.low)}</div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-800 font-bold mt-1">Daily Low</div>
+                <div className="text-xs font-mono text-zinc-400 leading-none">
+                  {formatPrice(tickerData.low)}
+                </div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-zinc-800 font-bold mt-1">
+                  Daily Low
+                </div>
               </div>
             </div>
           )}
@@ -169,8 +225,12 @@ export default function TradePage({ params }: PageProps) {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-3 relative z-10">
-          <Link href="/dashboard" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-white/[0.05] text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-emerald-500/10 hover:border-emerald-500/20 transition-all active:scale-95 group">
-            <FaArrowLeft className="w-2.5 h-2.5 transition-transform group-hover:-translate-x-0.5" /> Back
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-white/[0.05] text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-emerald-500/10 hover:border-emerald-500/20 transition-all active:scale-95 group"
+          >
+            <FaArrowLeft className="w-2.5 h-2.5 transition-transform group-hover:-translate-x-0.5" />{" "}
+            Back
           </Link>
           <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/5 shadow-inner">
             <button className="p-1.5 hover:bg-white/5 rounded-md text-zinc-500 hover:text-zinc-200 transition-colors">
@@ -187,7 +247,6 @@ export default function TradePage({ params }: PageProps) {
       <div className="flex-1 w-full max-w-[1920px] mx-auto p-0 gap-[1px] flex flex-col lg:flex-row font-sans bg-zinc-800/80">
         {/* LEFT & CENTER COMBINED CONTAINER (For Active Orders spanning both) */}
         <div className="flex-1 flex flex-col gap-[1px] min-w-0 bg-zinc-900/10">
-
           {/* TOP SECTION: Chart and Order Book side by side */}
           <div className="flex flex-col lg:flex-row gap-0 bg-[#050505] border-b border-white/10">
             {/* COLUMN 1: Chart Area */}
@@ -198,7 +257,17 @@ export default function TradePage({ params }: PageProps) {
               <TerminalPanel
                 className="h-[400px] border-0 rounded-none bg-zinc-900/5 backdrop-blur-xl relative overflow-hidden group"
                 title="Global Liquidity Graph"
-                headerAction={<div className="flex gap-2"><div className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></div><span className="text-[10px] text-emerald-400 font-bold tracking-wider">REALTIME</span></div>}
+                headerAction={
+                  <div className="flex gap-2">
+                    <div className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </div>
+                    <span className="text-[10px] text-emerald-400 font-bold tracking-wider">
+                      REALTIME
+                    </span>
+                  </div>
+                }
                 noPadding
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
@@ -236,7 +305,10 @@ export default function TradePage({ params }: PageProps) {
               autoHeight={true}
             >
               <div className="h-full overflow-visible">
-                <ActiveOrders orders={currentSymbolOrders} onCancelOrder={handleCancelOrder} />
+                <ActiveOrders
+                  orders={currentSymbolOrders}
+                  onCancelOrder={handleCancelOrder}
+                />
               </div>
             </TerminalPanel>
           </div>
@@ -249,7 +321,11 @@ export default function TradePage({ params }: PageProps) {
             <div className="bg-[#050505] neon-highlight-emerald transition-all duration-500">
               <OrderForm
                 symbol={symbol.name}
-                currentPrice={tickerData?.lastPrice ? formatPrice(tickerData.lastPrice) : "0.00"}
+                currentPrice={
+                  tickerData?.lastPrice
+                    ? formatPrice(tickerData.lastPrice)
+                    : "0.00"
+                }
                 balance={account?.balance.available.toLocaleString() || "0"}
                 onPlaceOrder={handlePlaceOrder}
               />
@@ -259,8 +335,12 @@ export default function TradePage({ params }: PageProps) {
             <div className="p-4 bg-[#050505] border-t border-white/10">
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Network Status</span>
-                  <span className="text-[10px] text-emerald-500 font-mono font-bold">OPTIMAL</span>
+                  <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">
+                    Network Status
+                  </span>
+                  <span className="text-[10px] text-emerald-500 font-mono font-bold">
+                    OPTIMAL
+                  </span>
                 </div>
                 <div className="h-[2px] w-full bg-zinc-900 rounded-full overflow-hidden">
                   <div className="h-full w-[85%] bg-emerald-500/40" />
@@ -272,7 +352,6 @@ export default function TradePage({ params }: PageProps) {
           <div className="flex-1 bg-[#050505]" />
         </div>
       </div>
-
     </div>
   );
 }

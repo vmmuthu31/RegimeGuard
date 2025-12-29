@@ -9,7 +9,6 @@ import {
   AreaSeries,
   Time,
 } from "lightweight-charts";
-import CountUp from "react-countup";
 import { ArrowUpRight } from "lucide-react";
 
 interface PortfolioChartProps {
@@ -47,17 +46,23 @@ export function PortfolioChart({ balance }: PortfolioChartProps) {
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
+    const containerHeight = Math.max(
+      chartContainerRef.current.clientHeight,
+      60
+    );
+    const containerWidth = chartContainerRef.current.clientWidth;
+
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "transparent", // Hide axis labels for cleaner look
+        textColor: "transparent",
       },
       grid: {
         vertLines: { visible: false },
         horzLines: { visible: false },
       },
-      width: chartContainerRef.current.clientWidth,
-      height: 160,
+      width: containerWidth,
+      height: containerHeight,
       rightPriceScale: {
         visible: false,
         borderVisible: false,
@@ -123,45 +128,25 @@ export function PortfolioChart({ balance }: PortfolioChartProps) {
   }, [balance]);
 
   return (
-    <div className="relative bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden group h-full min-h-[180px]">
-      {/* Background Gradient Effect */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-
-      <div className="absolute inset-0 z-0 opacity-50">
+    <div className="relative h-full min-h-[180px]">
+      {/* Chart fills the container */}
+      <div className="absolute inset-0">
         <div ref={chartContainerRef} className="w-full h-full" />
       </div>
 
-      <div className="relative z-10 p-6 flex flex-col justify-between h-full pointer-events-none">
-        <div>
-          <h3 className="text-zinc-400 text-sm font-medium mb-1 flex items-center gap-2">
-            Total Balance
-          </h3>
-          <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-bold text-white tracking-tight">
-              $
-              <CountUp
-                end={balance}
-                separator=","
-                decimals={2}
-                duration={2.5}
-                preserveValue={true}
-              />
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 mt-4">
-          <div
-            className={`flex items-center gap-1 text-sm font-bold ${
-              percentageChange >= 0 ? "text-emerald-400" : "text-red-400"
-            } bg-black/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/5`}
-          >
-            <ArrowUpRight className="w-4 h-4" />
-            {percentageChange.toFixed(2)}%
-          </div>
-          <span className="text-xs text-zinc-500 font-medium">
-            +$1,240.50 (24h)
-          </span>
+      {/* Minimal overlay with just the percentage change */}
+      <div className="absolute bottom-4 left-4 z-10">
+        <div
+          className={`flex items-center gap-1.5 text-sm font-bold ${
+            percentageChange >= 0 ? "text-emerald-400" : "text-red-400"
+          } bg-zinc-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10`}
+        >
+          <ArrowUpRight
+            className={`w-4 h-4 ${percentageChange < 0 ? "rotate-90" : ""}`}
+          />
+          {percentageChange >= 0 ? "+" : ""}
+          {percentageChange.toFixed(2)}%
+          <span className="text-zinc-500 font-normal ml-1">24h</span>
         </div>
       </div>
     </div>
