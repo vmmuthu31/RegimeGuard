@@ -80,7 +80,7 @@ export function OrderForm({
 
         {/* 3. Execution Type Tabs */}
         <div className="flex items-center gap-8 px-1 text-[11px] font-bold text-zinc-400 uppercase tracking-widest border-b border-white/10 pb-3">
-          <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3.5 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Limit</div>
+          <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3.5 transition-all cursor-pointer">Limit</div>
           <div className="hover:text-white transition-colors cursor-pointer">Market</div>
           <div className="hover:text-white transition-colors cursor-pointer">Trigger <span className="text-[8px] opacity-60">▼</span></div>
         </div>
