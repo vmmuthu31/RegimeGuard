@@ -225,7 +225,7 @@ export default function TradePage({ params }: PageProps) {
             </div>
 
             {/* Order Book Column - Height matched to Chart */}
-            <div className="w-full lg:w-[340px] shrink-0 h-full relative group/book bg-[#0B0E11]/60 overflow-hidden">
+            <div className="w-full lg:w-[300px] shrink-0 h-full relative group/book bg-[#0B0E11]/60 overflow-hidden">
               {/* Neon Accent Line */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
               <OrderBook tickerData={tickerData} symbol={symbol.name} />
@@ -258,7 +258,7 @@ export default function TradePage({ params }: PageProps) {
         </div>
 
         {/* RIGHT: Order Form Sidebar */}
-        <div className="w-full lg:w-[380px] shrink-0 flex flex-col bg-[#0B0E11] relative border-l border-white/20 group/sidebar overflow-hidden shadow-2xl">
+        <div className="w-full lg:w-[320px] shrink-0 flex flex-col bg-[#0B0E11] relative border-l border-white/20 group/sidebar overflow-hidden shadow-2xl">
           {/* Glassy Background Surface */}
           <div className="absolute inset-0 bg-zinc-950/40 pointer-events-none" />
 
