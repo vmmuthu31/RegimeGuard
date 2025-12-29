@@ -3,7 +3,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   FaUserCircle,
-  FaKey,
   FaSignOutAlt,
   FaCog,
   FaCreditCard,
@@ -20,9 +19,6 @@ interface UserDropdownProps {
 }
 
 export function UserDropdown({ account }: UserDropdownProps) {
-  // Mock API Key for display as it's not in the current account interface
-  const apiKey = "sk_live_...e4f9";
-
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -35,7 +31,7 @@ export function UserDropdown({ account }: UserDropdownProps) {
               Trader Account
             </span>
             <span className="text-[10px] text-zinc-500 font-mono">
-              {apiKey}
+              ${account?.balance?.available?.toLocaleString() ?? "0.00"} USDT
             </span>
           </div>
           <MdKeyboardArrowDown className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 transition-colors" />
@@ -61,11 +57,6 @@ export function UserDropdown({ account }: UserDropdownProps) {
           <DropdownMenu.Item className="group text-sm text-zinc-300 flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">
             <FaUserCircle className="w-4 h-4" />
             Profile
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item className="group text-sm text-zinc-300 flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">
-            <FaKey className="w-4 h-4" />
-            API Management
           </DropdownMenu.Item>
 
           <DropdownMenu.Item className="group text-sm text-zinc-300 flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">

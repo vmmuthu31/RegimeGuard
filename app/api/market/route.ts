@@ -6,6 +6,10 @@ import {
   getContractInfo,
 } from "@/server/services/weex-client";
 import {
+  getOrderBookDepth,
+  getCurrentFundingRate,
+} from "@/server/services/weex-market";
+import {
   classifyMarketRegime,
   computeTechnicalIndicators,
 } from "@/server/services/regime-classifier";
@@ -18,12 +22,35 @@ import { generateTradeSignal } from "@/server/services/strategy-executor";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const symbolParam = searchParams.get("symbol");
+  const action = searchParams.get("action");
 
   const symbol: TradingPair = TRADING_PAIRS.includes(symbolParam as TradingPair)
     ? (symbolParam as TradingPair)
     : "cmt_btcusdt";
 
   try {
+    if (action === "orderbook") {
+      const depth = await getOrderBookDepth(symbol, 15);
+      return NextResponse.json({
+        success: true,
+        data: {
+          symbol,
+          asks: depth.asks,
+          bids: depth.bids,
+          timestamp: depth.timestamp,
+        },
+      });
+    }
+
+    if (action === "fundingrate") {
+      const rates = await getCurrentFundingRate(symbol);
+      const rate = rates.find((r) => r.symbol === symbol) || rates[0];
+      return NextResponse.json({
+        success: true,
+        data: rate,
+      });
+    }
+
     const [ticker, candles, contractInfo] = await Promise.all([
       getTicker(symbol),
       getCandles(symbol, "1m", 100),
