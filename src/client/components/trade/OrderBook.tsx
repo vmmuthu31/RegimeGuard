@@ -125,7 +125,7 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/20 bg-zinc-950/60 relative">
         {/* Neon Accent Line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
         <div className="flex items-center gap-3">
           <div className="flex gap-1 cursor-pointer">

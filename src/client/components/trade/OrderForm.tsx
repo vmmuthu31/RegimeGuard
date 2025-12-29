@@ -51,7 +51,7 @@ export function OrderForm({
   return (
     <div className="bg-[#0B0E11] flex flex-col h-full relative overflow-hidden group">
       {/* Top Level Neon Accent */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
       {/* 1. Master Header - Matches MarketBar Height */}
       <div className="flex items-center justify-between px-4 h-14 border-b border-white/20 bg-zinc-950/60 relative z-20">

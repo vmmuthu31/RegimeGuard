@@ -75,8 +75,8 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
   return (
     <div className="flex flex-col h-full">
       {/* Tab Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-        <div className="flex items-center gap-1">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/20 bg-zinc-950/60 transition-colors">
+        <div className="flex items-center gap-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -84,21 +84,20 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  isActive
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
-                }`}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${isActive
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5 border border-transparent"
+                  }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? "drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]" : ""}`} />
                 {tab.label}
               </button>
             );
           })}
         </div>
-        <div className="flex items-center gap-2 text-zinc-500">
-          <Clock className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-mono">24H</span>
+        <div className="flex items-center gap-2 text-zinc-400 font-bold bg-zinc-900/80 px-3 py-1.5 rounded-lg border border-white/10 shadow-inner">
+          <Clock className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="text-[10px] font-black tracking-widest">24H PERFORMANCE</span>
         </div>
       </div>
 
@@ -106,28 +105,28 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-white/5">
-              <th className="text-left px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider w-8"></th>
-              <th className="text-left px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                Name
+            <tr className="border-b border-white/20 bg-zinc-950/40">
+              <th className="text-left px-4 py-3 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] w-8"></th>
+              <th className="text-left px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
+                Asset Intelligence
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                Price
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
+                Mark Price
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                24h Change
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
+                24h Vector
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                24h High
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
+                High Peak
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-                24h Low
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
+                Low Peak
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em]">
                 24h Volume
               </th>
-              <th className="text-right px-4 py-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider w-24">
-                Trend
+              <th className="text-right px-4 py-3 text-[10px] font-black text-zinc-300 uppercase tracking-[0.2em] w-24">
+                Trend Analysis
               </th>
             </tr>
           </thead>
@@ -145,40 +144,39 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03 }}
-                  className="group hover:bg-white/2 transition-colors cursor-pointer border-b border-white/2"
+                  className="group hover:bg-white/[0.03] transition-all cursor-pointer border-b border-white/[0.05]"
                   onClick={() => {
                     const pathId = sym.id.replace("cmt_", "");
                     window.location.href = `/trade/${pathId}`;
                   }}
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-4">
                     <button
                       onClick={(e) => toggleFavorite(sym.id, e)}
-                      className="p-1 hover:bg-white/10 rounded transition-colors"
+                      className="p-1.5 hover:bg-white/10 rounded transition-colors"
                     >
                       <Star
-                        className={`w-3.5 h-3.5 transition-colors ${
-                          isFavorite
-                            ? "text-yellow-400 fill-yellow-400"
-                            : "text-zinc-600 hover:text-zinc-400"
-                        }`}
+                        className={`w-3.5 h-3.5 transition-colors ${isFavorite
+                            ? "text-yellow-400 fill-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]"
+                            : "text-zinc-700 hover:text-zinc-500"
+                          }`}
                       />
                     </button>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-zinc-800 border border-white/5 flex items-center justify-center text-[10px] font-bold text-zinc-400 group-hover:text-emerald-400 group-hover:border-emerald-500/30 transition-colors">
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-white/10 flex items-center justify-center text-[10px] font-black text-zinc-500 group-hover:text-emerald-400 group-hover:border-emerald-500/40 transition-all shadow-inner">
                         {sym.name.substring(0, 2)}
                       </div>
                       <div>
-                        <span className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">
+                        <span className="text-xs font-black text-zinc-200 group-hover:text-white transition-colors tracking-tight">
                           {sym.name}
                         </span>
-                        <span className="text-zinc-600 text-xs">/USDT</span>
+                        <span className="text-zinc-600 text-[10px] font-bold block -mt-0.5 tracking-tighter">USDT PERSISTENT</span>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-4 text-right">
                     <span className="text-sm font-bold text-white font-mono">
                       $
                       {parseFloat(data.lastPrice).toLocaleString("en-US", {
@@ -189,11 +187,10 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold font-mono ${
-                        isPositive
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold font-mono ${isPositive
                           ? "text-emerald-400 bg-emerald-500/10"
                           : "text-red-400 bg-red-500/10"
-                      }`}
+                        }`}
                     >
                       {isPositive ? "+" : ""}
                       {formatPercent(data.priceChangePercent)}
@@ -232,9 +229,8 @@ export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
                           delay: i * 0.05,
                           ease: "easeOut",
                         }}
-                        className={`h-full rounded-full ${
-                          isPositive ? "bg-emerald-500" : "bg-red-500"
-                        }`}
+                        className={`h-full rounded-full ${isPositive ? "bg-emerald-500" : "bg-red-500"
+                          }`}
                       />
                     </div>
                   </td>
