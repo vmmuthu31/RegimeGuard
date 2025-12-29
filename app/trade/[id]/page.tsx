@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect } from "react";
+import { use, useEffect } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { FaArrowLeft } from "react-icons/fa";

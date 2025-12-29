@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, MouseEvent, ElementType } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -11,28 +11,20 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatPercent, formatVolume } from "@/src/shared/utils/formatters";
-import type {
-  TickerData,
-  MarketData,
-} from "@/src/client/hooks/useDashboardData";
+import type { TickerData } from "@/src/client/hooks/useDashboardData";
 
 interface MarketOverviewProps {
   tickers: Record<string, TickerData>;
-  market: MarketData | null;
   symbols: Array<{ id: string; name: string }>;
 }
 
 type TabType = "hot" | "gainers" | "losers" | "volume";
 
-export function MarketOverview({
-  tickers,
-  market,
-  symbols,
-}: MarketOverviewProps) {
+export function MarketOverview({ tickers, symbols }: MarketOverviewProps) {
   const [activeTab, setActiveTab] = useState<TabType>("hot");
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
-  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+  const toggleFavorite = (id: string, e: MouseEvent) => {
     e.stopPropagation();
     setFavorites((prev) => {
       const next = new Set(prev);
@@ -73,7 +65,7 @@ export function MarketOverview({
     }
   }, [symbols, tickers, activeTab]);
 
-  const tabs: { id: TabType; label: string; icon: React.ElementType }[] = [
+  const tabs: { id: TabType; label: string; icon: ElementType }[] = [
     { id: "hot", label: "Hot", icon: Flame },
     { id: "gainers", label: "Gainers", icon: TrendingUp },
     { id: "losers", label: "Losers", icon: TrendingDown },

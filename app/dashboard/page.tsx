@@ -9,7 +9,6 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
-
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
 import { MarketOverview } from "@/src/client/components/dashboard/MarketOverview";
@@ -405,7 +404,7 @@ export default function DashboardPage() {
 
         {/* Market Overview Table */}
         <div className="bg-zinc-900/60 border border-white/5 rounded-xl overflow-hidden">
-          <MarketOverview tickers={tickers} market={market} symbols={SYMBOLS} />
+          <MarketOverview tickers={tickers} symbols={SYMBOLS} />
         </div>
       </div>
     </div>

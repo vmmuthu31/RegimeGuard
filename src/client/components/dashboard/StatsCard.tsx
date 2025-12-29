@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
+import { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
   label: string;
-  value: string | React.ReactNode;
-  subValue?: string | React.ReactNode;
+  value: string | ReactNode;
+  subValue?: string | ReactNode;
   icon: LucideIcon;
   valueClassName?: string;
-  action?: React.ReactNode;
+  action?: ReactNode;
 }
 
 export function StatsCard({

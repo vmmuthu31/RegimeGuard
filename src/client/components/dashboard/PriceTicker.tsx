@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import { FaBitcoin, FaEthereum, FaBolt } from "react-icons/fa";
 import { SiSolana, SiDogecoin, SiRipple, SiLitecoin } from "react-icons/si";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 import type { TickerData } from "@/src/client/hooks/useDashboardData";
+import { ReactNode } from "react";
 
 interface PriceTickerProps {
   tickers: Record<string, TickerData>;
   symbols: Array<{ id: string; name: string }>;
 }
 
-const IconMap: Record<string, React.ReactNode> = {
+const IconMap: Record<string, ReactNode> = {
   BTC: <FaBitcoin className="text-orange-400" />,
   ETH: <FaEthereum className="text-blue-400" />,
   SOL: <SiSolana className="text-purple-400" />,

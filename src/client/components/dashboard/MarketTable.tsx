@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { FaBitcoin, FaEthereum, FaCoins } from "react-icons/fa";
 import {
@@ -15,7 +15,7 @@ import { TickerData } from "@/src/client/hooks/useDashboardData";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 
 // Map for all 8 competition symbols
-const IconMap: Record<string, React.ReactNode> = {
+const IconMap: Record<string, ReactNode> = {
   BTC: <FaBitcoin />,
   ETH: <FaEthereum />,
   SOL: <SiSolana />,

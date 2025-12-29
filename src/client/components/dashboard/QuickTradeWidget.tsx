@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaExchangeAlt } from "react-icons/fa";
 
 interface QuickTradeWidgetProps {
@@ -45,19 +45,21 @@ export function QuickTradeWidget({
         <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/5">
           <button
             onClick={() => setMode("buy")}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${isBuy
-              ? "bg-emerald-500 text-white shadow-lg"
-              : "text-zinc-500 hover:text-white"
-              }`}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${
+              isBuy
+                ? "bg-emerald-500 text-white shadow-lg"
+                : "text-zinc-500 hover:text-white"
+            }`}
           >
             Buy
           </button>
           <button
             onClick={() => setMode("sell")}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${!isBuy
-              ? "bg-red-500 text-white shadow-lg"
-              : "text-zinc-500 hover:text-white"
-              }`}
+            className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${
+              !isBuy
+                ? "bg-red-500 text-white shadow-lg"
+                : "text-zinc-500 hover:text-white"
+            }`}
           >
             Sell
           </button>
@@ -126,10 +128,11 @@ export function QuickTradeWidget({
       {/* Action Button */}
       <div className="p-4 bg-zinc-900/50 border-t border-white/5">
         <button
-          className={`w-full py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${isBuy
-            ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/20"
-            : "bg-red-500 hover:bg-red-400 text-white shadow-red-500/20"
-            }`}
+          className={`w-full py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] ${
+            isBuy
+              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/20"
+              : "bg-red-500 hover:bg-red-400 text-white shadow-red-500/20"
+          }`}
         >
           {isBuy ? "Confirm Buy" : "Confirm Sell"}
         </button>

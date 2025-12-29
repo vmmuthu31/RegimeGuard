@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { MouseEvent, ReactNode } from "react";
 import {
   FaBitcoin,
   FaEthereum,
@@ -23,7 +23,7 @@ interface TickerCardProps {
   className?: string; // Add className here
 }
 
-const IconMap: Record<string, React.ReactNode> = {
+const IconMap: Record<string, ReactNode> = {
   BTC: <FaBitcoin />,
   ETH: <FaEthereum />,
   SOL: <SiSolana />,
@@ -32,7 +32,7 @@ const IconMap: Record<string, React.ReactNode> = {
 export function TickerCard({ symbol, data, className }: TickerCardProps) {
   const isPositive = data && parseFloat(data.priceChangePercent) >= 0;
 
-  const handleOpenChart = (e: React.MouseEvent) => {
+  const handleOpenChart = (e: MouseEvent) => {
     e.stopPropagation();
     const pathId = symbol.id.replace("cmt_", "");
     window.location.href = `/trade/${pathId}`;
@@ -67,10 +67,11 @@ export function TickerCard({ symbol, data, className }: TickerCardProps) {
         </div>
         {data && (
           <div
-            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPositive
-              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-              : "bg-red-500/10 text-red-400 border-red-500/20"
-              }`}
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border ${
+              isPositive
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                : "bg-red-500/10 text-red-400 border-red-500/20"
+            }`}
           >
             {isPositive ? (
               <FaArrowUp className="w-2 h-2" />

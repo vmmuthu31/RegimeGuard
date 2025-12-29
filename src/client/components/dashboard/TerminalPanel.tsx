@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
 import { cn } from "@/src/lib/utils";
+import { HTMLAttributes, ReactNode } from "react";
 
-interface TerminalPanelProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface TerminalPanelProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   title?: string;
-  headerAction?: React.ReactNode;
+  headerAction?: ReactNode;
   noPadding?: boolean;
   autoHeight?: boolean;
 }

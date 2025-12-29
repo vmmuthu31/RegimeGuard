@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { FaTimes } from "react-icons/fa";
 
 export interface Order {
@@ -35,11 +34,13 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                 { label: "Price", width: "w-auto" },
                 { label: "Quantity", width: "w-auto" },
                 { label: "Filled", width: "w-[80px]" },
-                { label: "Action", width: "w-[100px]", align: "text-right" }
+                { label: "Action", width: "w-[100px]", align: "text-right" },
               ].map((head, i) => (
                 <th
                   key={i}
-                  className={`px-4 py-3 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.15em] border-b border-white/[0.03] ${head.width} ${head.align || "text-left"}`}
+                  className={`px-4 py-3 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.15em] border-b border-white/[0.03] ${
+                    head.width
+                  } ${head.align || "text-left"}`}
                 >
                   {head.label}
                 </th>
@@ -48,7 +49,10 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
           </thead>
           <tbody className="divide-y divide-white/[0.02]">
             {orders.map((order) => (
-              <tr key={order.id} className="group hover:bg-white/[0.015] transition-all duration-300 relative border-b border-white/[0.01]">
+              <tr
+                key={order.id}
+                className="group hover:bg-white/[0.015] transition-all duration-300 relative border-b border-white/[0.01]"
+              >
                 {/* Visual Accent - Permanent */}
                 <td className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/20 transition-all duration-500 shadow-[2px_0_10px_rgba(16,185,129,0.1)]" />
 
@@ -58,13 +62,21 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500/20 ring-1 ring-blue-500/40" />
-                    <span className="text-[11px] font-bold text-white tracking-tight">{order.symbol}</span>
+                    <span className="text-[11px] font-bold text-white tracking-tight">
+                      {order.symbol}
+                    </span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-950 border border-white/5 text-zinc-500 uppercase font-bold tracking-tighter">{order.type}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-950 border border-white/5 text-zinc-500 uppercase font-bold tracking-tighter">
+                    {order.type}
+                  </span>
                 </td>
-                <td className={`px-4 py-3 text-[11px] font-bold transition-all ${order.side === "Buy" ? "text-emerald-400" : "text-red-400"}`}>
+                <td
+                  className={`px-4 py-3 text-[11px] font-bold transition-all ${
+                    order.side === "Buy" ? "text-emerald-400" : "text-red-400"
+                  }`}
+                >
                   <span className="flex items-center gap-1.5">
                     {order.side === "Buy" ? "↑" : "↓"}
                     {order.side}
@@ -78,8 +90,19 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5 overflow-hidden rounded bg-zinc-950/50 p-0.5 w-fit border border-white/[0.02]">
-                    <div className="h-1 bg-emerald-500/50 rounded-full" style={{ width: `${(parseFloat(order.filled) / parseFloat(order.amount)) * 100}%` }} />
-                    <span className="text-[9px] text-zinc-600 font-bold">{order.filled}</span>
+                    <div
+                      className="h-1 bg-emerald-500/50 rounded-full"
+                      style={{
+                        width: `${
+                          (parseFloat(order.filled) /
+                            parseFloat(order.amount)) *
+                          100
+                        }%`,
+                      }}
+                    />
+                    <span className="text-[9px] text-zinc-600 font-bold">
+                      {order.filled}
+                    </span>
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right">
@@ -107,8 +130,12 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-700">Idle Engine</span>
-              <span className="text-[11px] mt-1 text-zinc-800">No active positions detected</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-700">
+                Idle Engine
+              </span>
+              <span className="text-[11px] mt-1 text-zinc-800">
+                No active positions detected
+              </span>
             </div>
           </div>
         )}
