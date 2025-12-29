@@ -51,53 +51,48 @@ export function OrderForm({
   return (
     <div className="bg-[#0B0E11] flex flex-col h-full relative overflow-hidden group">
       {/* Top Level Neon Accent */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
-      {/* 1. Master Header - Cross/Leverage (Matches MarketBar Height) */}
-      <div className="flex items-center justify-between px-4 h-14 border-b border-white/5 bg-zinc-950/40 relative z-20">
-        <div className="flex items-center gap-4 text-[11px] font-bold text-zinc-400">
-          <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer border border-white/5 bg-zinc-900/40 px-3 py-1.5 rounded-lg shadow-inner">
-            Cross Combined <span className="text-[8px] opacity-40">▼</span>
-          </div>
-          <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer border border-white/5 bg-zinc-900/40 px-3 py-1.5 rounded-lg shadow-inner">
-            Leverage <span className="text-emerald-500">20x</span> <span className="text-[8px] opacity-40">▼</span>
-          </div>
+      {/* 1. Master Header - Matches MarketBar Height */}
+      <div className="flex items-center justify-between px-4 h-14 border-b border-white/20 bg-zinc-950/60 relative z-20">
+        <div className="text-[11px] font-black text-white uppercase tracking-[0.2em]">
+          Quick Order
         </div>
-        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" title="Regime Shield Active" />
+        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.6)]" title="Regime Shield Active" />
       </div>
 
-      <div className="p-3 relative z-10 flex flex-col gap-3">
+      <div className="p-3 relative z-10 flex flex-col gap-4">
         {/* 2. Tactical Tabs (Open/Close) */}
-        <div className="flex gap-1.5 p-1 bg-zinc-900/60 rounded-xl border border-white/5">
+        <div className="flex gap-1.5 p-1 bg-zinc-900/80 rounded-xl border border-white/20 shadow-2xl">
           <button
             onClick={() => setSide("buy")}
-            className={`flex-1 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${side === "buy" ? "bg-emerald-500 text-zinc-950 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "text-zinc-600 hover:text-zinc-400"}`}
+            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "buy" ? "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-1 ring-emerald-400/50" : "text-zinc-500 hover:text-zinc-300"}`}
           >
             Open
           </button>
           <button
             onClick={() => setSide("sell")}
-            className={`flex-1 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${side === "sell" ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.2)]" : "text-zinc-600 hover:text-zinc-400"}`}
+            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "sell" ? "bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] ring-1 ring-red-400/50" : "text-zinc-500 hover:text-zinc-300"}`}
           >
             Close
           </button>
         </div>
 
         {/* 3. Execution Type Tabs */}
-        <div className="flex items-center gap-6 px-1 text-[10px] font-bold text-zinc-500 uppercase tracking-widest border-b border-white/[0.03] pb-2">
-          <div className="text-white border-b border-emerald-500 pb-2 -mb-2 transition-all cursor-pointer">Limit</div>
-          <div className="hover:text-zinc-300 transition-colors cursor-pointer">Market</div>
-          <div className="hover:text-zinc-300 transition-colors cursor-pointer">Trigger <span className="text-[8px] opacity-40">▼</span></div>
+        <div className="flex items-center gap-8 px-1 text-[11px] font-bold text-zinc-400 uppercase tracking-widest border-b border-white/10 pb-3">
+          <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3.5 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Limit</div>
+          <div className="hover:text-white transition-colors cursor-pointer">Market</div>
+          <div className="hover:text-white transition-colors cursor-pointer">Trigger <span className="text-[8px] opacity-60">▼</span></div>
         </div>
 
         {/* Inputs */}
         <div className="space-y-3 mb-4">
           {/* Price Label (Small) */}
           <div className="flex justify-between items-end px-1">
-            <span className="text-[10px] uppercase font-bold text-zinc-600 tracking-[0.15em]">
+            <span className="text-[11px] uppercase font-bold text-zinc-300 tracking-[0.15em]">
               Entry Price (USDT)
             </span>
-            <span className="text-[9px] font-bold text-zinc-700 bg-zinc-900/50 px-1.5 py-0.5 rounded border border-white/5 font-mono">
+            <span className="text-[10px] font-bold text-white bg-zinc-900 px-2 py-0.5 rounded border border-white/20 font-mono shadow-xl">
               FIXED MARKET
             </span>
           </div>
@@ -105,26 +100,26 @@ export function OrderForm({
           {/* Price View */}
           <div
             className={`relative group/input rounded-xl border transition-all duration-300 ${focused === "price"
-              ? "bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]"
-              : "bg-zinc-900/30 border-white/10"
+              ? "bg-zinc-900 border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+              : "bg-zinc-900/50 border-white/20"
               }`}
           >
             <input
               type="text"
               value={currentPrice}
               readOnly
-              className="w-full bg-transparent py-3 px-3 text-lg font-mono font-bold text-zinc-300 outline-none text-right"
+              className="w-full bg-transparent py-3.5 px-4 text-xl font-mono font-bold text-white outline-none text-right"
             />
             {/* Progress bar accent */}
-            <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-linear-to-r from-transparent via-zinc-800 to-transparent" />
+            <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-linear-to-r from-transparent via-white/20 to-transparent" />
           </div>
 
           {/* Amount Label */}
-          <div className="flex justify-between items-end px-1">
-            <span className="text-[10px] uppercase font-bold text-zinc-600 tracking-[0.15em]">
+          <div className="flex justify-between items-end px-1 pt-2">
+            <span className="text-[11px] uppercase font-bold text-zinc-300 tracking-[0.15em]">
               Execution Amount
             </span>
-            <span className="text-[10px] font-bold text-zinc-400 font-mono tracking-wider">
+            <span className="text-[11px] font-bold text-zinc-200 font-mono tracking-wider">
               {side === "buy" ? "USDT" : coin}
             </span>
           </div>
@@ -133,9 +128,9 @@ export function OrderForm({
           <div
             className={`relative group/input rounded-xl border transition-all duration-500 ${focused === "amount"
               ? side === "buy"
-                ? "bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]"
-                : "bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
-              : "bg-zinc-900/30 border-white/10"
+                ? "bg-zinc-950 border-emerald-500/60 shadow-[0_0_40px_rgba(16,185,129,0.1)]"
+                : "bg-zinc-950 border-red-500/60 shadow-[0_0_40px_rgba(239,68,68,0.1)]"
+              : "bg-zinc-900/50 border-white/20 shadow-inner"
               }`}
           >
             <input
@@ -145,7 +140,7 @@ export function OrderForm({
               onFocus={() => setFocused("amount")}
               onBlur={() => setFocused(null)}
               placeholder="0.00"
-              className="w-full bg-transparent py-4 px-3 text-xl font-mono font-bold text-white outline-none text-right placeholder:text-zinc-800"
+              className="w-full bg-transparent py-4.5 px-4 text-2xl font-mono font-bold text-white outline-none text-right placeholder:text-zinc-800"
             />
             {/* Focal Glow */}
             <div
@@ -198,16 +193,16 @@ export function OrderForm({
             <>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
                     Available Margin
                   </span>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className="p-1 rounded bg-zinc-900/50 border border-white/5">
-                      <FaWallet className="w-2.5 h-2.5 text-zinc-500" />
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded bg-zinc-900 border border-white/20 shadow-lg">
+                      <FaWallet className="w-3 h-3 text-emerald-500" />
                     </div>
-                    <span className="text-xs font-mono font-bold text-zinc-300">
+                    <span className="text-sm font-mono font-black text-white">
                       {balance}{" "}
-                      <span className="text-[9px] text-zinc-600">USDT</span>
+                      <span className="text-[10px] text-zinc-500">USDT</span>
                     </span>
                   </div>
                 </div>

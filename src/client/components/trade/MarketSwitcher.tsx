@@ -64,20 +64,19 @@ export function MarketSwitcher({ currentSymbol }: MarketSwitcherProps) {
       {/* Trigger Pill */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 cursor-pointer pl-2 pr-4 py-1.5 rounded-full border border-emerald-500/30 bg-white/[0.01] transition-all group shadow-[0_0_25px_rgba(16,185,129,0.1)] hover:border-emerald-500/50 hover:shadow-[0_0_35px_rgba(16,185,129,0.25)] active:scale-95"
+        className="flex items-center gap-3 cursor-pointer pl-3 pr-5 py-2 rounded-full border border-emerald-500/40 bg-zinc-950/40 backdrop-blur-3xl transition-all group shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:border-emerald-500/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] active:scale-95"
       >
         <div className="w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center text-emerald-400 shadow-inner group-hover:text-emerald-300 transition-colors">
           {IconMap[currentIconKey] || <FaBitcoin className="w-4 h-4" />}
         </div>
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors tracking-tight uppercase">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-sm font-black text-white group-hover:text-emerald-400 transition-colors tracking-tighter uppercase">
               {currentSymbol}
             </h1>
             <FaChevronDown
-              className={`w-2 h-2 text-emerald-500/50 transition-transform duration-300 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`w-2 h-2 text-emerald-500/50 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </div>
         </div>
@@ -91,11 +90,11 @@ export function MarketSwitcher({ currentSymbol }: MarketSwitcherProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full left-0 mt-2 w-64 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100] overflow-hidden"
+            className="absolute top-full left-0 mt-3 w-64 bg-zinc-950/95 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.8)] z-[100] overflow-hidden"
           >
-            <div className="p-2 flex flex-col gap-1">
-              <div className="px-3 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest border-b border-white/5 mb-1">
-                Select Market
+            <div className="p-2 flex flex-col gap-1.5">
+              <div className="px-3 py-2.5 text-[11px] font-black text-zinc-300 uppercase tracking-[0.2em] border-b border-white/10 mb-1">
+                Select Intelligence Market
               </div>
               {TRADING_PAIRS.map((pair) => {
                 const cleanName = getCleanName(pair);
@@ -109,36 +108,33 @@ export function MarketSwitcher({ currentSymbol }: MarketSwitcherProps) {
                   <button
                     key={pair}
                     onClick={() => handleSelect(pair)}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group/item ${
-                      isActive
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group/item ${isActive
                         ? "bg-emerald-500/10 border border-emerald-500/20"
                         : "hover:bg-white/[0.05] border border-transparent hover:border-white/5"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`p-1.5 rounded-lg bg-zinc-950 border border-white/5 shadow-inner transition-colors ${
-                          isActive
-                            ? "text-emerald-400"
-                            : "text-zinc-500 group-hover/item:text-emerald-400"
-                        }`}
+                        className={`p-2 rounded-xl bg-zinc-950 border border-white/10 shadow-2xl transition-all ${isActive
+                            ? "text-emerald-400 border-emerald-500/30"
+                            : "text-zinc-400 group-hover/item:text-emerald-400 group-hover/item:border-white/20"
+                          }`}
                       >
                         {IconMap[iconKey] || (
-                          <FaBitcoin className="w-3.5 h-3.5" />
+                          <FaBitcoin className="w-4 h-4" />
                         )}
                       </div>
                       <span
-                        className={`text-xs font-bold transition-colors ${
-                          isActive
+                        className={`text-xs font-black tracking-tight transition-colors ${isActive
                             ? "text-white"
-                            : "text-zinc-400 group-hover/item:text-white"
-                        }`}
+                            : "text-zinc-300 group-hover/item:text-white"
+                          }`}
                       >
                         {cleanName}
                       </span>
                     </div>
                     {isActive && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
                     )}
                   </button>
                 );

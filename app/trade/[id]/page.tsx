@@ -152,7 +152,7 @@ export default function TradePage({ params }: PageProps) {
       </div>
 
       {/* 0. Dashboard Header (Restored) */}
-      <div className="px-4 shrink-0 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 relative z-[110]">
+      <div className="px-4 shrink-0 bg-zinc-950/80 backdrop-blur-xl border-b border-white/20 relative z-[110] shadow-2xl">
         <DashboardHeader
           connected={connected}
           lastUpdate={lastUpdate}
@@ -165,41 +165,41 @@ export default function TradePage({ params }: PageProps) {
         {/* LEFT & CENTER COMBINED CONTAINER */}
         <div className="flex-1 flex flex-col gap-[1px] bg-zinc-800/20">
           {/* 1. Market Info Bar (Refined with Glow) - NOW INSIDE LEFT COL */}
-          <div className="flex items-center h-14 bg-zinc-950/40 backdrop-blur-2xl border-b border-white/10 px-4 gap-8 text-[11px] shrink-0 sticky top-0 z-[90] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center h-14 bg-zinc-950/40 backdrop-blur-2xl border-b border-white/20 px-4 gap-8 text-[11px] shrink-0 sticky top-0 z-[90] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
             {/* Subtle Bottom Glow Line */}
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-emerald-500/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-transparent via-emerald-500/30 to-transparent" />
 
             <MarketSwitcher currentSymbol={symbol.name} />
-            <div className="h-4 w-px bg-white/10 hidden md:block" />
+            <div className="h-4 w-px bg-white/20 hidden md:block" />
             {tickerData && (
               <div className="flex items-center gap-8 overflow-hidden">
                 <div className="flex flex-col group/price">
-                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5 group-hover/price:text-emerald-500/50 transition-colors">Mark Price</span>
-                  <span className={cn("text-[11px] font-mono font-bold tracking-tight transition-all duration-300", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" : "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]")}>
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5 group-hover/price:text-emerald-500/80 transition-colors">Mark Price</span>
+                  <span className={cn("text-[11px] font-mono font-bold tracking-tight transition-all duration-300", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.4)]" : "text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.4)]")}>
                     {formatPrice(tickerData.lastPrice)}
                   </span>
                 </div>
                 <div className="hidden sm:flex flex-col">
-                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Change</span>
-                  <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-500/80" : "text-red-500/80")}>
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h Change</span>
+                  <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-500" : "text-red-500")}>
                     {formatPercent(tickerData.priceChangePercent)}
                   </span>
                 </div>
                 <div className="hidden md:flex flex-col">
-                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h High</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h High</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-white">
                     {formatPrice(tickerData.high)}
                   </span>
                 </div>
                 <div className="hidden md:flex flex-col">
-                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Low</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h Low</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-white">
                     {formatPrice(tickerData.low)}
                   </span>
                 </div>
                 <div className="hidden lg:flex flex-col">
-                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">Funding / Countdown</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-500 uppercase">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">Funding / Countdown</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300 uppercase">
                     0.0100% / 06:42:12
                   </span>
                 </div>
@@ -209,12 +209,12 @@ export default function TradePage({ params }: PageProps) {
           {/* Top Level: Chart and Order Book */}
           <div className="flex flex-col lg:flex-row h-[550px] gap-[1px] bg-zinc-800/40">
             {/* Chart Column */}
-            <div className="flex-1 flex flex-col border-r border-white/5 h-full relative group/chart overflow-hidden">
+            <div className="flex-1 flex flex-col border-r border-white/20 h-full relative group/chart overflow-hidden">
               {/* Neon Accent Line */}
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover/chart:opacity-100 transition-opacity duration-1000" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
-              <div className="flex items-center gap-6 px-4 py-2 border-b border-white/5 bg-zinc-950/20 text-[10px] font-bold text-zinc-500 uppercase tracking-widest relative">
-                <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)]">Regime Analysis</div>
+              <div className="flex items-center gap-6 px-4 py-2 border-b border-white/20 bg-zinc-950/40 text-[10px] font-bold text-zinc-400 uppercase tracking-widest relative">
+                <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Regime Analysis</div>
                 <div className="hover:text-zinc-300 transition-colors cursor-pointer">Risk Metrics</div>
                 <div className="hover:text-zinc-300 transition-colors cursor-pointer">Neural Feed</div>
                 <div className="hover:text-zinc-300 transition-colors cursor-pointer">Execution Logs</div>
@@ -225,24 +225,27 @@ export default function TradePage({ params }: PageProps) {
             </div>
 
             {/* Order Book Column - Height matched to Chart */}
-            <div className="w-full lg:w-[340px] shrink-0 h-full relative group/book bg-[#0B0E11]/40 overflow-hidden">
+            <div className="w-full lg:w-[340px] shrink-0 h-full relative group/book bg-[#0B0E11]/60 overflow-hidden">
               {/* Neon Accent Line */}
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover/book:opacity-100 transition-opacity duration-1000" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
               <OrderBook tickerData={tickerData} symbol={symbol.name} />
             </div>
           </div>
 
           {/* Bottom Panel: Positions/Orders - Grows naturally */}
-          <div className="flex-1 flex flex-col min-h-[500px] bg-[#0B0E11]">
-            <div className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/40 sticky top-0 z-10 backdrop-blur-md">
-              <div className="flex gap-6 text-[10px] font-bold text-zinc-600 uppercase tracking-tight py-3">
-                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_4px_10px_rgba(16,185,129,0.3)]">Active Vaults (0)</div>
-                <div className="hover:text-zinc-400 transition-colors cursor-pointer">Signal History (0)</div>
-                <div className="hover:text-zinc-400 transition-colors cursor-pointer">Risk Protections</div>
-                <div className="hover:text-zinc-400 transition-colors cursor-pointer">Account Exposure</div>
+          <div className="flex-1 flex flex-col min-h-[500px] bg-[#0B0E11] relative group/bottom">
+            {/* Neon Accent Line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
+
+            <div className="flex items-center justify-between px-4 border-b border-white/20 bg-zinc-950/60 sticky top-0 z-10 backdrop-blur-md">
+              <div className="flex gap-6 text-[10px] font-bold text-zinc-400 uppercase tracking-tight py-3">
+                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Active Vaults (0)</div>
+                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Signal History (0)</div>
+                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Risk Protections</div>
+                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Account Exposure</div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="px-3 py-1 rounded bg-zinc-900 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all uppercase shadow-[0_0_15px_rgba(255,255,255,0.02)]">Emergency Close</button>
+                <button className="px-3 py-1 rounded bg-zinc-900 border border-white/20 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all uppercase shadow-[0_0_15px_rgba(255,255,255,0.05)]">Emergency Close</button>
               </div>
             </div>
             <div className="flex-1 bg-zinc-900/5">
@@ -255,9 +258,9 @@ export default function TradePage({ params }: PageProps) {
         </div>
 
         {/* RIGHT: Order Form Sidebar */}
-        <div className="w-full lg:w-[380px] shrink-0 flex flex-col bg-[#0B0E11] relative border-l border-white/10 group/sidebar overflow-hidden">
+        <div className="w-full lg:w-[380px] shrink-0 flex flex-col bg-[#0B0E11] relative border-l border-white/20 group/sidebar overflow-hidden shadow-2xl">
           {/* Glassy Background Surface */}
-          <div className="absolute inset-0 bg-zinc-950/20 pointer-events-none" />
+          <div className="absolute inset-0 bg-zinc-950/40 pointer-events-none" />
 
           <div className="sticky top-0 z-40 transition-all duration-700">
             {/* Neon Glow around Form on hover */}

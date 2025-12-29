@@ -38,7 +38,7 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
               ].map((head, i) => (
                 <th
                   key={i}
-                  className={`px-4 py-3 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.15em] border-b border-white/[0.03] ${head.width
+                  className={`px-4 py-3.5 text-[10px] text-zinc-300 font-bold uppercase tracking-[0.15em] border-b border-white/20 ${head.width
                     } ${head.align || "text-left"}`}
                 >
                   {head.label}
@@ -46,33 +46,33 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.02]">
+          <tbody className="divide-y divide-white/10">
             {orders.map((order) => (
               <tr
                 key={order.id}
-                className="group hover:bg-white/[0.015] transition-all duration-300 relative border-b border-white/[0.01]"
+                className="group hover:bg-white/[0.025] transition-all duration-300 relative"
               >
                 {/* Visual Accent - Permanent */}
-                <td className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500/20 transition-all duration-500 shadow-[2px_0_10px_rgba(16,185,129,0.1)]" />
+                <td className="absolute left-0 top-0 bottom-0 w-[2px] bg-emerald-500/40 shadow-[4px_0_15px_rgba(16,185,129,0.2)]" />
 
-                <td className="px-4 py-3 text-[11px] text-zinc-500 group-hover:text-zinc-400 transition-colors uppercase">
+                <td className="px-4 py-4 text-[11px] text-zinc-400 group-hover:text-zinc-200 transition-colors uppercase font-medium">
                   {order.time}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500/20 ring-1 ring-blue-500/40" />
-                    <span className="text-[11px] font-bold text-white tracking-tight">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <span className="text-[11px] font-black text-white tracking-tight">
                       {order.symbol}
                     </span>
                   </div>
                 </td>
-                <td className="px-4 py-3">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-950 border border-white/5 text-zinc-500 uppercase font-bold tracking-tighter">
+                <td className="px-4 py-4">
+                  <span className="text-[10px] px-2 py-0.5 rounded-lg bg-zinc-950 border border-white/20 text-zinc-200 uppercase font-black tracking-tighter shadow-md">
                     {order.type}
                   </span>
                 </td>
                 <td
-                  className={`px-4 py-3 text-[11px] font-bold transition-all ${order.side === "Buy" ? "text-emerald-400" : "text-red-400"
+                  className={`px-4 py-4 text-[11px] font-black tracking-widest transition-all ${order.side === "Buy" ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" : "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]"
                     }`}
                 >
                   <span className="flex items-center gap-1.5">
@@ -80,32 +80,32 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                     {order.side}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-[11px] font-medium text-zinc-300 font-mono">
+                <td className="px-4 py-4 text-[12px] font-bold text-white font-mono tracking-tight">
                   {order.price}
                 </td>
-                <td className="px-4 py-3 text-[11px] font-medium text-zinc-300 font-mono">
+                <td className="px-4 py-4 text-[12px] font-bold text-white font-mono tracking-tight">
                   {order.amount}
                 </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1.5 overflow-hidden rounded bg-zinc-950/50 p-0.5 w-fit border border-white/[0.02]">
+                <td className="px-4 py-4">
+                  <div className="flex items-center gap-2 overflow-hidden rounded bg-zinc-950 p-1 w-fit border border-white/10 shadow-inner">
                     <div
-                      className="h-1 bg-emerald-500/50 rounded-full"
+                      className="h-1.5 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] rounded-full"
                       style={{
                         width: `${(parseFloat(order.filled) /
-                            parseFloat(order.amount)) *
+                          parseFloat(order.amount)) *
                           100
                           }%`,
                       }}
                     />
-                    <span className="text-[9px] text-zinc-600 font-bold">
+                    <span className="text-[10px] text-white font-black font-mono">
                       {order.filled}
                     </span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-4 text-right">
                   <button
                     onClick={() => onCancelOrder(order.id)}
-                    className="relative px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest text-zinc-500 border border-white/5 hover:border-red-500/30 hover:text-red-400 hover:bg-red-500/[0.03] transition-all overflow-hidden group/cancel"
+                    className="relative px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 border border-white/10 hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/[0.05] transition-all overflow-hidden group/cancel shadow-sm active:scale-95"
                   >
                     <span className="relative z-10">Cancel</span>
                   </button>
@@ -116,21 +116,21 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
         </table>
 
         {orders.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-zinc-600 gap-4 relative overflow-hidden">
+          <div className="flex flex-col items-center justify-center py-20 text-zinc-500 gap-4 relative overflow-hidden">
             {/* Background geometric pattern */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:20px_20px]" />
+            <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-            <div className="w-12 h-12 rounded-2xl bg-zinc-900/50 border border-white/5 flex items-center justify-center text-zinc-700 shadow-inner group-hover:scale-110 transition-transform duration-500">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/20 flex items-center justify-center text-zinc-400 shadow-2xl group-hover:scale-110 transition-transform duration-500">
               <div className="relative">
-                <FaTimes className="w-4 h-4" />
-                <div className="absolute -inset-2 bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                <FaTimes className="w-5 h-5" />
+                <div className="absolute -inset-4 bg-emerald-500/20 blur-2xl opacity-100" />
               </div>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-700">
-                Idle Engine
+              <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white">
+                Intelligence Idle
               </span>
-              <span className="text-[11px] mt-1 text-zinc-800">
+              <span className="text-[12px] mt-1 text-zinc-500 font-bold uppercase tracking-tighter">
                 No active protocol exposure detection
               </span>
             </div>
