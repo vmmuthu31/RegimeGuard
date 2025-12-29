@@ -14,6 +14,7 @@ import {
   Order,
 } from "@/src/client/components/trade/ActiveOrders";
 import { TerminalPanel } from "@/src/client/components/dashboard/TerminalPanel";
+import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
 import { MarketSwitcher } from "@/src/client/components/trade/MarketSwitcher";
 import { OrderBook } from "@/src/client/components/trade/OrderBook";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
@@ -129,114 +130,122 @@ export default function TradePage({ params }: PageProps) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#07080A] text-zinc-100 font-sans selection:bg-emerald-500/30 relative">
-      {/* 0. Global Navigation Header (Consolidated) */}
-      <header className="h-14 bg-[#0B0E11] border-b border-white/5 flex items-center px-4 justify-between select-none shrink-0 relative z-[100] sticky top-0 backdrop-blur-md">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-8 h-8 bg-emerald-500 rounded flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-              <span className="text-zinc-950 font-black text-xl">R</span>
-            </div>
-            <span className="text-xl font-bold tracking-tighter text-white">Regime<span className="text-emerald-500">Guard</span></span>
-          </div>
-          <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold text-zinc-400 uppercase tracking-wider mt-1">
-            <span className="text-emerald-400 border-b-2 border-emerald-500 pb-4 mt-2 transition-all cursor-pointer">Intelligence</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Terminal</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Vaults</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Governance</span>
-            <div className="flex items-center gap-2 text-emerald-400 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-[10px]">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-              Risk Shield Active
-            </div>
-          </nav>
-        </div>
-        <div className="flex items-center gap-5 text-zinc-400 text-[11px] font-bold uppercase">
-          <button className="bg-emerald-500 text-zinc-950 px-5 py-2 rounded-lg text-[10px] font-black hover:bg-emerald-400 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.2)]">Connect Protocol</button>
-          <div className="h-4 w-px bg-white/10" />
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="hover:text-white transition-colors">Settings</Link>
-          </div>
-        </div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-[#020202] text-zinc-100 font-sans selection:bg-emerald-500/30 relative overflow-x-hidden">
+      {/* GLOBAL AMBIENCE LAYERS */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Moving Light Beams */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/5 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/5 blur-[150px] rounded-full" />
 
-      {/* 1. Market Info Bar */}
-      <div className="flex items-center h-14 bg-[#0B0E11] border-b border-white/5 px-4 gap-8 text-[11px] shrink-0 sticky top-14 z-[90] backdrop-blur-sm">
-        <MarketSwitcher currentSymbol={symbol.name} />
-        <div className="h-4 w-px bg-white/10 hidden md:block" />
-        {tickerData && (
-          <div className="flex items-center gap-8 overflow-hidden">
-            <div className="flex flex-col">
-              <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">Mark Price</span>
-              <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400" : "text-red-400")}>
-                {formatPrice(tickerData.lastPrice)}
-              </span>
-            </div>
-            <div className="hidden sm:flex flex-col">
-              <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Change</span>
-              <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400" : "text-red-400")}>
-                {formatPercent(tickerData.priceChangePercent)}
-              </span>
-            </div>
-            <div className="hidden md:flex flex-col">
-              <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h High</span>
-              <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
-                {formatPrice(tickerData.high)}
-              </span>
-            </div>
-            <div className="hidden md:flex flex-col">
-              <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Low</span>
-              <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
-                {formatPrice(tickerData.low)}
-              </span>
-            </div>
-            <div className="hidden lg:flex flex-col">
-              <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">Funding / Countdown</span>
-              <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-500 uppercase">
-                0.0100% / 06:42:12
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Subtle Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+
+        {/* Vignette */}
+        <div className="absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.8)]" />
       </div>
 
-      <div className="flex-1 w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row bg-zinc-950">
-        {/* LEFT & CENTER: Chart + Bottom Panel */}
-        <div className="flex-1 flex flex-col border-r border-white/5">
-          {/* Top Level: Chart and Order Book */}
-          <div className="flex flex-col lg:flex-row border-b border-white/5 h-[550px]">
-            {/* Chart Column */}
-            <div className="flex-1 flex flex-col border-r border-white/5 h-full">
-              <div className="flex items-center gap-6 px-4 py-2 border-b border-white/5 bg-zinc-950/20 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all">Regime Analysis</div>
-                <div className="hover:text-zinc-300 transition-colors">Risk Metrics</div>
-                <div className="hover:text-zinc-300 transition-colors">Neural Feed</div>
-                <div className="hover:text-zinc-300 transition-colors">Execution Logs</div>
+      {/* 0. Dashboard Header (Restored) */}
+      <div className="px-4 shrink-0 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 relative z-[110]">
+        <DashboardHeader
+          connected={connected}
+          lastUpdate={lastUpdate}
+          account={account}
+          compact={true}
+        />
+      </div>
+
+      <div className="flex-1 w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row bg-[#0B0E11] gap-[1px] relative">
+        {/* LEFT & CENTER COMBINED CONTAINER */}
+        <div className="flex-1 flex flex-col gap-[1px] bg-zinc-800/20">
+          {/* 1. Market Info Bar (Refined with Glow) - NOW INSIDE LEFT COL */}
+          <div className="flex items-center h-14 bg-zinc-950/40 backdrop-blur-2xl border-b border-white/10 px-4 gap-8 text-[11px] shrink-0 sticky top-0 z-[90] shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+            {/* Subtle Bottom Glow Line */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-emerald-500/20 to-transparent" />
+
+            <MarketSwitcher currentSymbol={symbol.name} />
+            <div className="h-4 w-px bg-white/10 hidden md:block" />
+            {tickerData && (
+              <div className="flex items-center gap-8 overflow-hidden">
+                <div className="flex flex-col group/price">
+                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5 group-hover/price:text-emerald-500/50 transition-colors">Mark Price</span>
+                  <span className={cn("text-[11px] font-mono font-bold tracking-tight transition-all duration-300", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" : "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]")}>
+                    {formatPrice(tickerData.lastPrice)}
+                  </span>
+                </div>
+                <div className="hidden sm:flex flex-col">
+                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Change</span>
+                  <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-500/80" : "text-red-500/80")}>
+                    {formatPercent(tickerData.priceChangePercent)}
+                  </span>
+                </div>
+                <div className="hidden md:flex flex-col">
+                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h High</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
+                    {formatPrice(tickerData.high)}
+                  </span>
+                </div>
+                <div className="hidden md:flex flex-col">
+                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">24h Low</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300">
+                    {formatPrice(tickerData.low)}
+                  </span>
+                </div>
+                <div className="hidden lg:flex flex-col">
+                  <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tighter mb-0.5">Funding / Countdown</span>
+                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-500 uppercase">
+                    0.0100% / 06:42:12
+                  </span>
+                </div>
               </div>
-              <div className="flex-1 relative overflow-hidden">
+            )}
+          </div>
+          {/* Top Level: Chart and Order Book */}
+          <div className="flex flex-col lg:flex-row h-[550px] gap-[1px] bg-zinc-800/40">
+            {/* Chart Column */}
+            <div className="flex-1 flex flex-col border-r border-white/5 h-full relative group/chart overflow-hidden">
+              {/* Neon Accent Line */}
+              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover/chart:opacity-100 transition-opacity duration-1000" />
+
+              <div className="flex items-center gap-6 px-4 py-2 border-b border-white/5 bg-zinc-950/20 text-[10px] font-bold text-zinc-500 uppercase tracking-widest relative">
+                <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)]">Regime Analysis</div>
+                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Risk Metrics</div>
+                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Neural Feed</div>
+                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Execution Logs</div>
+              </div>
+              <div className="flex-1 relative overflow-hidden bg-zinc-900/10">
                 <CandleChart data={formattedCandles} />
               </div>
             </div>
 
             {/* Order Book Column - Height matched to Chart */}
-            <div className="w-full lg:w-[340px] shrink-0 h-full">
+            <div className="w-full lg:w-[340px] shrink-0 h-full relative group/book bg-[#0B0E11]/40 overflow-hidden">
+              {/* Neon Accent Line */}
+              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover/book:opacity-100 transition-opacity duration-1000" />
               <OrderBook tickerData={tickerData} symbol={symbol.name} />
             </div>
           </div>
 
           {/* Bottom Panel: Positions/Orders - Grows naturally */}
           <div className="flex-1 flex flex-col min-h-[500px] bg-[#0B0E11]">
-            <div className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/20 sticky top-0 z-10">
+            <div className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/40 sticky top-0 z-10 backdrop-blur-md">
               <div className="flex gap-6 text-[10px] font-bold text-zinc-600 uppercase tracking-tight py-3">
-                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer">Active Vaults (0)</div>
+                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_4px_10px_rgba(16,185,129,0.3)]">Active Vaults (0)</div>
                 <div className="hover:text-zinc-400 transition-colors cursor-pointer">Signal History (0)</div>
                 <div className="hover:text-zinc-400 transition-colors cursor-pointer">Risk Protections</div>
                 <div className="hover:text-zinc-400 transition-colors cursor-pointer">Account Exposure</div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="px-3 py-1 rounded bg-zinc-900 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all uppercase">Emergency Close</button>
+                <button className="px-3 py-1 rounded bg-zinc-900 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all uppercase shadow-[0_0_15px_rgba(255,255,255,0.02)]">Emergency Close</button>
               </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 bg-zinc-900/5">
               <ActiveOrders
                 orders={currentSymbolOrders}
                 onCancelOrder={handleCancelOrder}
@@ -246,8 +255,13 @@ export default function TradePage({ params }: PageProps) {
         </div>
 
         {/* RIGHT: Order Form Sidebar */}
-        <div className="w-full lg:w-[380px] shrink-0 flex flex-col bg-[#0B0E11] relative">
-          <div className="sticky top-28">
+        <div className="w-full lg:w-[380px] shrink-0 flex flex-col bg-[#0B0E11] relative border-l border-white/10 group/sidebar overflow-hidden">
+          {/* Glassy Background Surface */}
+          <div className="absolute inset-0 bg-zinc-950/20 pointer-events-none" />
+
+          <div className="sticky top-0 z-40 transition-all duration-700">
+            {/* Neon Glow around Form on hover */}
+            <div className="absolute inset-[-20px] bg-emerald-500/5 blur-3xl opacity-0 group-hover/sidebar:opacity-100 transition-opacity pointer-events-none" />
             <OrderForm
               symbol={symbol.name}
               currentPrice={tickerData?.lastPrice ? formatPrice(tickerData.lastPrice) : "0.00"}
@@ -259,21 +273,29 @@ export default function TradePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Footer / Status Bar */}
-      <div className="h-8 bg-[#0B0E11] border-t border-white/5 flex items-center justify-between px-4 text-[9px] font-bold text-zinc-600 uppercase tracking-widest relative z-50 shadow-2xl shrink-0">
+      {/* Footer / Status Bar (Enhanced with Glow) */}
+      <div className="h-8 bg-[#0B0E11] border-t border-white/5 flex items-center justify-between px-4 text-[9px] font-bold text-zinc-600 uppercase tracking-widest relative z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] shrink-0">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5 text-emerald-500/80">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex items-center gap-1.5 text-emerald-500/80 group cursor-pointer">
+            <div className="relative">
+              <div className="absolute inset-0 bg-emerald-500 rounded-full blur-[4px] animate-pulse opacity-50" />
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 relative" />
+            </div>
             Intelligence Feed Stable
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-zinc-700">|</span>
-            RegimeGuard Mainnet-1 <span className="text-emerald-500/60 font-mono">Synced</span>
+          <div className="flex items-center gap-1.5 group cursor-pointer">
+            <span className="text-zinc-800">|</span>
+            <span className="text-zinc-500 group-hover:text-emerald-500/80 transition-colors uppercase">RegimeGuard Mainnet-1</span>
+            <span className="text-emerald-500/60 font-mono">Synced</span>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-zinc-700">
-          <Settings className="w-3.5 h-3.5 cursor-pointer hover:text-zinc-400" />
-          <Maximize2 className="w-3.5 h-3.5 cursor-pointer hover:text-zinc-400" />
+        <div className="flex items-center gap-5 text-zinc-700">
+          <div className="flex items-center gap-2 hover:text-emerald-500 transition-colors cursor-pointer">
+            <div className="w-1 h-1 rounded-full bg-emerald-500" />
+            Network-2 <span className="font-mono text-[8px] text-zinc-800">12ms</span>
+          </div>
+          <Settings className="w-3.5 h-3.5 cursor-pointer hover:text-white transition-colors" />
+          <Maximize2 className="w-3.5 h-3.5 cursor-pointer hover:text-white transition-colors" />
         </div>
       </div>
     </div>

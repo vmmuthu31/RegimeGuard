@@ -49,55 +49,45 @@ export function OrderForm({
   };
 
   return (
-    <div className="bg-[#050505] flex flex-col h-full relative overflow-hidden group border border-white/10">
-      {/* Dynamic Background Glow */}
-      <div
-        className={`absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-all duration-700 ease-in-out ${side === "buy" ? "bg-emerald-500/30" : "bg-red-500/30"
-          }`}
-      />
+    <div className="bg-[#0B0E11] flex flex-col h-full relative overflow-hidden group">
+      {/* Top Level Neon Accent */}
+      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-      {/* Top Refraction Line */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-linear-to-r from-transparent via-white/10 to-transparent" />
-
-      <div className="p-4 relative z-10 flex flex-col h-full">
-        {/* Header / Tabs */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex flex-col">
-            <h2 className="text-white text-base font-bold flex items-center gap-2 tracking-tight">
-              <span
-                className={`w-1 h-1 rounded-full animate-pulse ${side === "buy"
-                    ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
-                    : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
-                  }`}
-              />
-              Quick Order
-            </h2>
+      {/* 1. Master Header - Cross/Leverage (Matches MarketBar Height) */}
+      <div className="flex items-center justify-between px-4 h-14 border-b border-white/5 bg-zinc-950/40 relative z-20">
+        <div className="flex items-center gap-4 text-[11px] font-bold text-zinc-400">
+          <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer border border-white/5 bg-zinc-900/40 px-3 py-1.5 rounded-lg shadow-inner">
+            Cross Combined <span className="text-[8px] opacity-40">▼</span>
           </div>
-
-          <div className="flex bg-zinc-900/40 rounded-full p-0.5 border border-white/5 backdrop-blur-xl shadow-inner">
-            {(["buy", "sell"] as const).map((s) => (
-              <button
-                key={s}
-                onClick={() => setSide(s)}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all duration-300 relative ${side === s
-                    ? side === "buy"
-                      ? "text-emerald-400"
-                      : "text-red-400"
-                    : "text-zinc-500 hover:text-zinc-300"
-                  }`}
-              >
-                {side === s && (
-                  <motion.div
-                    layoutId="activeTabOutline"
-                    className={`absolute inset-0 rounded-full bg-white/[0.03] border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.02)]`}
-                  />
-                )}
-                <span className="relative z-10 uppercase tracking-widest">
-                  {s}
-                </span>
-              </button>
-            ))}
+          <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer border border-white/5 bg-zinc-900/40 px-3 py-1.5 rounded-lg shadow-inner">
+            Leverage <span className="text-emerald-500">20x</span> <span className="text-[8px] opacity-40">▼</span>
           </div>
+        </div>
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" title="Regime Shield Active" />
+      </div>
+
+      <div className="p-3 relative z-10 flex flex-col gap-3">
+        {/* 2. Tactical Tabs (Open/Close) */}
+        <div className="flex gap-1.5 p-1 bg-zinc-900/60 rounded-xl border border-white/5">
+          <button
+            onClick={() => setSide("buy")}
+            className={`flex-1 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${side === "buy" ? "bg-emerald-500 text-zinc-950 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "text-zinc-600 hover:text-zinc-400"}`}
+          >
+            Open
+          </button>
+          <button
+            onClick={() => setSide("sell")}
+            className={`flex-1 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${side === "sell" ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.2)]" : "text-zinc-600 hover:text-zinc-400"}`}
+          >
+            Close
+          </button>
+        </div>
+
+        {/* 3. Execution Type Tabs */}
+        <div className="flex items-center gap-6 px-1 text-[10px] font-bold text-zinc-500 uppercase tracking-widest border-b border-white/[0.03] pb-2">
+          <div className="text-white border-b border-emerald-500 pb-2 -mb-2 transition-all cursor-pointer">Limit</div>
+          <div className="hover:text-zinc-300 transition-colors cursor-pointer">Market</div>
+          <div className="hover:text-zinc-300 transition-colors cursor-pointer">Trigger <span className="text-[8px] opacity-40">▼</span></div>
         </div>
 
         {/* Inputs */}
@@ -115,8 +105,8 @@ export function OrderForm({
           {/* Price View */}
           <div
             className={`relative group/input rounded-xl border transition-all duration-300 ${focused === "price"
-                ? "bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]"
-                : "bg-zinc-900/30 border-white/10"
+              ? "bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]"
+              : "bg-zinc-900/30 border-white/10"
               }`}
           >
             <input
@@ -142,10 +132,10 @@ export function OrderForm({
           {/* Amount Input */}
           <div
             className={`relative group/input rounded-xl border transition-all duration-500 ${focused === "amount"
-                ? side === "buy"
-                  ? "bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]"
-                  : "bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
-                : "bg-zinc-900/30 border-white/10"
+              ? side === "buy"
+                ? "bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]"
+                : "bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
+              : "bg-zinc-900/30 border-white/10"
               }`}
           >
             <input
@@ -160,14 +150,14 @@ export function OrderForm({
             {/* Focal Glow */}
             <div
               className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-emerald-500/40 to-transparent ${focused === "amount" && side === "buy"
-                  ? "opacity-100"
-                  : "opacity-0"
+                ? "opacity-100"
+                : "opacity-0"
                 }`}
             />
             <div
               className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-red-500/40 to-transparent ${focused === "amount" && side === "sell"
-                  ? "opacity-100"
-                  : "opacity-0"
+                ? "opacity-100"
+                : "opacity-0"
                 }`}
             />
           </div>
@@ -190,8 +180,8 @@ export function OrderForm({
         <div className="mt-auto pt-4 border-t border-white/[0.03]">
           {!connected ? (
             <div className="flex flex-col gap-3">
-              <button className="w-full py-3 rounded-xl bg-emerald-500 text-zinc-950 font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]">Sign Up to Protocol</button>
-              <button className="w-full py-3 rounded-xl bg-zinc-900 border border-white/10 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all">Log In</button>
+              <button className="w-full py-3 rounded-xl bg-emerald-500 text-zinc-950 font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] active:scale-95">Sign Up to Protocol</button>
+              <button className="w-full py-3 rounded-xl bg-zinc-900 border border-white/10 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all shadow-[0_0_15px_rgba(0,0,0,0.4)] active:scale-95">Log In</button>
               <div className="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                 <h4 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                   <Zap className="w-3 h-3 fill-emerald-500/20" />
@@ -225,8 +215,8 @@ export function OrderForm({
                 {/* Dynamic Indicator */}
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${side === "buy"
-                      ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
-                      : "bg-red-500/5 border-red-500/20 text-red-500"
+                    ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
+                    : "bg-red-500/5 border-red-500/20 text-red-500"
                     }`}
                 >
                   <Zap
@@ -239,8 +229,8 @@ export function OrderForm({
               <button
                 onClick={handleSubmit}
                 className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${side === "buy"
-                    ? "bg-emerald-500 text-black hover:bg-emerald-400"
-                    : "bg-red-500 text-white hover:bg-red-400"
+                  ? "bg-emerald-500 text-black hover:bg-emerald-400"
+                  : "bg-red-500 text-white hover:bg-red-400"
                   }`}
               >
                 {/* Shiny Overlay */}
