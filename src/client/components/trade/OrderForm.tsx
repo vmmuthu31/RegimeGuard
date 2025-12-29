@@ -10,6 +10,7 @@ interface OrderFormProps {
   currentPrice: string;
   balance: string;
   onPlaceOrder: (side: "Buy" | "Sell", price: string, amount: string) => void;
+  connected?: boolean;
 }
 
 export function OrderForm({
@@ -17,6 +18,7 @@ export function OrderForm({
   currentPrice,
   balance,
   onPlaceOrder,
+  connected = true,
 }: OrderFormProps) {
   const [side, setSide] = useState<"buy" | "sell">("buy");
   const [amount, setAmount] = useState("");
@@ -50,9 +52,8 @@ export function OrderForm({
     <div className="bg-[#050505] flex flex-col h-full relative overflow-hidden group border border-white/10">
       {/* Dynamic Background Glow */}
       <div
-        className={`absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-all duration-700 ease-in-out ${
-          side === "buy" ? "bg-emerald-500/30" : "bg-red-500/30"
-        }`}
+        className={`absolute top-0 right-0 w-[300px] h-[300px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-all duration-700 ease-in-out ${side === "buy" ? "bg-emerald-500/30" : "bg-red-500/30"
+          }`}
       />
 
       {/* Top Refraction Line */}
@@ -64,11 +65,10 @@ export function OrderForm({
           <div className="flex flex-col">
             <h2 className="text-white text-base font-bold flex items-center gap-2 tracking-tight">
               <span
-                className={`w-1 h-1 rounded-full animate-pulse ${
-                  side === "buy"
+                className={`w-1 h-1 rounded-full animate-pulse ${side === "buy"
                     ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
                     : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
-                }`}
+                  }`}
               />
               Quick Order
             </h2>
@@ -79,13 +79,12 @@ export function OrderForm({
               <button
                 key={s}
                 onClick={() => setSide(s)}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all duration-300 relative ${
-                  side === s
+                className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all duration-300 relative ${side === s
                     ? side === "buy"
                       ? "text-emerald-400"
                       : "text-red-400"
                     : "text-zinc-500 hover:text-zinc-300"
-                }`}
+                  }`}
               >
                 {side === s && (
                   <motion.div
@@ -115,11 +114,10 @@ export function OrderForm({
 
           {/* Price View */}
           <div
-            className={`relative group/input rounded-xl border transition-all duration-300 ${
-              focused === "price"
+            className={`relative group/input rounded-xl border transition-all duration-300 ${focused === "price"
                 ? "bg-zinc-900/90 border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.02)]"
                 : "bg-zinc-900/30 border-white/10"
-            }`}
+              }`}
           >
             <input
               type="text"
@@ -143,13 +141,12 @@ export function OrderForm({
 
           {/* Amount Input */}
           <div
-            className={`relative group/input rounded-xl border transition-all duration-500 ${
-              focused === "amount"
+            className={`relative group/input rounded-xl border transition-all duration-500 ${focused === "amount"
                 ? side === "buy"
                   ? "bg-zinc-900/90 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.05)]"
                   : "bg-zinc-900/90 border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.05)]"
                 : "bg-zinc-900/30 border-white/10"
-            }`}
+              }`}
           >
             <input
               type="text"
@@ -162,18 +159,16 @@ export function OrderForm({
             />
             {/* Focal Glow */}
             <div
-              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-emerald-500/40 to-transparent ${
-                focused === "amount" && side === "buy"
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-emerald-500/40 to-transparent ${focused === "amount" && side === "buy"
                   ? "opacity-100"
                   : "opacity-0"
-              }`}
+                }`}
             />
             <div
-              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-red-500/40 to-transparent ${
-                focused === "amount" && side === "sell"
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-red-500/40 to-transparent ${focused === "amount" && side === "sell"
                   ? "opacity-100"
                   : "opacity-0"
-              }`}
+                }`}
             />
           </div>
 
@@ -191,57 +186,83 @@ export function OrderForm({
           </div>
         </div>
 
-        {/* Action Section */}
+        {/* Action Section / Guest View */}
         <div className="mt-auto pt-4 border-t border-white/[0.03]">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex flex-col">
-              <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
-                Available Margin
-              </span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="p-1 rounded bg-zinc-900/50 border border-white/5">
-                  <FaWallet className="w-2.5 h-2.5 text-zinc-500" />
+          {!connected ? (
+            <div className="flex flex-col gap-3">
+              <button className="w-full py-3 rounded-xl bg-emerald-500 text-zinc-950 font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]">Sign Up to Protocol</button>
+              <button className="w-full py-3 rounded-xl bg-zinc-900 border border-white/10 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all">Log In</button>
+              <div className="mt-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                <h4 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <Zap className="w-3 h-3 fill-emerald-500/20" />
+                  Futures Info
+                </h4>
+                <div className="space-y-2">
+                  <InfoRow label="Trading Fee" value="0.02% / 0.05%" />
+                  <InfoRow label="Leverage" value="Up to 100x" />
+                  <InfoRow label="Max Position" value="50,000 USDT" />
                 </div>
-                <span className="text-xs font-mono font-bold text-zinc-300">
-                  {balance}{" "}
-                  <span className="text-[9px] text-zinc-600">USDT</span>
-                </span>
               </div>
             </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
+                    Available Margin
+                  </span>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <div className="p-1 rounded bg-zinc-900/50 border border-white/5">
+                      <FaWallet className="w-2.5 h-2.5 text-zinc-500" />
+                    </div>
+                    <span className="text-xs font-mono font-bold text-zinc-300">
+                      {balance}{" "}
+                      <span className="text-[9px] text-zinc-600">USDT</span>
+                    </span>
+                  </div>
+                </div>
 
-            {/* Dynamic Indicator */}
-            <div
-              className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
-                side === "buy"
-                  ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
-                  : "bg-red-500/5 border-red-500/20 text-red-500"
-              }`}
-            >
-              <Zap
-                className={`w-3.5 h-3.5 ${
-                  side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
-                }`}
-              />
-            </div>
-          </div>
+                {/* Dynamic Indicator */}
+                <div
+                  className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${side === "buy"
+                      ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
+                      : "bg-red-500/5 border-red-500/20 text-red-500"
+                    }`}
+                >
+                  <Zap
+                    className={`w-3.5 h-3.5 ${side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
+                      }`}
+                  />
+                </div>
+              </div>
 
-          <button
-            onClick={handleSubmit}
-            className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${
-              side === "buy"
-                ? "bg-emerald-500 text-black hover:bg-emerald-400"
-                : "bg-red-500 text-white hover:bg-red-400"
-            }`}
-          >
-            {/* Shiny Overlay */}
-            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/submit:translate-x-full transition-transform duration-1000" />
+              <button
+                onClick={handleSubmit}
+                className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${side === "buy"
+                    ? "bg-emerald-500 text-black hover:bg-emerald-400"
+                    : "bg-red-500 text-white hover:bg-red-400"
+                  }`}
+              >
+                {/* Shiny Overlay */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/submit:translate-x-full transition-transform duration-1000" />
 
-            <span className="relative z-10 uppercase">
-              {side === "buy" ? `Execute Buy` : `Execute Sell`}
-            </span>
-          </button>
+                <span className="relative z-10 uppercase">
+                  {side === "buy" ? `Execute Buy` : `Execute Sell`}
+                </span>
+              </button>
+            </>
+          )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between items-center text-[10px]">
+      <span className="text-zinc-500 font-bold uppercase tracking-tighter">{label}</span>
+      <span className="text-zinc-300 font-mono font-bold">{value}</span>
     </div>
   );
 }

@@ -21,10 +21,10 @@ interface ActiveOrdersProps {
 
 export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
   return (
-    <div className="h-full bg-[#050505] flex flex-col font-mono select-none">
-      <div className="flex-1 overflow-auto">
+    <div className="bg-[#0B0E11] flex flex-col font-mono select-none">
+      <div className="flex-1">
         <table className="w-full text-left border-separate border-spacing-0">
-          <thead className="sticky top-0 z-20 bg-[#09090b] shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
+          <thead className="sticky top-0 z-20 bg-[#0B0E11]">
             <tr>
               {[
                 { label: "Execution Time", width: "w-[120px]" },
@@ -38,9 +38,8 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
               ].map((head, i) => (
                 <th
                   key={i}
-                  className={`px-4 py-3 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.15em] border-b border-white/[0.03] ${
-                    head.width
-                  } ${head.align || "text-left"}`}
+                  className={`px-4 py-3 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.15em] border-b border-white/[0.03] ${head.width
+                    } ${head.align || "text-left"}`}
                 >
                   {head.label}
                 </th>
@@ -73,9 +72,8 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                   </span>
                 </td>
                 <td
-                  className={`px-4 py-3 text-[11px] font-bold transition-all ${
-                    order.side === "Buy" ? "text-emerald-400" : "text-red-400"
-                  }`}
+                  className={`px-4 py-3 text-[11px] font-bold transition-all ${order.side === "Buy" ? "text-emerald-400" : "text-red-400"
+                    }`}
                 >
                   <span className="flex items-center gap-1.5">
                     {order.side === "Buy" ? "↑" : "↓"}
@@ -93,11 +91,10 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                     <div
                       className="h-1 bg-emerald-500/50 rounded-full"
                       style={{
-                        width: `${
-                          (parseFloat(order.filled) /
+                        width: `${(parseFloat(order.filled) /
                             parseFloat(order.amount)) *
                           100
-                        }%`,
+                          }%`,
                       }}
                     />
                     <span className="text-[9px] text-zinc-600 font-bold">
@@ -134,7 +131,7 @@ export function ActiveOrders({ orders, onCancelOrder }: ActiveOrdersProps) {
                 Idle Engine
               </span>
               <span className="text-[11px] mt-1 text-zinc-800">
-                No active positions detected
+                No active protocol exposure detection
               </span>
             </div>
           </div>

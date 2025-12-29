@@ -52,7 +52,7 @@ export function CandleChart({ data, colors }: CandleChartProps) {
         horzLines: { color: "rgba(255, 255, 255, 0.05)" },
       },
       width: chartContainerRef.current.clientWidth,
-      height: 400,
+      height: 500,
       timeScale: {
         timeVisible: true,
         secondsVisible: false,
@@ -121,7 +121,7 @@ export function CandleChart({ data, colors }: CandleChartProps) {
   }, [colors]);
 
   return (
-    <div className="w-full h-[400px] relative">
+    <div className="w-full h-[500px] relative">
       <div ref={chartContainerRef} className="w-full h-full" />
       {data.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center text-zinc-500 bg-zinc-900/50 backdrop-blur-sm z-10">
