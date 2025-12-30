@@ -17,10 +17,9 @@
 
 const API_BASE = "http://localhost:3000";
 
-// Minimum order sizes per asset
 const MIN_SIZES: Record<string, string> = {
-  cmt_btcusdt: "0.0001", // ~$8.8 at $88k
-  cmt_ethusdt: "0.001", // ~$3 at $3k
+  cmt_btcusdt: "0.0001",
+  cmt_ethusdt: "0.001",
 };
 
 interface TradeResult {
@@ -105,7 +104,6 @@ async function main() {
   const symbols = ["cmt_btcusdt", "cmt_ethusdt"];
   const results: TradeResult[] = [];
 
-  // Execute 50 trades alternating buy/sell and symbols
   for (let i = 1; i <= 50; i++) {
     const action: "buy" | "sell" = i % 2 === 1 ? "buy" : "sell";
     const symbol = symbols[(i - 1) % symbols.length];
@@ -113,7 +111,6 @@ async function main() {
     const result = await executeTrade(i, action, symbol);
     results.push(result);
 
-    // 500ms delay between trades
     await delay(500);
   }
 

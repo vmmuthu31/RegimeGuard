@@ -20,7 +20,7 @@ interface TickerCardProps {
   symbol: { id: string; name: string; iconKey?: string; color: string };
   data?: TickerData;
   index: number;
-  className?: string; // Add className here
+  className?: string;
 }
 
 const IconMap: Record<string, ReactNode> = {

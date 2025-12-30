@@ -14,12 +14,11 @@ import {
 import { TickerData } from "@/src/client/hooks/useDashboardData";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 
-// Map for all 8 competition symbols
 const IconMap: Record<string, ReactNode> = {
   BTC: <FaBitcoin />,
   ETH: <FaEthereum />,
   SOL: <SiSolana />,
-  DOGE: <SiDogecoin />, // Requires react-icons/si
+  DOGE: <SiDogecoin />,
   XRP: <SiXrp />,
   ADA: <SiCardano />,
   BNB: <SiBinance />,
@@ -35,9 +34,6 @@ export function MarketTable({ tickers, symbols }: MarketTableProps) {
   const router = useRouter();
 
   const handleRowClick = (symbolId: string) => {
-    // Navigate to trade page, stripping prefix for cleaner URL if desired,
-    // or just relying on the logic we fixed in TradePage to handle 'ethusdt' or 'cmt_ethusdt'
-    // Let's use the clean short ID for the URL: cmt_ethusdt -> ethusdt
     const shortId = symbolId.replace("cmt_", "").replace("usdt", "") + "usdt";
     router.push(`/trade/${shortId}`);
   };

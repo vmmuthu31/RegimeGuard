@@ -31,15 +31,13 @@ const DynamicCard: FC<IProps> = ({
   useEffect(() => {
     const animateBorder = () => {
       const now = Date.now() / 1000;
-      const speed = 0.5; // Animation speed
+      const speed = 0.5;
 
-      // Calculate positions based on time
       const topX = Math.sin(now * speed) * 100;
       const rightY = Math.cos(now * speed) * 100;
       const bottomX = Math.sin(now * speed + Math.PI) * 100;
       const leftY = Math.cos(now * speed + Math.PI) * 100;
 
-      // Apply positions to elements
       if (topRef.current)
         topRef.current.style.transform = `translateX(${topX}%)`;
       if (rightRef.current)
@@ -99,45 +97,45 @@ const DynamicCard: FC<IProps> = ({
         <p className="text-zinc-400 max-w-xl mx-auto mb-10">{description}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {features.length > 0 ? (
-            features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-5 border border-white/5 hover:border-emerald-500/30 transition-all text-left group"
-              >
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 flex items-center justify-center mr-4 border border-white/5 group-hover:border-emerald-500/30">
-                    <div className="text-emerald-400">{feature.icon}</div>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white group-hover:text-emerald-400 transition-colors">{feature.title}</h3>
-                    <p className="text-sm text-zinc-500 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            [1, 2, 3, 4].map((item) => (
-              <div
-                key={item}
-                className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-4 border border-white/5 hover:border-emerald-500/30 transition-all text-left"
-              >
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mr-3">
-                    <span className="text-emerald-400">{item}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-white">Feature {item}</h3>
-                    <p className="text-sm text-zinc-500">
-                      Description of feature
-                    </p>
+          {features.length > 0
+            ? features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-5 border border-white/5 hover:border-emerald-500/30 transition-all text-left group"
+                >
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 flex items-center justify-center mr-4 border border-white/5 group-hover:border-emerald-500/30">
+                      <div className="text-emerald-400">{feature.icon}</div>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white group-hover:text-emerald-400 transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-zinc-500 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            : [1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="bg-zinc-900/50 backdrop-blur-sm rounded-xl p-4 border border-white/5 hover:border-emerald-500/30 transition-all text-left"
+                >
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mr-3">
+                      <span className="text-emerald-400">{item}</span>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-white">Feature {item}</h3>
+                      <p className="text-sm text-zinc-500">
+                        Description of feature
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
         </div>
 
         <button className="mt-10 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold py-3.5 px-10 rounded-xl transition-all shadow-[0_0_20px_-5px_rgba(16,185,129,0.3)] hover:shadow-emerald-500/40">

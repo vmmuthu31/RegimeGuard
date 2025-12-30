@@ -37,7 +37,6 @@ import { classifyMarketRegime } from "@/server/services/regime-classifier";
 import { getCandles } from "@/server/services/weex-client";
 import type { RegimeClassification } from "@/shared/types";
 
-// GET: Query orders (current, history, fills, detail)
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action");
@@ -110,7 +109,6 @@ export async function GET(request: Request) {
       }
 
       default:
-        // Default: return current orders
         const currentOrders = await getCurrentOrders(config);
         return NextResponse.json({
           success: true,
@@ -127,7 +125,6 @@ export async function GET(request: Request) {
   }
 }
 
-// POST: Place orders, cancel orders, close positions
 export async function POST(request: Request) {
   try {
     const config = getWeexConfig();
@@ -135,7 +132,6 @@ export async function POST(request: Request) {
     const action = body.action;
 
     switch (action) {
-      // ========== Order Placement ==========
       case "placeOrder": {
         const params: PlaceOrderParams = {
           symbol: body.symbol,
@@ -164,7 +160,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
       }
 
-      // ========== High-Level Trade Helpers ==========
       case "openLong": {
         const result = await openLong(config, body.symbol, body.size, {
           price: body.price,
@@ -201,18 +196,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
       }
 
-      // ========== Smart Trade with Risk Check ==========
       case "smartTrade": {
-        // This integrates with RegimeGuard's risk engine
         const symbol: TradingPair = body.symbol;
         const side: "long" | "short" = body.side;
         const baseSize: string = body.size;
 
-        // Get market regime for risk assessment
         const candles = await getCandles(symbol, "1m", 100);
         const regime: RegimeClassification = classifyMarketRegime(candles);
 
-        // Evaluate risk
         const riskDecision = evaluateRisk(
           regime,
           regime.features.volatility,
@@ -226,7 +217,6 @@ export async function POST(request: Request) {
           }
         );
 
-        // Check if trading is allowed
         if (riskDecision.tradeSuspended) {
           return NextResponse.json({
             success: false,
@@ -249,12 +239,10 @@ export async function POST(request: Request) {
           });
         }
 
-        // Adjust position size based on risk
         const adjustedSize = (
           parseFloat(baseSize) * riskDecision.positionSizeMultiplier
         ).toFixed(6);
 
-        // Execute trade
         const tradeResult =
           side === "long"
             ? await openLong(config, symbol, adjustedSize, {
@@ -283,7 +271,6 @@ export async function POST(request: Request) {
         });
       }
 
-      // ========== Order Cancellation ==========
       case "cancelOrder": {
         const result = await cancelOrder(config, body.orderId, body.clientOid);
         return NextResponse.json({ success: true, data: result });
@@ -307,7 +294,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
       }
 
-      // ========== Trigger/Plan Orders ==========
       case "placeTriggerOrder": {
         const params: TriggerOrderParams = {
           symbol: body.symbol,
@@ -328,7 +314,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
       }
 
-      // ========== TP/SL Orders ==========
       case "placeTpSl": {
         const params: TpSlOrderParams = {
           symbol: body.symbol,
@@ -355,7 +340,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
       }
 
-      // ========== Position Management ==========
       case "closeAllPositions": {
         const result = await closeAllPositions(config, body.symbol);
         return NextResponse.json({ success: true, data: result });

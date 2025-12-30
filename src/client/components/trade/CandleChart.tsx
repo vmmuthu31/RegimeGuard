@@ -12,7 +12,7 @@ import {
 } from "lightweight-charts";
 
 interface CandleData {
-  time: string | number; // Time or Unix timestamp
+  time: string | number;
   open: number;
   high: number;
   low: number;
@@ -35,7 +35,6 @@ export function CandleChart({ data, colors }: CandleChartProps) {
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
-  // Initialize Chart
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
@@ -59,10 +58,9 @@ export function CandleChart({ data, colors }: CandleChartProps) {
       },
     });
 
-    // Valid v5 API usage: addSeries(CandlestickSeries, options)
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#10b981", // Emerald 500
-      downColor: "#ef4444", // Red 500
+      upColor: "#10b981",
+      downColor: "#ef4444",
       borderVisible: false,
       wickUpColor: "#10b981",
       wickDownColor: "#ef4444",
@@ -88,7 +86,6 @@ export function CandleChart({ data, colors }: CandleChartProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update Data
   useEffect(() => {
     if (seriesRef.current && data.length > 0) {
       const sortedData: CandlestickData<Time>[] = [...data]
@@ -105,7 +102,6 @@ export function CandleChart({ data, colors }: CandleChartProps) {
     }
   }, [data]);
 
-  // Update Options (Colors)
   useEffect(() => {
     if (chartRef.current && colors) {
       chartRef.current.applyOptions({

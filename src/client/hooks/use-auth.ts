@@ -16,14 +16,12 @@ interface UserData {
   };
 }
 
-// Simple mock auth hook - no Privy dependency
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userSettings, setUserSettings] = useAtom(userSettingsAtom);
   const setSystemStatus = useSetAtom(systemStatusAtom);
 
   const login = useCallback(() => {
-    // For demo purposes, just set authenticated state
     setIsAuthenticated(true);
     setSystemStatus("operational");
   }, [setSystemStatus]);

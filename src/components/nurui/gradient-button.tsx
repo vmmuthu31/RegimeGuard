@@ -16,18 +16,12 @@ interface GradientButtonProps {
 
 const GradientButton: React.FC<GradientButtonProps> = ({
   borderWidth = 2,
-  colors = [
-    "#10b981", // Emerald-500
-    "#34d399", // Emerald-400
-    "#059669", // Emerald-600
-    "#06b6d4", // Cyan-500
-    "#10b981", // Emerald-500
-  ],
+  colors = ["#10b981", "#34d399", "#059669", "#06b6d4", "#10b981"],
   duration = 3000,
-  borderRadius = 9999, // Pill shaped by default for this theme
+  borderRadius = 9999,
   blur = 6,
   className,
-  bgColor = "#09090b", // Match zinc-950
+  bgColor = "#09090b",
   text = "Start Trading",
   onClick,
 }) => {
@@ -47,7 +41,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
         style={gradientStyle}
         className={cn(
           "relative flex items-center justify-center min-w-28 min-h-10 overflow-hidden rainbow-btn before:absolute before:-inset-[200%] animate-rainbow cursor-pointer",
-          className,
+          className
         )}
       >
         <span className="text-white btn-content inline-flex w-full h-full items-center justify-center px-4 py-2">

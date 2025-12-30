@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export const BeamPath = ({ className }: { className?: string }) => {
   return (
     <svg
-      viewBox="0 0 1200 100" // Wide aspect ratio
+      viewBox="0 0 1200 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("w-full h-full opacity-60", className)}
@@ -30,7 +30,7 @@ export const BeamPath = ({ className }: { className?: string }) => {
             height="100%"
             fill="white"
             initial={{ x: -200 }}
-            animate={{ x: 1400 }} // Move past the end
+            animate={{ x: 1400 }}
             transition={{
               duration: 4,
               repeat: Infinity,

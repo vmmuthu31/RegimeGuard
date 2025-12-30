@@ -52,14 +52,13 @@ interface TradingLoopState {
 
 const DEFAULT_CONFIG: TradingLoopConfig = {
   symbols: ["cmt_btcusdt", "cmt_ethusdt"],
-  intervalMs: 15000, // 15s interval for "Live" feel
+  intervalMs: 15000,
   enabled: false,
-  dryRun: false, // LIVE TRADING ENABLED
-  basePositionSize: 0.00005, // ~$5 per trade at $100k BTC
-  maxConcurrentTrades: 2, // Max $10 total exposure
+  dryRun: false,
+  basePositionSize: 0.00005,
+  maxConcurrentTrades: 2,
 };
 
-// Use globalThis to persist state across hot reloads in Next.js development
 const globalForTradingLoop = globalThis as unknown as {
   _tradingLoopState: TradingLoopState | undefined;
 };

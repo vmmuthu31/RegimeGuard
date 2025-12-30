@@ -116,7 +116,7 @@ export async function GET(request: Request) {
               allFills.push(...fills);
             }
           } catch {
-            // Skip symbols with errors
+            console.log("Error fetching fills for symbol: " + symbol);
           }
         }
 

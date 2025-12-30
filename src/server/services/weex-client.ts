@@ -229,7 +229,7 @@ export async function getPositions(
       side: item.side === "LONG" ? PositionSide.LONG : PositionSide.SHORT,
       size: size,
       entryPrice: entryPrice,
-      markPrice: 0, // Not directly available, would need ticker call
+      markPrice: 0,
       unrealizedPnl: parseFloat(item.unrealizePnl || "0"),
       leverage: parseFloat(item.leverage || "1"),
       marginMode:

@@ -1,8 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
-import "./styles/info-card.css"; // Ensure you have the CSS file for styles
+import "./styles/info-card.css";
 
-// RTL detection for Hebrew/Arabic
 function isRTL(text: string) {
   return /[\u0590-\u05FF\u0600-\u06FF\u0700-\u074F]/.test(text);
 }
@@ -50,7 +49,6 @@ export const InfoCard: React.FC<InfoCardProps> = ({
   const [hovered, setHovered] = useState(false);
   const borderRef = useRef<HTMLDivElement>(null);
 
-  // Mouse movement for rotating border
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const border = borderRef.current;
     if (!border) return;
@@ -61,17 +59,11 @@ export const InfoCard: React.FC<InfoCardProps> = ({
     border.style.setProperty("--rotation", `${angle}rad`);
   };
 
-  // RTL logic
   const rtl = isRTL(title) || isRTL(description);
   const effectiveFont = rtl ? rtlFontFamily : fontFamily;
   const titleDirection = isRTL(title) ? "rtl" : "ltr";
   const descDirection = isRTL(description) ? "rtl" : "ltr";
 
-  // Sizes for inner card (matches .inner-container: 354x344)
-
-  // Pattern background (unchanged, just colors are props)
-
-  // Border gradient
   const borderGradient = `conic-gradient(from var(--rotation,0deg), ${borderColor} 0deg, ${borderColor} 90deg, ${borderBgColor} 90deg, ${borderBgColor} 360deg)`;
 
   return (
@@ -144,7 +136,9 @@ export const InfoCard: React.FC<InfoCardProps> = ({
               height: "100%",
             }}
           >
-            {icon && <span className="mr-2 inline-flex items-center">{icon}</span>}
+            {icon && (
+              <span className="mr-2 inline-flex items-center">{icon}</span>
+            )}
             {title}
           </span>
           <span

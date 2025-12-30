@@ -68,7 +68,7 @@ export function TradingControls() {
         setPositions(data.data.positions);
       }
     } catch {
-      // Silently fail
+      console.log("Failed to fetch positions");
     }
   }, []);
 

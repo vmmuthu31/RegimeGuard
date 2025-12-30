@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       ? (symbolParam as TradingPair)
       : "cmt_btcusdt";
 
-    const size = body.size || "0.00001"; // ~$1 at $100k BTC
+    const size = body.size || "0.00001";
     const isMarket = body.isMarket !== false;
 
     switch (action) {

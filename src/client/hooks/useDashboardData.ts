@@ -193,7 +193,6 @@ export function useDashboardData() {
       });
       const data = await response.json();
       if (data.success) {
-        // Fetch fresh status to be sure
         await fetchLoopStatus();
       }
     } catch {}
