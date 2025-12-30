@@ -9,9 +9,11 @@ interface OrderFormProps {
   symbol: string;
   currentPrice: string;
   balance: string;
-  onPlaceOrder: (side: "Buy" | "Sell", price: string, amount: string) => void;
+  onPlaceOrder: (side: "Buy" | "Sell", price: string, amount: string, leverage: number) => void;
   connected?: boolean;
 }
+
+const LEVERAGE_OPTIONS = [1, 5, 10, 20] as const;
 
 export function OrderForm({
   symbol,
@@ -22,6 +24,7 @@ export function OrderForm({
 }: OrderFormProps) {
   const [side, setSide] = useState<"buy" | "sell">("buy");
   const [amount, setAmount] = useState("");
+  const [leverage, setLeverage] = useState<number>(1); // Default 1x (spot-like)
   const [focused, setFocused] = useState<"price" | "amount" | null>(null);
 
   const coin = symbol.includes("/")
@@ -34,6 +37,7 @@ export function OrderForm({
     if (!price) return;
 
     if (side === "buy") {
+      // Calculate amount in USDT based on percentage of balance
       const val = (balInfo * pct).toFixed(2);
       setAmount(val);
     } else {
@@ -43,9 +47,13 @@ export function OrderForm({
 
   const handleSubmit = () => {
     if (!amount) return;
-    onPlaceOrder(side === "buy" ? "Buy" : "Sell", currentPrice, amount);
+    onPlaceOrder(side === "buy" ? "Buy" : "Sell", currentPrice, amount, leverage);
     setAmount("");
   };
+
+  // Calculate estimated position value
+  const estimatedValue = parseFloat(amount || "0") * leverage;
+  const estimatedCoins = estimatedValue / parseFloat(currentPrice.replace(/,/g, "") || "1");
 
   return (
     <div className="bg-[#0B0E11] flex flex-col h-full relative overflow-hidden group">
@@ -68,21 +76,19 @@ export function OrderForm({
         <div className="flex gap-1.5 p-1 bg-zinc-900/80 rounded-xl border border-white/20 shadow-2xl">
           <button
             onClick={() => setSide("buy")}
-            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
-              side === "buy"
-                ? "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-1 ring-emerald-400/50"
-                : "text-zinc-500 hover:text-zinc-300"
-            }`}
+            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "buy"
+              ? "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-1 ring-emerald-400/50"
+              : "text-zinc-500 hover:text-zinc-300"
+              }`}
           >
             Open
           </button>
           <button
             onClick={() => setSide("sell")}
-            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
-              side === "sell"
-                ? "bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] ring-1 ring-red-400/50"
-                : "text-zinc-500 hover:text-zinc-300"
-            }`}
+            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "sell"
+              ? "bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] ring-1 ring-red-400/50"
+              : "text-zinc-500 hover:text-zinc-300"
+              }`}
           >
             Close
           </button>
@@ -101,6 +107,39 @@ export function OrderForm({
           </div>
         </div>
 
+        {/* 4. Leverage Selector */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center px-1">
+            <span className="text-[10px] uppercase font-bold text-zinc-400 tracking-[0.15em]">
+              Leverage
+            </span>
+            <span className={`text-[11px] font-black font-mono ${leverage === 1 ? 'text-emerald-400' : 'text-yellow-400'}`}>
+              {leverage}x {leverage === 1}
+            </span>
+          </div>
+          <div className="flex gap-1.5">
+            {LEVERAGE_OPTIONS.map((lev) => (
+              <button
+                key={lev}
+                onClick={() => setLeverage(lev)}
+                className={`flex-1 py-2 rounded-lg text-[11px] font-black transition-all duration-200 ${leverage === lev
+                  ? lev === 1
+                    ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]'
+                    : 'bg-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.4)]'
+                  : 'bg-zinc-900 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-zinc-200'
+                  }`}
+              >
+                {lev}x
+              </button>
+            ))}
+          </div>
+          {leverage > 1 && (
+            <div className="text-[9px] text-yellow-500/80 font-medium px-1">
+              ⚠️ Higher leverage = higher risk. Position will be liquidated faster.
+            </div>
+          )}
+        </div>
+
         {/* Inputs */}
         <div className="space-y-3 mb-4">
           {/* Price Label (Small) */}
@@ -115,11 +154,10 @@ export function OrderForm({
 
           {/* Price View */}
           <div
-            className={`relative group/input rounded-xl border transition-all duration-300 ${
-              focused === "price"
-                ? "bg-zinc-900 border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
-                : "bg-zinc-900/50 border-white/20"
-            }`}
+            className={`relative group/input rounded-xl border transition-all duration-300 ${focused === "price"
+              ? "bg-zinc-900 border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+              : "bg-zinc-900/50 border-white/20"
+              }`}
           >
             <input
               type="text"
@@ -143,13 +181,12 @@ export function OrderForm({
 
           {/* Amount Input */}
           <div
-            className={`relative group/input rounded-xl border transition-all duration-500 ${
-              focused === "amount"
-                ? side === "buy"
-                  ? "bg-zinc-950 border-emerald-500/60 shadow-[0_0_40px_rgba(16,185,129,0.1)]"
-                  : "bg-zinc-950 border-red-500/60 shadow-[0_0_40px_rgba(239,68,68,0.1)]"
-                : "bg-zinc-900/50 border-white/20 shadow-inner"
-            }`}
+            className={`relative group/input rounded-xl border transition-all duration-500 ${focused === "amount"
+              ? side === "buy"
+                ? "bg-zinc-950 border-emerald-500/60 shadow-[0_0_40px_rgba(16,185,129,0.1)]"
+                : "bg-zinc-950 border-red-500/60 shadow-[0_0_40px_rgba(239,68,68,0.1)]"
+              : "bg-zinc-900/50 border-white/20 shadow-inner"
+              }`}
           >
             <input
               type="text"
@@ -162,18 +199,16 @@ export function OrderForm({
             />
             {/* Focal Glow */}
             <div
-              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-emerald-500/40 to-transparent ${
-                focused === "amount" && side === "buy"
-                  ? "opacity-100"
-                  : "opacity-0"
-              }`}
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-emerald-500/40 to-transparent ${focused === "amount" && side === "buy"
+                ? "opacity-100"
+                : "opacity-0"
+                }`}
             />
             <div
-              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-red-500/40 to-transparent ${
-                focused === "amount" && side === "sell"
-                  ? "opacity-100"
-                  : "opacity-0"
-              }`}
+              className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-px transition-all duration-500 bg-linear-to-r from-transparent via-red-500/40 to-transparent ${focused === "amount" && side === "sell"
+                ? "opacity-100"
+                : "opacity-0"
+                }`}
             />
           </div>
 
@@ -233,27 +268,24 @@ export function OrderForm({
 
                 {/* Dynamic Indicator */}
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${
-                    side === "buy"
-                      ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
-                      : "bg-red-500/5 border-red-500/20 text-red-500"
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${side === "buy"
+                    ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
+                    : "bg-red-500/5 border-red-500/20 text-red-500"
+                    }`}
                 >
                   <Zap
-                    className={`w-3.5 h-3.5 ${
-                      side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
-                    }`}
+                    className={`w-3.5 h-3.5 ${side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
+                      }`}
                   />
                 </div>
               </div>
 
               <button
                 onClick={handleSubmit}
-                className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${
-                  side === "buy"
-                    ? "bg-emerald-500 text-black hover:bg-emerald-400"
-                    : "bg-red-500 text-white hover:bg-red-400"
-                }`}
+                className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${side === "buy"
+                  ? "bg-emerald-500 text-black hover:bg-emerald-400"
+                  : "bg-red-500 text-white hover:bg-red-400"
+                  }`}
               >
                 {/* Shiny Overlay */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/submit:translate-x-full transition-transform duration-1000" />
