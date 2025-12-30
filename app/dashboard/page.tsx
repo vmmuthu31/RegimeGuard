@@ -14,6 +14,7 @@ import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHead
 import { MarketOverview } from "@/src/client/components/dashboard/MarketOverview";
 import { PriceTicker } from "@/src/client/components/dashboard/PriceTicker";
 import { PortfolioChart } from "@/src/client/components/dashboard/PortfolioChart";
+import { AIDecisionsPanel } from "@/src/client/components/dashboard/AIDecisionsPanel";
 import { formatVolume } from "@/src/shared/utils/formatters";
 
 function SentimentGauge({ value }: { value: number }) {
@@ -167,7 +168,9 @@ export default function DashboardPage() {
                 </h3>
                 <div className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                  <span className="text-[10px] font-black text-emerald-400 uppercase tracking-tighter">Live Monitor</span>
+                  <span className="text-[10px] font-black text-emerald-400 uppercase tracking-tighter">
+                    Live Monitor
+                  </span>
                 </div>
               </div>
               <div className="mb-4">
@@ -178,7 +181,9 @@ export default function DashboardPage() {
                     maximumFractionDigits: 2,
                   })}
                 </span>
-                <span className="text-[10px] font-bold text-zinc-500 ml-1.5 uppercase">USDT</span>
+                <span className="text-[10px] font-bold text-zinc-500 ml-1.5 uppercase">
+                  USDT
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-zinc-900/40 rounded-lg p-2.5 border border-white/10 shadow-inner">
@@ -186,17 +191,20 @@ export default function DashboardPage() {
                     Unrealized PnL
                   </span>
                   <span
-                    className={`text-sm font-black font-mono ${(account?.balance.unrealizedPnl || 0) >= 0
-                      ? "text-emerald-400"
-                      : "text-red-400"
-                      }`}
+                    className={`text-sm font-black font-mono ${
+                      (account?.balance.unrealizedPnl || 0) >= 0
+                        ? "text-emerald-400"
+                        : "text-red-400"
+                    }`}
                   >
                     {(account?.balance.unrealizedPnl || 0) >= 0 ? "+" : ""}$
                     {Math.abs(account?.balance.unrealizedPnl || 0).toFixed(2)}
                   </span>
                 </div>
                 <div className="bg-zinc-900/40 rounded-lg p-2.5 border border-white/10 shadow-inner">
-                  <span className="text-[9px] font-black text-zinc-500 block uppercase tracking-tight mb-1">Staked Assets</span>
+                  <span className="text-[9px] font-black text-zinc-500 block uppercase tracking-tight mb-1">
+                    Staked Assets
+                  </span>
                   <span className="text-sm font-black text-white font-mono">
                     ${(account?.balance.frozen || 0).toFixed(2)}
                   </span>
@@ -253,18 +261,21 @@ export default function DashboardPage() {
                 Detected Market Phase
               </span>
               <span
-                className={`text-2xl font-black font-mono tracking-tighter ${market?.regime.regime === "TRENDING"
-                  ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]"
-                  : market?.regime.regime === "HIGH_VOLATILITY"
+                className={`text-2xl font-black font-mono tracking-tighter ${
+                  market?.regime.regime === "TRENDING"
+                    ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.4)]"
+                    : market?.regime.regime === "HIGH_VOLATILITY"
                     ? "text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.4)]"
                     : "text-blue-400 drop-shadow-[0_0_12px_rgba(96,165,250,0.4)]"
-                  }`}
+                }`}
               >
                 {market?.regime.regime?.replace("_", " ") || "ANALYZING"}
               </span>
               <span className="text-[10px] font-bold text-zinc-500 block mt-1 uppercase">
                 {market
-                  ? `${(market.regime.confidence * 100).toFixed(0)}% Confidence Score`
+                  ? `${(market.regime.confidence * 100).toFixed(
+                      0
+                    )}% Confidence Score`
                   : "--"}
               </span>
             </div>
@@ -295,26 +306,34 @@ export default function DashboardPage() {
                 AI Intelligence Core
               </h3>
               <div
-                className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-black ${loopRunning
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                  : "bg-zinc-900 text-zinc-500 border border-white/5"
-                  }`}
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-black ${
+                  loopRunning
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                    : "bg-zinc-900 text-zinc-500 border border-white/5"
+                }`}
               >
                 <div
-                  className={`w-1.5 h-1.5 rounded-full ${loopRunning ? "bg-emerald-500 animate-pulse" : "bg-zinc-600"
-                    }`}
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    loopRunning ? "bg-emerald-500 animate-pulse" : "bg-zinc-600"
+                  }`}
                 />
                 {loopRunning ? "ACTIVE ENGINE" : "STANDBY"}
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 bg-zinc-900/60 border border-white/10 rounded-xl mb-4 relative z-10 shadow-inner">
               <div
-                className={`p-2.5 rounded-lg border transition-all duration-500 ${loopRunning ? "bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]" : "bg-zinc-800 border-white/5"
-                  }`}
+                className={`p-2.5 rounded-lg border transition-all duration-500 ${
+                  loopRunning
+                    ? "bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                    : "bg-zinc-800 border-white/5"
+                }`}
               >
                 <Play
-                  className={`w-4 h-4 transition-all duration-500 ${loopRunning ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)] fill-emerald-500/20" : "text-zinc-600"
-                    }`}
+                  className={`w-4 h-4 transition-all duration-500 ${
+                    loopRunning
+                      ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)] fill-emerald-500/20"
+                      : "text-zinc-600"
+                  }`}
                 />
               </div>
               <div className="flex flex-col">
@@ -322,29 +341,35 @@ export default function DashboardPage() {
                   Neural Signal Feed
                 </span>
                 <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-tighter">
-                  {loopRunning ? "Processing Real-time Vectors" : "Awaiting Operational Command"}
+                  {loopRunning
+                    ? "Processing Real-time Vectors"
+                    : "Awaiting Operational Command"}
                 </span>
               </div>
             </div>
             <button
               onClick={toggleTradingLoop}
-              className={`py-3 rounded-xl text-[11px] font-black transition-all uppercase tracking-[0.2em] relative z-10 ${loopRunning
-                ? "bg-transparent text-red-500 border border-red-500/20 hover:bg-red-500/5 hover:border-red-500/50"
-                : "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95"
-                }`}
+              className={`py-3 rounded-xl text-[11px] font-black transition-all uppercase tracking-[0.2em] relative z-10 ${
+                loopRunning
+                  ? "bg-transparent text-red-500 border border-red-500/20 hover:bg-red-500/5 hover:border-red-500/50"
+                  : "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95"
+              }`}
             >
               {loopRunning ? "Terminate Core" : "Initialize AI Engine"}
             </button>
             <div className="grid grid-cols-2 gap-3 mt-4 relative z-10">
               <div className="text-center p-2 bg-zinc-900 border border-white/10 rounded-lg shadow-inner">
-                <span className="text-[9px] font-black text-zinc-500 block uppercase tracking-tighter mb-1">Live RSI</span>
+                <span className="text-[9px] font-black text-zinc-500 block uppercase tracking-tighter mb-1">
+                  Live RSI
+                </span>
                 <span
-                  className={`text-base font-black font-mono transition-colors duration-500 ${rsi > 70
-                    ? "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]"
-                    : rsi < 30
+                  className={`text-base font-black font-mono transition-colors duration-500 ${
+                    rsi > 70
+                      ? "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]"
+                      : rsi < 30
                       ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]"
                       : "text-white"
-                    }`}
+                  }`}
                 >
                   {rsi.toFixed(1)}
                 </span>
@@ -363,13 +388,22 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* AI Decisions Panel - Demonstrates AI Involvement */}
+        <div className="mb-4">
+          <AIDecisionsPanel />
+        </div>
+
         {/* Top Movers Row */}
         <div className="bg-[#0B0E11] border border-white/20 rounded-xl p-4 mb-4 relative group">
           {/* Neon Accent Line */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100" />
           <div className="flex items-center justify-between mb-3 relative z-10">
-            <h3 className="text-[11px] font-black text-white uppercase tracking-[0.2em]">Market Vector Analysis</h3>
-            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-tighter">Real-time Top Movers</span>
+            <h3 className="text-[11px] font-black text-white uppercase tracking-[0.2em]">
+              Market Vector Analysis
+            </h3>
+            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-tighter">
+              Real-time Top Movers
+            </span>
           </div>
           <div className="grid grid-cols-4 md:grid-cols-8 gap-3 relative z-10">
             {SYMBOLS.map((sym) => {
@@ -388,7 +422,11 @@ export default function DashboardPage() {
                   key={sym.id}
                   className="text-center p-3 bg-zinc-900/60 border border-white/5 rounded-xl hover:bg-zinc-800/80 hover:border-white/20 hover:shadow-2xl transition-all cursor-pointer group/mover relative overflow-hidden"
                 >
-                  <div className={`absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover/mover:opacity-100 transition-opacity ${isPositive ? "bg-emerald-500" : "bg-red-500"}`} />
+                  <div
+                    className={`absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover/mover:opacity-100 transition-opacity ${
+                      isPositive ? "bg-emerald-500" : "bg-red-500"
+                    }`}
+                  />
                   <span className="text-[11px] font-black text-zinc-400 group-hover/mover:text-white transition-colors uppercase tracking-tight">
                     {sym.name.split("/")[0]}
                   </span>
@@ -399,8 +437,11 @@ export default function DashboardPage() {
                       <TrendingDown className="w-3 h-3 text-red-400" />
                     )}
                     <span
-                      className={`text-[12px] font-black font-mono transition-all ${isPositive ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]" : "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]"
-                        }`}
+                      className={`text-[12px] font-black font-mono transition-all ${
+                        isPositive
+                          ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]"
+                          : "text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]"
+                      }`}
                     >
                       {isPositive ? "+" : ""}
                       {(change * 100).toFixed(2)}%

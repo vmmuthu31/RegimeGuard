@@ -605,6 +605,28 @@ bun run build
 
 Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 
+### API Verification
+
+A dedicated verification page is available to quickly confirm API connectivity:
+
+```bash
+# Start the server
+npm run dev
+
+# Visit the verification page
+open http://localhost:3000/verify
+```
+
+The verification page automatically tests:
+
+- ✅ **Health Check** — Server responsiveness
+- ✅ **Account Balance** — WEEX API credentials work
+- ✅ **Market Data** — Real-time price fetching
+- ✅ **AI Agents** — Multi-agent system initialized
+- ✅ **AI Logging** — Can upload decisions to WEEX
+
+All tests display green checkmarks for pass, red X for fail.
+
 ---
 
 ## 📡 API Endpoints
