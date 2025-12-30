@@ -235,3 +235,45 @@ export function createVolatilityGuardLog(
     explanation: explanation.slice(0, 1000),
   };
 }
+
+
+
+export function createNoTradeDecisionLog(
+  inputData: {
+    symbol: string;
+    regime: string;
+    rsi: number;
+    currentPrice: number;
+    volatility: number;
+    reason: string;
+  },
+  outputData: {
+    decision: "HOLD" | "WAIT";
+    confidence: number;
+  },
+  explanation: string
+): AiLogRequest {
+  return {
+    orderId: null,
+    stage: "Decision Making",
+    model: "RegimeGuard-DecisionEngine-v1",
+    input: {
+      prompt: `Evaluate trading opportunity for ${inputData.symbol}`,
+      data: {
+        Symbol: inputData.symbol,
+        Regime: inputData.regime,
+        RSI_14: inputData.rsi,
+        CurrentPrice: inputData.currentPrice,
+        Volatility: inputData.volatility,
+        ConditionsRequired: inputData.reason,
+      },
+    },
+    output: {
+      signal: "NO_TRADE",
+      decision: outputData.decision,
+      confidence: outputData.confidence,
+      reason: `AI decided not to trade: ${inputData.reason}`,
+    },
+    explanation: explanation.slice(0, 1000),
+  };
+}

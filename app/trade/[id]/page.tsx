@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { FaArrowLeft } from "react-icons/fa";
@@ -20,6 +20,19 @@ import { OrderBook } from "@/src/client/components/trade/OrderBook";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 import { cn } from "@/src/lib/utils";
 
+interface Position {
+  symbol: string;
+  side: string;
+  size: number;
+  entryPrice: number;
+  markPrice: number;
+  unrealizedPnl: number;
+  leverage: number;
+  marginMode: string;
+  liquidationPrice: number;
+  timestamp: number;
+}
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -36,6 +49,8 @@ export default function TradePage({ params }: PageProps) {
     fetchOrders,
     lastUpdate,
   } = useDashboardData();
+
+  const [positions, setPositions] = useState<Position[]>([]);
 
   const symbol =
     SYMBOLS.find(
@@ -60,6 +75,30 @@ export default function TradePage({ params }: PageProps) {
     }
   }, [connected, symbol.id, fetchKlineData, candleData.length]);
 
+  // Fetch positions on load and periodically
+  useEffect(() => {
+    const fetchPos = async () => {
+      try {
+        const response = await fetch("/api/account");
+        const data = await response.json();
+        if (data.success && data.data.positions) {
+          setPositions(data.data.positions);
+        }
+      } catch {
+        // Silent fail
+      }
+    };
+
+    fetchPos();
+    const interval = setInterval(fetchPos, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Filter positions for current symbol
+  const currentSymbolPositions = positions.filter(
+    (p) => p.symbol.toLowerCase() === symbol.id.toLowerCase()
+  );
+
   const mappedOrders: Order[] = orders.map((o) => ({
     id: o.orderId,
     time: new Date(parseInt(o.cTime)).toLocaleTimeString(),
@@ -81,29 +120,81 @@ export default function TradePage({ params }: PageProps) {
   const handlePlaceOrder = async (
     side: "Buy" | "Sell",
     price: string,
-    amount: string
+    amount: string,
+    leverage: number = 1
   ) => {
+    try {
+      // Convert USDT amount to coin size
+      const usdtAmount = parseFloat(amount);
+      const currentPriceNum = parseFloat(price.replace(/,/g, ""));
+
+      if (!currentPriceNum || !usdtAmount) {
+        toast.error("Invalid amount or price");
+        return;
+      }
+
+      // Calculate coin size: (USDT amount * leverage) / price
+      const coinSize = (usdtAmount * leverage) / currentPriceNum;
+      const formattedSize = coinSize.toFixed(6);
+
+      const response = await fetch("/api/trade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: side === "Buy" ? "openLong" : "openShort",
+          symbol: symbol.id,
+          size: formattedSize,
+          isMarket: true,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        toast.success(`${side} Order: ${formattedSize} ${symbol.name.split('/')[0]} (${leverage}x leverage)`);
+        setTimeout(() => {
+          fetchOrders();
+          fetchPositions();
+        }, 500);
+      } else {
+        toast.error(`Order failed: ${result.error || "Unknown error"}`);
+        console.error("Order error:", result);
+      }
+    } catch (error) {
+      toast.error(`Failed to place order: ${error instanceof Error ? error.message : "Unknown"}`);
+      console.error("Order exception:", error);
+    }
+  };
+
+  const fetchPositions = async () => {
+    try {
+      const response = await fetch("/api/account");
+      const data = await response.json();
+      if (data.success && data.data.positions) {
+        setPositions(data.data.positions);
+      }
+    } catch {
+      console.error("Failed to fetch positions");
+    }
+  };
+
+  const handleClosePosition = async (positionSymbol: string) => {
     try {
       const response = await fetch("/api/trade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "placeOrder",
-          symbol: symbol.id,
-          size: amount,
-          side: side.toLowerCase(),
-          type: "market",
-          price: "0",
+          action: "closeAllPositions",
+          symbol: positionSymbol,
         }),
       });
-      if ((await response.json()).success) {
-        toast.success(`${side} Order Placed for ${amount} ${symbol.name}`);
-        setTimeout(() => fetchOrders(), 500);
+      const result = await response.json();
+      if (result.success) {
+        toast.success(`Position closed for ${positionSymbol}`);
+        setTimeout(() => fetchPositions(), 500);
       } else {
-        toast.error("Order failed");
+        toast.error(`Failed to close: ${result.error || "Unknown error"}`);
       }
     } catch {
-      toast.error("Failed to place order");
+      toast.error("Failed to close position");
     }
   };
 
@@ -239,20 +330,64 @@ export default function TradePage({ params }: PageProps) {
 
             <div className="flex items-center justify-between px-4 border-b border-white/20 bg-zinc-950/60 sticky top-0 z-10 backdrop-blur-md">
               <div className="flex gap-6 text-[10px] font-bold text-zinc-400 uppercase tracking-tight py-3">
-                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Active Vaults (0)</div>
-                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Signal History (0)</div>
-                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Risk Protections</div>
-                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Account Exposure</div>
+                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">
+                  Positions ({positions.length})
+                </div>
+                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Orders ({currentSymbolOrders.length})</div>
+                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Trade History</div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="px-3 py-1 rounded bg-zinc-900 border border-white/20 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all uppercase shadow-[0_0_15px_rgba(255,255,255,0.05)]">Emergency Close</button>
+                <button
+                  onClick={() => handleClosePosition(symbol.id)}
+                  className="px-3 py-1.5 rounded bg-red-500/10 border border-red-500/30 text-[10px] font-bold text-red-400 hover:text-white hover:bg-red-500 transition-all uppercase"
+                >
+                  Close All
+                </button>
               </div>
             </div>
-            <div className="flex-1 bg-zinc-900/5">
-              <ActiveOrders
-                orders={currentSymbolOrders}
-                onCancelOrder={handleCancelOrder}
-              />
+            <div className="flex-1 bg-zinc-900/5 overflow-auto">
+              {/* Show Positions */}
+              {positions.length > 0 ? (
+                <div className="divide-y divide-white/10">
+                  {positions.map((pos, idx) => (
+                    <div key={idx} className="flex items-center justify-between px-4 py-3 hover:bg-white/[0.02] transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-2 h-2 rounded-full ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                        <div>
+                          <div className="text-xs font-bold text-white flex items-center gap-2">
+                            {pos.symbol?.replace('cmt_', '').toUpperCase()}
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                              {pos.side?.toUpperCase()}
+                            </span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-400">
+                              {pos.leverage}x
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-zinc-500 mt-1">
+                            Size: {pos.size?.toFixed(4)} | Entry: ${pos.entryPrice?.toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className={`text-sm font-bold font-mono ${pos.unrealizedPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {pos.unrealizedPnl >= 0 ? '+' : ''}{pos.unrealizedPnl?.toFixed(2)} USDT
+                        </div>
+                        <button
+                          onClick={() => handleClosePosition(pos.symbol)}
+                          className="px-3 py-1.5 rounded bg-zinc-900 border border-white/20 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all uppercase"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ActiveOrders
+                  orders={currentSymbolOrders}
+                  onCancelOrder={handleCancelOrder}
+                />
+              )}
             </div>
           </div>
         </div>
