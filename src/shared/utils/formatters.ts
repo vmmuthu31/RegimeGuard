@@ -22,7 +22,7 @@ export const formatPercent = (percent: string | number): string => {
   if (isNaN(num)) return "0.00%";
 
   const val = num * 100;
-  return val >= 0 ? `+${val.toFixed(2)}%` : `${val.toFixed(2)}%`;
+  return val >= 0 ? `${val.toFixed(2)}%` : `${val.toFixed(2)}%`;
 };
 
 /**

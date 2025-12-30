@@ -20,6 +20,8 @@ import { openLong, openShort } from "@/server/services/weex-trade";
 import {
   uploadAiLog,
   createTradeExecutionLog,
+  createRegimeClassificationLog,
+  createRiskDecisionLog,
 } from "@/server/services/weex-ailog";
 import {
   generateTradeExplanation,
@@ -171,6 +173,55 @@ export async function runSingleCycle(): Promise<{
 
       decisions.set(symbol, decision);
       loopState.lastDecisions.set(symbol, decision);
+
+      if (decision.regime && !loopConfig.dryRun) {
+        const regimeLog = createRegimeClassificationLog(
+          null,
+          {
+            symbol,
+            rsi: decision.indicators.rsi,
+            ema9: decision.indicators.ema9,
+            ema21: decision.indicators.ema21,
+            atr: decision.indicators.atr,
+            volatility: decision.indicators.volatility,
+            momentum: decision.indicators.momentum,
+          },
+          {
+            regime: decision.regime.regime,
+            confidence: decision.regime.confidence,
+            strategy: decision.signal?.strategy || "NO_STRATEGY",
+          },
+          decision.explanation || "Routine market regime analysis"
+        );
+        await uploadAiLog(config, regimeLog).catch((e) => {
+          console.error(`Failed to upload regime log for ${symbol}:`, e);
+        });
+      }
+
+      if (decision.regime) {
+        const riskLog = createRiskDecisionLog(
+          null,
+          {
+            symbol,
+            regime: decision.regime.regime,
+            regimeConfidence: decision.regime.confidence,
+            currentVolatility: decision.indicators.volatility,
+            recentDrawdown: 0,
+            dailyLossPercent: 0,
+          },
+          {
+            positionSizeMultiplier: 1,
+            stopLossAdjustment: "NORMAL",
+            tradeSuspended: !decision.riskApproved,
+            riskLevel: decision.volatilityOk ? "LOW" : "HIGH",
+          },
+          decision.explanation || "Risk assessment completed"
+        );
+
+        await uploadAiLog(config, riskLog).catch((e) => {
+          console.error(`Failed to upload risk log for ${symbol}:`, e);
+        });
+      }
 
       if (
         decision.action !== "HOLD" &&
