@@ -52,21 +52,30 @@ interface TradingLoopState {
 
 const DEFAULT_CONFIG: TradingLoopConfig = {
   symbols: ["cmt_btcusdt", "cmt_ethusdt"],
-  intervalMs: 60000,
+  intervalMs: 180000, // 3 minutes for better signal quality
   enabled: false,
-  dryRun: true,
+  dryRun: false, // LIVE TRADING ENABLED
   basePositionSize: 0.00005, // ~$5 per trade at $100k BTC
-  maxConcurrentTrades: 2, // Max 2 trades = ~$10 total allocation
+  maxConcurrentTrades: 2, // Max $10 total exposure
 };
 
-let loopState: TradingLoopState = {
-  isRunning: false,
-  lastRun: 0,
-  cycleCount: 0,
-  tradesExecuted: 0,
-  errors: [],
-  lastDecisions: new Map(),
+// Use globalThis to persist state across hot reloads in Next.js development
+const globalForTradingLoop = globalThis as unknown as {
+  _tradingLoopState: TradingLoopState | undefined;
 };
+
+if (!globalForTradingLoop._tradingLoopState) {
+  globalForTradingLoop._tradingLoopState = {
+    isRunning: false,
+    lastRun: 0,
+    cycleCount: 0,
+    tradesExecuted: 0,
+    errors: [],
+    lastDecisions: new Map(),
+  };
+}
+
+let loopState = globalForTradingLoop._tradingLoopState;
 
 let loopConfig = { ...DEFAULT_CONFIG };
 let loopInterval: NodeJS.Timeout | null = null;

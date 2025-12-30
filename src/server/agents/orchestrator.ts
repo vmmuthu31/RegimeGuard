@@ -39,10 +39,13 @@ interface OrchestratorContext {
   allMessages: AgentMessage[];
 }
 
-let orchestratorContext: OrchestratorContext | null = null;
+// Use globalThis to persist state across hot reloads in Next.js development
+const globalForOrchestrator = globalThis as unknown as {
+  _orchestratorContext: OrchestratorContext | undefined;
+};
 
 export function initOrchestrator(): OrchestratorContext {
-  orchestratorContext = {
+  const ctx = {
     regimeAgent: initRegimeAgent(),
     riskAgent: initRiskAgent(),
     volatilityAgent: initVolatilityAgent(),
@@ -51,14 +54,15 @@ export function initOrchestrator(): OrchestratorContext {
     decisionHistory: [],
     allMessages: [],
   };
-  return orchestratorContext;
+  globalForOrchestrator._orchestratorContext = ctx;
+  return ctx;
 }
 
 export function getOrchestrator(): OrchestratorContext {
-  if (!orchestratorContext) {
+  if (!globalForOrchestrator._orchestratorContext) {
     return initOrchestrator();
   }
-  return orchestratorContext;
+  return globalForOrchestrator._orchestratorContext;
 }
 
 export function runTradingPipeline(
@@ -295,8 +299,8 @@ export function getAllAgentStates(): AgentState[] {
 }
 
 export function stopOrchestrator(): void {
-  if (orchestratorContext) {
-    orchestratorContext.isRunning = false;
+  if (globalForOrchestrator._orchestratorContext) {
+    globalForOrchestrator._orchestratorContext.isRunning = false;
   }
 }
 

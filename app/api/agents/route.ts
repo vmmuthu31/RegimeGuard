@@ -26,6 +26,7 @@ export async function GET() {
               symbol: orchestratorState.lastDecision.symbol,
               action: orchestratorState.lastDecision.action,
               explanation: orchestratorState.lastDecision.explanation,
+              indicators: orchestratorState.lastDecision.indicators,
               timestamp: orchestratorState.lastDecision.timestamp,
             }
           : null,
