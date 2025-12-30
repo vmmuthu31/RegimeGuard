@@ -52,7 +52,7 @@ interface TradingLoopState {
 
 const DEFAULT_CONFIG: TradingLoopConfig = {
   symbols: ["cmt_btcusdt", "cmt_ethusdt"],
-  intervalMs: 180000, // 3 minutes for better signal quality
+  intervalMs: 15000, // 15s interval for "Live" feel
   enabled: false,
   dryRun: false, // LIVE TRADING ENABLED
   basePositionSize: 0.00005, // ~$5 per trade at $100k BTC
