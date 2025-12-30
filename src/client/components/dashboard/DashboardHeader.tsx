@@ -22,13 +22,15 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   return (
     <header
-      className={`flex items-center justify-between ${compact ? "mb-0 py-2" : "mb-8"
-        } ${className || ""}`}
+      className={`flex items-center justify-between ${
+        compact ? "mb-0 py-2" : "mb-8"
+      } ${className || ""}`}
     >
       <div className="flex items-center gap-4">
         <div
-          className={`rounded-xl bg-[#0B0E11] border border-white/20 shadow-2xl flex items-center justify-center relative overflow-hidden group/logo ${compact ? "w-9 h-9" : "w-14 h-14"
-            }`}
+          className={`rounded-xl bg-[#0B0E11] border border-white/20 shadow-2xl flex items-center justify-center relative overflow-hidden group/logo ${
+            compact ? "w-9 h-9" : "w-14 h-14"
+          }`}
         >
           {/* Subtle Glow Background */}
           <div className="absolute inset-0 bg-emerald-500/5 group-hover/logo:bg-emerald-500/10 transition-colors" />
@@ -42,10 +44,11 @@ export function DashboardHeader({
         </div>
         <div>
           <h1
-            className={`${compact ? "text-xl" : "text-3xl"
-              } font-black tracking-tighter text-white uppercase`}
+            className={`${
+              compact ? "text-xl" : "text-3xl"
+            } font-black tracking-tighter text-white uppercase`}
           >
-            RegimeGuard <span className="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">Pro</span>
+            RegimeGuard
           </h1>
           {!compact && (
             <p className="text-zinc-400 text-[11px] font-black uppercase tracking-[0.2em] mt-0.5 opacity-60">
@@ -57,18 +60,22 @@ export function DashboardHeader({
 
       <div className="flex items-center gap-3">
         <div
-          className={`flex items-center gap-2.5 px-4 py-2 rounded-lg border backdrop-blur-3xl transition-all duration-500 ${connected
+          className={`flex items-center gap-2.5 px-4 py-2 rounded-lg border backdrop-blur-3xl transition-all duration-500 ${
+            connected
               ? "border-emerald-500/40 bg-emerald-500/5 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:border-emerald-500/60"
               : "border-red-500/40 bg-red-500/5 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.15)] hover:border-red-500/60"
-            } ${compact ? "scale-90 origin-right" : ""}`}
+          } ${compact ? "scale-90 origin-right" : ""}`}
         >
           <span className="relative flex h-2.5 w-2.5">
             {connected && (
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40"></span>
             )}
             <div
-              className={`relative inline-flex h-2.5 w-2.5 rounded-full ${connected ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
-                }`}
+              className={`relative inline-flex h-2.5 w-2.5 rounded-full ${
+                connected
+                  ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
+                  : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"
+              }`}
             />
           </span>
           <span className="text-[10px] font-black tracking-[0.15em] uppercase">

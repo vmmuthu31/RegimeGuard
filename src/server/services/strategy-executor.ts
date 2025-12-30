@@ -98,7 +98,7 @@ export function generateMeanReversionSignal(
 ): TradeSignal | null {
   const { rsi, ema21, fibonacciLevels, supportResistance } = indicators;
 
-  const isOversold = rsi < 35;
+  const isOversold = rsi < 30;
   const isOverbought = rsi > 65;
 
   if (!isOversold && !isOverbought) {
