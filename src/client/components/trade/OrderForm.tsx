@@ -73,10 +73,10 @@ export function OrderForm({
 
       <div className="p-3 relative z-10 flex flex-col gap-4">
         {/* 2. Tactical Tabs (Open/Close) */}
-        <div className="flex gap-1.5 p-1 bg-zinc-900/80 rounded-xl border border-white/20 shadow-2xl">
+        <div className="flex gap-1 p-1 bg-zinc-900/80 rounded-xl border border-white/20 shadow-2xl">
           <button
             onClick={() => setSide("buy")}
-            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "buy"
+            className={`flex-1 py-2.5 rounded-lg text-[12px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "buy"
               ? "bg-emerald-500 text-zinc-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-1 ring-emerald-400/50"
               : "text-zinc-500 hover:text-zinc-300"
               }`}
@@ -85,7 +85,7 @@ export function OrderForm({
           </button>
           <button
             onClick={() => setSide("sell")}
-            className={`flex-1 py-3.5 rounded-lg text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "sell"
+            className={`flex-1 py-2.5 rounded-lg text-[12px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${side === "sell"
               ? "bg-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] ring-1 ring-red-400/50"
               : "text-zinc-500 hover:text-zinc-300"
               }`}
@@ -95,8 +95,8 @@ export function OrderForm({
         </div>
 
         {/* 3. Execution Type Tabs */}
-        <div className="flex items-center gap-8 px-1 text-[11px] font-bold text-zinc-400 uppercase tracking-widest border-b border-white/10 pb-3">
-          <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3.5 transition-all cursor-pointer">
+        <div className="flex items-center gap-6 px-1 text-[10px] font-bold text-zinc-400 uppercase tracking-widest border-b border-white/10 pb-2">
+          <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2.5 transition-all cursor-pointer">
             Limit
           </div>
           <div className="hover:text-white transition-colors cursor-pointer">
@@ -107,47 +107,98 @@ export function OrderForm({
           </div>
         </div>
 
-        {/* 4. Leverage Selector */}
-        <div className="space-y-2">
+        {/* 4. Leverage Slider */}
+        <div className="space-y-3 py-1">
           <div className="flex justify-between items-center px-1">
             <span className="text-[10px] uppercase font-bold text-zinc-400 tracking-[0.15em]">
               Leverage
             </span>
-            <span className={`text-[11px] font-black font-mono ${leverage === 1 ? 'text-emerald-400' : 'text-yellow-400'}`}>
-              {leverage}x {leverage === 1}
-            </span>
-          </div>
-          <div className="flex gap-1.5">
-            {LEVERAGE_OPTIONS.map((lev) => (
-              <button
-                key={lev}
-                onClick={() => setLeverage(lev)}
-                className={`flex-1 py-2 rounded-lg text-[11px] font-black transition-all duration-200 ${leverage === lev
-                  ? lev === 1
-                    ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                    : 'bg-yellow-500 text-black shadow-[0_0_15px_rgba(234,179,8,0.4)]'
-                  : 'bg-zinc-900 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-zinc-200'
-                  }`}
-              >
-                {lev}x
-              </button>
-            ))}
-          </div>
-          {leverage > 1 && (
-            <div className="text-[9px] text-yellow-500/80 font-medium px-1">
-              ⚠️ Higher leverage = higher risk. Position will be liquidated faster.
+            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md border 
+              ${leverage === 1
+                ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
+                : leverage >= 10
+                  ? 'border-red-500/30 bg-red-500/5 text-red-400'
+                  : 'border-yellow-500/30 bg-yellow-500/5 text-yellow-400'}`}
+            >
+              <span className="text-[11px] font-black font-mono">
+                {leverage}x
+              </span>
+              <span className="text-[9px] font-bold uppercase tracking-tighter opacity-70">
+                {leverage === 1 ? 'Spot-like' : leverage >= 10 ? 'High Risk' : 'Leveraged'}
+              </span>
             </div>
+          </div>
+
+          <div className="relative px-2 h-4 flex items-center">
+            {/* The Track Background */}
+            <div className="absolute left-2 right-2 h-0.5 bg-white/5 rounded-full overflow-hidden">
+              <motion.div
+                animate={{ width: `${((leverage - 1) / 19) * 100}%` }}
+                className={`h-full transition-colors duration-500 ${leverage === 1 ? 'bg-emerald-500' : leverage >= 10 ? 'bg-red-500' : 'bg-yellow-500'
+                  }`}
+              />
+            </div>
+
+            {/* Markers (Diamonds) */}
+            <div className="absolute left-2 right-2 flex justify-between items-center pointer-events-none">
+              {LEVERAGE_OPTIONS.map((lev) => {
+                const pos = ((lev - 1) / 19) * 100;
+                const isActive = leverage >= lev;
+                return (
+                  <div
+                    key={lev}
+                    className="relative flex flex-col items-center group/marker"
+                    style={{ left: `calc(${pos}% - 4px)`, position: 'absolute' }}
+                  >
+                    <div
+                      className={`w-2.5 h-2.5 rotate-45 transform border transition-all duration-300 pointer-events-auto cursor-pointer
+                        ${isActive
+                          ? leverage === 1 ? 'bg-emerald-500 border-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-yellow-500 border-yellow-400 shadow-[0_0_8px_rgba(234,179,8,0.5)]'
+                          : 'bg-zinc-950 border-white/20 hover:border-white/40'
+                        }`}
+                      onClick={() => setLeverage(lev)}
+                    />
+                    <span className={`absolute -top-5 text-[8px] font-black transition-colors ${isActive ? 'text-white' : 'text-zinc-500'}`}>
+                      {lev}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* The Hidden Range Input for Free Adjustment */}
+            <input
+              type="range"
+              min="1"
+              max="20"
+              step="1"
+              value={leverage}
+              onChange={(e) => setLeverage(parseInt(e.target.value))}
+              onFocus={() => setFocused(null)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 accent-transparent"
+            />
+          </div>
+
+          {leverage > 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-[8px] text-yellow-500/70 font-medium px-1 flex items-start gap-1"
+            >
+              <Zap className="w-2 h-2 shrink-0 mt-0.5" />
+              <span>Capital efficiency increased by {leverage}x.</span>
+            </motion.div>
           )}
         </div>
 
         {/* Inputs */}
-        <div className="space-y-3 mb-4">
+        <div className="space-y-2 mb-2">
           {/* Price Label (Small) */}
           <div className="flex justify-between items-end px-1">
-            <span className="text-[11px] uppercase font-bold text-zinc-300 tracking-[0.15em]">
+            <span className="text-[10px] uppercase font-bold text-zinc-300 tracking-[0.1em]">
               Entry Price (USDT)
             </span>
-            <span className="text-[10px] font-bold text-white bg-zinc-900 px-2 py-0.5 rounded border border-white/20 font-mono shadow-xl">
+            <span className="text-[9px] font-bold text-white bg-zinc-900 px-1.5 py-0.5 rounded border border-white/20 font-mono shadow-xl">
               FIXED MARKET
             </span>
           </div>
@@ -163,18 +214,18 @@ export function OrderForm({
               type="text"
               value={currentPrice}
               readOnly
-              className="w-full bg-transparent py-3.5 px-4 text-xl font-mono font-bold text-white outline-none text-right"
+              className="w-full bg-transparent py-2.5 px-4 text-lg font-mono font-bold text-white outline-none text-right"
             />
             {/* Progress bar accent */}
             <div className="absolute bottom-0 left-4 right-4 h-[1px] bg-linear-to-r from-transparent via-white/20 to-transparent" />
           </div>
 
           {/* Amount Label */}
-          <div className="flex justify-between items-end px-1 pt-2">
-            <span className="text-[11px] uppercase font-bold text-zinc-300 tracking-[0.15em]">
+          <div className="flex justify-between items-end px-1 pt-1">
+            <span className="text-[10px] uppercase font-bold text-zinc-300 tracking-[0.1em]">
               Execution Amount
             </span>
-            <span className="text-[11px] font-bold text-zinc-200 font-mono tracking-wider">
+            <span className="text-[10px] font-bold text-zinc-200 font-mono tracking-wider">
               {side === "buy" ? "USDT" : coin}
             </span>
           </div>
@@ -195,7 +246,7 @@ export function OrderForm({
               onFocus={() => setFocused("amount")}
               onBlur={() => setFocused(null)}
               placeholder="0.00"
-              className="w-full bg-transparent py-4.5 px-4 text-2xl font-mono font-bold text-white outline-none text-right placeholder:text-zinc-800"
+              className="w-full bg-transparent py-3 px-4 text-xl font-mono font-bold text-white outline-none text-right placeholder:text-zinc-800"
             />
             {/* Focal Glow */}
             <div
@@ -213,12 +264,12 @@ export function OrderForm({
           </div>
 
           {/* Percentage Pills - More Modern */}
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {[0.1, 0.25, 0.5, 0.75, 1].map((pct) => (
               <button
                 key={pct}
                 onClick={() => handlePercentageClick(pct)}
-                className="flex-1 py-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.03] hover:border-white/10 text-[9px] font-bold text-zinc-500 hover:text-zinc-300 transition-all active:scale-95 tracking-tighter"
+                className="flex-1 py-1.5 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.03] hover:border-white/10 text-[9px] font-bold text-zinc-500 hover:text-zinc-300 transition-all active:scale-95 tracking-tighter"
               >
                 {pct * 100}%
               </button>
@@ -250,31 +301,31 @@ export function OrderForm({
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-2">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">
                     Available Margin
                   </span>
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded bg-zinc-900 border border-white/20 shadow-lg">
-                      <FaWallet className="w-3 h-3 text-emerald-500" />
+                  <div className="flex items-center gap-1.5">
+                    <div className="p-1 rounded bg-zinc-900 border border-white/10">
+                      <FaWallet className="w-2.5 h-2.5 text-emerald-500" />
                     </div>
-                    <span className="text-sm font-mono font-black text-white">
+                    <span className="text-xs font-mono font-black text-white">
                       {balance}{" "}
-                      <span className="text-[10px] text-zinc-500">USDT</span>
+                      <span className="text-[9px] text-zinc-500">USDT</span>
                     </span>
                   </div>
                 </div>
 
                 {/* Dynamic Indicator */}
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-500 ${side === "buy"
+                  className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-500 ${side === "buy"
                     ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
                     : "bg-red-500/5 border-red-500/20 text-red-500"
                     }`}
                 >
                   <Zap
-                    className={`w-3.5 h-3.5 ${side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
+                    className={`w-3 h-3 ${side === "buy" ? "fill-emerald-500/20" : "fill-red-500/20"
                       }`}
                   />
                 </div>
@@ -282,7 +333,7 @@ export function OrderForm({
 
               <button
                 onClick={handleSubmit}
-                className={`group/submit w-full py-4 rounded-xl font-bold text-xs tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${side === "buy"
+                className={`group/submit w-full py-3 rounded-xl font-bold text-[11px] tracking-[0.2em] transition-all duration-500 relative overflow-hidden shadow-2xl ${side === "buy"
                   ? "bg-emerald-500 text-black hover:bg-emerald-400"
                   : "bg-red-500 text-white hover:bg-red-400"
                   }`}

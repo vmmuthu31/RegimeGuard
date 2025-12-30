@@ -1,10 +1,11 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { FaArrowLeft } from "react-icons/fa";
-import { Settings, Maximize2 } from "lucide-react";
+import { Settings, Maximize2, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
 import { CandleChart } from "@/src/client/components/trade/CandleChart";
@@ -51,6 +52,9 @@ export default function TradePage({ params }: PageProps) {
   } = useDashboardData();
 
   const [positions, setPositions] = useState<Position[]>([]);
+  const [activeTab, setActiveTab] = useState<"positions" | "orders" | "history">("positions");
+  const [history, setHistory] = useState<any[]>([]);
+  const [granularity, setGranularity] = useState<string>("1m");
 
   const symbol =
     SYMBOLS.find(
@@ -93,6 +97,24 @@ export default function TradePage({ params }: PageProps) {
     const interval = setInterval(fetchPos, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  // Fetch history
+  const fetchHistory = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/trade?action=history&symbol=${symbol.id}&pageSize=50`);
+      const data = await response.json();
+      if (data.success) setHistory(data.data);
+    } catch { }
+  }, [symbol.id]);
+
+  useEffect(() => {
+    void fetchHistory();
+  }, [fetchHistory]);
+
+  // Fetch Klines when granularity or symbol changes
+  useEffect(() => {
+    void fetchKlineData(symbol.id, granularity);
+  }, [fetchKlineData, symbol.id, granularity]);
 
   // Filter positions for current symbol
   const currentSymbolPositions = positions.filter(
@@ -304,11 +326,30 @@ export default function TradePage({ params }: PageProps) {
               {/* Neon Accent Line */}
               <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
-              <div className="flex items-center gap-6 px-4 py-2 border-b border-white/20 bg-zinc-950/40 text-[10px] font-bold text-zinc-400 uppercase tracking-widest relative">
-                <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Regime Analysis</div>
-                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Risk Metrics</div>
-                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Neural Feed</div>
-                <div className="hover:text-zinc-300 transition-colors cursor-pointer">Execution Logs</div>
+              <div className="flex items-center justify-between px-4 border-b border-white/20 bg-zinc-950/40 relative">
+                <div className="flex items-center gap-6 py-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                  <div className="text-white border-b-2 border-emerald-500 pb-2 -mb-2 transition-all shadow-[0_8px_15px_rgba(16,185,129,0.4)]">Regime Analysis</div>
+                  <div className="hover:text-zinc-300 transition-colors cursor-pointer">Risk Metrics</div>
+                  <div className="hover:text-zinc-300 transition-colors cursor-pointer">Neural Feed</div>
+                  <div className="hover:text-zinc-300 transition-colors cursor-pointer">Execution Logs</div>
+                </div>
+
+                {/* Chart Intervals */}
+                <div className="flex items-center gap-3 text-[10px] font-bold text-zinc-500 font-mono">
+                  <span className="text-[9px] uppercase tracking-tighter opacity-50 mr-1">Time</span>
+                  {["1m", "5m", "15m", "1H", "4H", "1D", "1W"].map((int) => (
+                    <button
+                      key={int}
+                      onClick={() => setGranularity(int.toLowerCase())}
+                      className={`hover:text-white transition-colors uppercase ${granularity === int.toLowerCase() ? "text-white" : ""}`}
+                    >
+                      {int}
+                    </button>
+                  ))}
+                  <button className="hover:text-white transition-colors">
+                    <span className="text-[10px]">▼</span>
+                  </button>
+                </div>
               </div>
               <div className="flex-1 relative overflow-hidden bg-zinc-900/10">
                 <CandleChart data={formattedCandles} />
@@ -329,12 +370,34 @@ export default function TradePage({ params }: PageProps) {
             <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-emerald-500/0 via-emerald-500/60 to-emerald-500/0 opacity-100 transition-opacity" />
 
             <div className="flex items-center justify-between px-4 border-b border-white/20 bg-zinc-950/60 sticky top-0 z-10 backdrop-blur-md">
-              <div className="flex gap-6 text-[10px] font-bold text-zinc-400 uppercase tracking-tight py-3">
-                <div className="text-white border-b-2 border-emerald-500 pb-3 -mb-3 transition-all cursor-pointer shadow-[0_8px_15px_rgba(16,185,129,0.4)]">
+              <div className="flex gap-6 text-[10px] font-bold text-zinc-400 uppercase font-mono py-3">
+                <button
+                  onClick={() => setActiveTab("positions")}
+                  className={`transition-all pb-3 -mb-3 relative ${activeTab === "positions" ? "text-white" : "hover:text-zinc-200"}`}
+                >
                   Positions ({positions.length})
-                </div>
-                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Orders ({currentSymbolOrders.length})</div>
-                <div className="hover:text-zinc-200 transition-colors cursor-pointer">Trade History</div>
+                  {activeTab === "positions" && (
+                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab("orders")}
+                  className={`transition-all pb-3 -mb-3 relative ${activeTab === "orders" ? "text-white" : "hover:text-zinc-200"}`}
+                >
+                  Orders ({currentSymbolOrders.length})
+                  {activeTab === "orders" && (
+                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab("history")}
+                  className={`transition-all pb-3 -mb-3 relative ${activeTab === "history" ? "text-white" : "hover:text-zinc-200"}`}
+                >
+                  Trade History
+                  {activeTab === "history" && (
+                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-4">
                 <button
@@ -346,47 +409,98 @@ export default function TradePage({ params }: PageProps) {
               </div>
             </div>
             <div className="flex-1 bg-zinc-900/5 overflow-auto">
-              {/* Show Positions */}
-              {positions.length > 0 ? (
-                <div className="divide-y divide-white/10">
-                  {positions.map((pos, idx) => (
-                    <div key={idx} className="flex items-center justify-between px-4 py-3 hover:bg-white/[0.02] transition-all">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-2 h-2 rounded-full ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                        <div>
-                          <div className="text-xs font-bold text-white flex items-center gap-2">
-                            {pos.symbol?.replace('cmt_', '').toUpperCase()}
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                              {pos.side?.toUpperCase()}
-                            </span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-400">
-                              {pos.leverage}x
-                            </span>
-                          </div>
-                          <div className="text-[10px] text-zinc-500 mt-1">
-                            Size: {pos.size?.toFixed(4)} | Entry: ${pos.entryPrice?.toFixed(2)}
+              {activeTab === "positions" ? (
+                positions.length > 0 ? (
+                  <div className="divide-y divide-white/10">
+                    {positions.map((pos, idx) => (
+                      <div key={idx} className="flex items-center justify-between px-4 py-3 hover:bg-white/[0.02] transition-all">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-2 h-2 rounded-full ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          <div>
+                            <div className="text-xs font-bold text-white flex items-center gap-2">
+                              {pos.symbol?.replace('cmt_', '').toUpperCase()}
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded ${pos.side?.toLowerCase() === 'long' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                                {pos.side?.toUpperCase()}
+                              </span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-400">
+                                {pos.leverage}x
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-zinc-500 mt-1">
+                              Size: {pos.size?.toFixed(4)} | Entry: ${pos.entryPrice?.toFixed(2)}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className={`text-sm font-bold font-mono ${pos.unrealizedPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                          {pos.unrealizedPnl >= 0 ? '+' : ''}{pos.unrealizedPnl?.toFixed(2)} USDT
+                        <div className="flex items-center gap-4">
+                          <div className={`text-sm font-bold font-mono ${pos.unrealizedPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {pos.unrealizedPnl >= 0 ? '+' : ''}{pos.unrealizedPnl?.toFixed(2)} USDT
+                          </div>
+                          <button
+                            onClick={() => handleClosePosition(pos.symbol)}
+                            className="px-3 py-1.5 rounded bg-zinc-900 border border-white/20 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all uppercase"
+                          >
+                            Close
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleClosePosition(pos.symbol)}
-                          className="px-3 py-1.5 rounded bg-zinc-900 border border-white/20 text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-red-500 hover:border-red-500 transition-all uppercase"
-                        >
-                          Close
-                        </button>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full py-20 text-zinc-600">
+                    <div className="w-12 h-12 rounded-full border border-white/5 flex items-center justify-center mb-4">
+                      <Zap className="w-6 h-6 opacity-20" />
                     </div>
-                  ))}
-                </div>
-              ) : (
+                    <span className="text-[10px] font-bold uppercase tracking-widest">No Active Positions</span>
+                  </div>
+                )
+              ) : activeTab === "orders" ? (
                 <ActiveOrders
                   orders={currentSymbolOrders}
                   onCancelOrder={handleCancelOrder}
                 />
+              ) : (
+                <div className="divide-y divide-white/10">
+                  {history.length > 0 ? (
+                    history.map((h, idx) => (
+                      <div key={idx} className="flex items-center justify-between px-4 py-3 hover:bg-white/[0.02] transition-all">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-1.5 h-1.5 rounded-full ${h.type.includes('long') ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                          <div>
+                            <div className="text-[11px] font-bold text-white flex items-center gap-2">
+                              {h.symbol.replace('cmt_', '').toUpperCase()}
+                              <span className={`text-[9px] px-1.5 py-0.5 rounded ${h.type.includes('long') ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                {h.type.toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="text-[9px] text-zinc-500 mt-0.5 font-mono">
+                              {new Date(h.createTime).toLocaleString()} | {h.orderType.toUpperCase()}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-6 text-right">
+                          <div className="flex flex-col">
+                            <span className="text-[9px] text-zinc-500 uppercase font-bold tracking-tighter">Amount</span>
+                            <span className="text-[11px] font-bold text-white font-mono">{h.filledQty}</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[9px] text-zinc-500 uppercase font-bold tracking-tighter">Exit Price</span>
+                            <span className="text-[11px] font-bold text-white font-mono">${h.priceAvg}</span>
+                          </div>
+                          <div className="flex flex-col min-w-[60px]">
+                            <span className="text-[9px] text-zinc-500 uppercase font-bold tracking-tighter">Net Profit</span>
+                            <span className={`text-[11px] font-bold font-mono ${parseFloat(h.totalProfits) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                              {parseFloat(h.totalProfits) >= 0 ? '+' : ''}{parseFloat(h.totalProfits).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full py-20 text-zinc-600">
+                      <span className="text-[10px] font-bold uppercase tracking-widest">No Trade History</span>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>
