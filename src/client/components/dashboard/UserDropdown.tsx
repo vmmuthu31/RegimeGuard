@@ -1,6 +1,7 @@
 "use client";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
 import {
   FaUserCircle,
   FaSignOutAlt,
@@ -54,9 +55,14 @@ export function UserDropdown({ account }: UserDropdownProps) {
             </div>
           </div>
 
-          <DropdownMenu.Item className="group text-sm text-zinc-300 flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">
-            <FaUserCircle className="w-4 h-4" />
-            Profile
+          <DropdownMenu.Item className="group text-sm text-zinc-300  rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">
+            <Link
+              className="flex items-center gap-3 px-3 py-2.5"
+              href="/account"
+            >
+              <FaUserCircle className="w-4 h-4" />
+              Profile
+            </Link>
           </DropdownMenu.Item>
 
           <DropdownMenu.Item className="group text-sm text-zinc-300 flex items-center gap-3 px-3 py-2.5 rounded-lg outline-none cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors">

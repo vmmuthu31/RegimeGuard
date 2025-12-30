@@ -15,6 +15,7 @@ import { MarketOverview } from "@/src/client/components/dashboard/MarketOverview
 import { PriceTicker } from "@/src/client/components/dashboard/PriceTicker";
 import { PortfolioChart } from "@/src/client/components/dashboard/PortfolioChart";
 import { AIDecisionsPanel } from "@/src/client/components/dashboard/AIDecisionsPanel";
+import { TradingControls } from "@/src/client/components/dashboard/TradingControls";
 import { formatVolume } from "@/src/shared/utils/formatters";
 
 function SentimentGauge({ value }: { value: number }) {
@@ -388,9 +389,10 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* AI Decisions Panel - Demonstrates AI Involvement */}
-        <div className="mb-4">
+        {/* AI Decisions & Trading Controls */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <AIDecisionsPanel />
+          <TradingControls />
         </div>
 
         {/* Top Movers Row */}

@@ -55,8 +55,8 @@ const DEFAULT_CONFIG: TradingLoopConfig = {
   intervalMs: 60000,
   enabled: false,
   dryRun: true,
-  basePositionSize: 0.01,
-  maxConcurrentTrades: 2,
+  basePositionSize: 0.00005, // ~$5 per trade at $100k BTC
+  maxConcurrentTrades: 2, // Max 2 trades = ~$10 total allocation
 };
 
 let loopState: TradingLoopState = {

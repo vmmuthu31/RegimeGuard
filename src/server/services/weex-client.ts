@@ -207,31 +207,37 @@ export async function getPositions(
   const data = await makeRequest<
     Array<{
       symbol: string;
-      positionSide: string;
-      positionAmt: string;
-      avgEntryPrice: string;
-      markPrice: string;
+      side: string;
+      size: string;
+      open_value: string;
       unrealizePnl: string;
       leverage: string;
-      marginMode: string;
-      liquidationPrice: string;
-      timestamp: string;
+      margin_mode: string;
+      liquidatePrice: string;
+      created_time: number;
+      contractVal: string;
     }>
   >(config, "GET", "/capi/v2/account/position/allPosition", queryString);
 
-  return data.map((item) => ({
-    symbol: item.symbol as TradingPair,
-    side: item.positionSide === "LONG" ? PositionSide.LONG : PositionSide.SHORT,
-    size: parseFloat(item.positionAmt),
-    entryPrice: parseFloat(item.avgEntryPrice),
-    markPrice: parseFloat(item.markPrice),
-    unrealizedPnl: parseFloat(item.unrealizePnl),
-    leverage: parseFloat(item.leverage),
-    marginMode:
-      item.marginMode === "CROSS" ? MarginMode.CROSS : MarginMode.ISOLATED,
-    liquidationPrice: parseFloat(item.liquidationPrice),
-    timestamp: parseInt(item.timestamp),
-  }));
+  return data.map((item) => {
+    const size = parseFloat(item.size || "0");
+    const openValue = parseFloat(item.open_value || "0");
+    const entryPrice = size > 0 ? openValue / size : 0;
+
+    return {
+      symbol: item.symbol as TradingPair,
+      side: item.side === "LONG" ? PositionSide.LONG : PositionSide.SHORT,
+      size: size,
+      entryPrice: entryPrice,
+      markPrice: 0, // Not directly available, would need ticker call
+      unrealizedPnl: parseFloat(item.unrealizePnl || "0"),
+      leverage: parseFloat(item.leverage || "1"),
+      marginMode:
+        item.margin_mode === "SHARED" ? MarginMode.CROSS : MarginMode.ISOLATED,
+      liquidationPrice: parseFloat(item.liquidatePrice || "0"),
+      timestamp: item.created_time || Date.now(),
+    };
+  });
 }
 
 export async function setLeverage(

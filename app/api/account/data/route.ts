@@ -23,7 +23,8 @@ type AccountEndpoint =
   | "bills"
   | "settings"
   | "positions"
-  | "position";
+  | "position"
+  | "trades";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -72,6 +73,76 @@ export async function GET(request: Request) {
         }
         const data = await getSinglePosition(config, symbol);
         return NextResponse.json({ success: true, data });
+      }
+
+      case "trades": {
+        const { makeAuthenticatedRequest } = await import(
+          "@/server/services/weex-account"
+        );
+
+        interface FillRecord {
+          tradeId: number;
+          orderId: number;
+          symbol: string;
+          marginMode: string;
+          positionSide: string;
+          orderSide: string;
+          fillSize: string;
+          fillValue: string;
+          fillFee: string;
+          realizePnl: string;
+          direction: string;
+          createdTime: number;
+        }
+
+        const allFills: FillRecord[] = [];
+
+        for (const symbol of TRADING_PAIRS) {
+          try {
+            const startTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            const result = await makeAuthenticatedRequest<
+              | { list?: FillRecord[]; nextFlag?: boolean; totals?: number }
+              | FillRecord[]
+            >(
+              config,
+              "GET",
+              "/capi/v2/order/fills",
+              `?symbol=${symbol}&startTime=${startTime}&limit=100`
+            );
+
+            const fills = Array.isArray(result) ? result : result.list || [];
+
+            if (fills.length > 0) {
+              allFills.push(...fills);
+            }
+          } catch {
+            // Skip symbols with errors
+          }
+        }
+
+        allFills.sort((a, b) => b.createdTime - a.createdTime);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            trades: allFills.slice(0, 100).map((f) => ({
+              tradeId: f.tradeId?.toString() || "0",
+              orderId: f.orderId?.toString() || "0",
+              symbol: f.symbol,
+              positionSide: f.positionSide,
+              side: f.orderSide,
+              fillSize: f.fillSize,
+              fillPrice: (
+                parseFloat(f.fillValue || "0") / parseFloat(f.fillSize || "1")
+              ).toFixed(2),
+              fillValue: f.fillValue,
+              fillFee: f.fillFee,
+              realizePnl: f.realizePnl,
+              createdTime: f.createdTime,
+            })),
+            total: allFills.length,
+          },
+        });
       }
 
       default: {

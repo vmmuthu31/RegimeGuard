@@ -111,11 +111,13 @@ export default function VerifyPage() {
       const res = await fetch("/api/market?symbol=cmt_btcusdt");
       const data = await res.json();
       if (data.success && data.data?.ticker) {
+        const price = parseFloat(data.data.ticker.lastPrice);
+        const priceStr = isNaN(price)
+          ? "Connected"
+          : `$${price.toLocaleString()}`;
         updateResult("market", {
           status: "pass",
-          details: `BTC Price: $${parseFloat(
-            data.data.ticker.lastPrice
-          ).toLocaleString()}`,
+          details: `BTC Price: ${priceStr}`,
         });
       } else {
         updateResult("market", {
@@ -246,11 +248,13 @@ export default function VerifyPage() {
           const res = await fetch("/api/market?symbol=cmt_btcusdt");
           const data = await res.json();
           if (data.success && data.data?.ticker) {
+            const price = parseFloat(data.data.ticker.lastPrice);
+            const priceStr = isNaN(price)
+              ? "Connected"
+              : `$${price.toLocaleString()}`;
             updateResult("market", {
               status: "pass",
-              details: `BTC Price: $${parseFloat(
-                data.data.ticker.lastPrice
-              ).toLocaleString()}`,
+              details: `BTC Price: ${priceStr}`,
             });
           } else {
             updateResult("market", {
