@@ -174,6 +174,16 @@ export function useDashboardData() {
     } catch {}
   }, []);
 
+  const fetchLoopStatus = useCallback(async () => {
+    try {
+      const response = await fetch("/api/loop?action=status");
+      const data = await response.json();
+      if (data.success && data.data?.state) {
+        setLoopRunning(data.data.state.isRunning);
+      }
+    } catch {}
+  }, []);
+
   const toggleTradingLoop = async () => {
     try {
       const response = await fetch("/api/loop", {
@@ -181,7 +191,11 @@ export function useDashboardData() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: loopRunning ? "stop" : "start" }),
       });
-      if ((await response.json()).success) setLoopRunning(!loopRunning);
+      const data = await response.json();
+      if (data.success) {
+        // Fetch fresh status to be sure
+        await fetchLoopStatus();
+      }
     } catch {}
   };
 
@@ -191,7 +205,14 @@ export function useDashboardData() {
     void fetchAccountData();
     void fetchMarketData();
     void fetchOrders();
-  }, [connectAndSubscribe, fetchAccountData, fetchMarketData, fetchOrders]);
+    void fetchLoopStatus();
+  }, [
+    connectAndSubscribe,
+    fetchAccountData,
+    fetchMarketData,
+    fetchOrders,
+    fetchLoopStatus,
+  ]);
 
   useEffect(() => {
     if (!connected) return;
@@ -200,6 +221,7 @@ export function useDashboardData() {
       void fetchAccountData();
       void fetchMarketData();
       void fetchOrders();
+      void fetchLoopStatus();
     }, 1500);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchWebSocketData();
@@ -210,6 +232,7 @@ export function useDashboardData() {
     fetchAccountData,
     fetchMarketData,
     fetchOrders,
+    fetchLoopStatus,
   ]);
 
   return {
