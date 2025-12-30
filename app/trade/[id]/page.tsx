@@ -155,9 +155,28 @@ export default function TradePage({ params }: PageProps) {
         return;
       }
 
-      // Calculate coin size: (USDT amount * leverage) / price
-      const coinSize = (usdtAmount * leverage) / currentPriceNum;
-      const formattedSize = coinSize.toFixed(6);
+      // Calculate raw coin size: (USDT amount * leverage) / price
+      const rawCoinSize = (usdtAmount * leverage) / currentPriceNum;
+
+      // Get stepSize and precision from symbol config
+      const stepSize = symbol.stepSize || 0.0001;
+      const precision = symbol.precision || 4;
+
+      // Round to nearest stepSize
+      const roundedSize = Math.floor(rawCoinSize / stepSize) * stepSize;
+
+      // Check if rounded size is valid (greater than 0)
+      if (roundedSize === 0 || roundedSize < stepSize) {
+        const minUsdtRequired = (stepSize * currentPriceNum) / leverage;
+        toast.error(
+          `Amount too small. Minimum ${symbol.name.split('/')[0]} size is ${stepSize}. ` +
+          `You need at least $${minUsdtRequired.toFixed(2)} USDT at ${leverage}x leverage.`
+        );
+        return;
+      }
+
+      // Format to correct precision
+      const formattedSize = roundedSize.toFixed(precision);
 
       const response = await fetch("/api/trade", {
         method: "POST",

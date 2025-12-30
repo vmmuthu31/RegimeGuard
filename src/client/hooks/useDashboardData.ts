@@ -49,14 +49,14 @@ export interface MarketData {
 }
 
 export const SYMBOLS = [
-  { id: "cmt_btcusdt", name: "BTC/USDT", iconKey: "BTC", color: "#f7931a" },
-  { id: "cmt_ethusdt", name: "ETH/USDT", iconKey: "ETH", color: "#627eea" },
-  { id: "cmt_solusdt", name: "SOL/USDT", iconKey: "SOL", color: "#00ffa3" },
-  { id: "cmt_dogeusdt", name: "DOGE/USDT", iconKey: "DOGE", color: "#ba9f33" },
-  { id: "cmt_xrpusdt", name: "XRP/USDT", iconKey: "XRP", color: "#a8a9ad" },
-  { id: "cmt_adausdt", name: "ADA/USDT", iconKey: "ADA", color: "#0033ad" },
-  { id: "cmt_bnbusdt", name: "BNB/USDT", iconKey: "BNB", color: "#f3ba2f" },
-  { id: "cmt_ltcusdt", name: "LTC/USDT", iconKey: "LTC", color: "#345c9c" },
+  { id: "cmt_btcusdt", name: "BTC/USDT", iconKey: "BTC", color: "#f7931a", stepSize: 0.0001, precision: 4 },
+  { id: "cmt_ethusdt", name: "ETH/USDT", iconKey: "ETH", color: "#627eea", stepSize: 0.001, precision: 3 },
+  { id: "cmt_solusdt", name: "SOL/USDT", iconKey: "SOL", color: "#00ffa3", stepSize: 0.01, precision: 2 },
+  { id: "cmt_dogeusdt", name: "DOGE/USDT", iconKey: "DOGE", color: "#ba9f33", stepSize: 100, precision: 0 },
+  { id: "cmt_xrpusdt", name: "XRP/USDT", iconKey: "XRP", color: "#a8a9ad", stepSize: 1, precision: 0 },
+  { id: "cmt_adausdt", name: "ADA/USDT", iconKey: "ADA", color: "#0033ad", stepSize: 1, precision: 0 },
+  { id: "cmt_bnbusdt", name: "BNB/USDT", iconKey: "BNB", color: "#f3ba2f", stepSize: 0.01, precision: 2 },
+  { id: "cmt_ltcusdt", name: "LTC/USDT", iconKey: "LTC", color: "#345c9c", stepSize: 0.01, precision: 2 },
 ];
 
 export function useDashboardData() {
