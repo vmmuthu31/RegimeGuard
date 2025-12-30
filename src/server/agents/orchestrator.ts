@@ -39,7 +39,6 @@ interface OrchestratorContext {
   allMessages: AgentMessage[];
 }
 
-// Use globalThis to persist state across hot reloads in Next.js development
 const globalForOrchestrator = globalThis as unknown as {
   _orchestratorContext: OrchestratorContext | undefined;
 };
