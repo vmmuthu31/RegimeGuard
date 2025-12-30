@@ -452,6 +452,91 @@ regimeguard/
 
 ---
 
+## 🎨 Frontend Features
+
+RegimeGuard features a premium, institutional-grade trading interface with three core pages:
+
+### 1. Landing Page (`/`)
+
+A high-impact marketing page showcasing the platform's capabilities:
+
+- **Hero Section** — Animated gradient background with CTA buttons
+- **Feature Grid** — AI capabilities, risk management, and real-time analytics highlights
+- **Architecture Diagram** — Visual system flow explanation
+- **Social Proof** — Performance metrics and technology stack
+
+### 2. Dashboard (`/dashboard`)
+
+The central intelligence hub for monitoring markets and controlling the AI engine:
+
+| Component                 | Description                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| **Price Ticker**          | Real-time scrolling ticker bar for all supported trading pairs                             |
+| **Account Overview**      | Live balance, unrealized PnL, and staked assets with mini portfolio chart                  |
+| **Market Sentiment**      | Fear/Greed gauge derived from RSI with Bulls vs Bears ratio bar                            |
+| **Regime Intelligence**   | Current detected market phase (Trending/Range-Bound/High Volatility) with confidence score |
+| **AI Engine Control**     | Start/Stop button for automated trading loop with RSI and volatility indicators            |
+| **Top Movers**            | 8-symbol grid showing 24h price changes with trend indicators                              |
+| **Market Overview Table** | Comprehensive table with favorites, price, 24h change, high/low, volume, and trend bar     |
+
+**Visual Design:**
+
+- Dark glassmorphic theme (`#0B0E11` base)
+- Emerald accent neon glows and border highlights
+- Subtle ambient aurora background with grid pattern
+- Micro-animations on hover states
+
+### 3. Trade Page (`/trade/[id]`)
+
+A professional-grade trading terminal for individual assets:
+
+| Component               | Description                                                                                         |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| **Market Info Bar**     | Mark price, 24h change, high/low, funding rate with sticky header                                   |
+| **Market Switcher**     | Dropdown to switch between trading pairs with back-to-dashboard button                              |
+| **Candle Chart**        | 500px height candlestick chart with real-time data from WEEX                                        |
+| **Order Book**          | Live bid/ask depth visualization with spread indicator and price glow effects                       |
+| **Quick Order Form**    | Open/Close tabs, Limit/Market/Trigger modes, amount input with margin display                       |
+| **Active Orders Table** | Execution pipeline with time, symbol, type, side, price, amount, filled progress, and cancel button |
+| **Status Footer**       | Network status, connection indicator, and sync status                                               |
+
+**Visual Design:**
+
+- Neon accent lines on panel headers
+- Glowing price indicators (green for up, red for down)
+- Drop shadows on interactive elements
+- Responsive layout (sidebar collapses on mobile)
+
+### Component Architecture
+
+```
+src/client/components/
+├── dashboard/
+│   ├── DashboardHeader.tsx    # Logo, connection status, user dropdown
+│   ├── MarketOverview.tsx     # Full market table with tabs
+│   ├── PortfolioChart.tsx     # Mini area chart for balance history
+│   ├── PriceTicker.tsx        # Scrolling real-time ticker bar
+│   ├── SentimentGauge.tsx     # Radial fear/greed indicator
+│   └── UserDropdown.tsx       # Account menu with balance
+├── trade/
+│   ├── ActiveOrders.tsx       # Order execution pipeline table
+│   ├── CandleChart.tsx        # Lightweight-charts candlestick
+│   ├── MarketSwitcher.tsx     # Trading pair dropdown selector
+│   ├── OrderBook.tsx          # Bid/ask depth visualization
+│   ├── OrderForm.tsx          # Quick order entry form
+│   └── TerminalPanel.tsx      # Reusable panel wrapper
+└── ui/                        # shadcn/ui components (30+)
+```
+
+### Design System
+
+- **Colors:** Zinc-900/950 backgrounds, Emerald-400/500 accents, Red-400/500 for sell/negative
+- **Typography:** Font-black weights, uppercase tracking-widest for labels
+- **Effects:** `drop-shadow`, `backdrop-blur-xl`, neon `box-shadow` glows
+- **Animations:** Framer Motion for transitions, CSS `animate-pulse` for live indicators
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -718,7 +803,15 @@ RegimeGuard aligns with WEEX's philosophy:
 | Swing Point Detection           | ✅ Complete |
 | Interactive Chart Visualization | ✅ Complete |
 | Enhanced Confidence Scoring     | ✅ Complete |
-| Dashboard UI                    | ✅ Complete |
+| **Landing Page**                | ✅ Complete |
+| **Dashboard UI**                | ✅ Complete |
+| **Trade Page (`/trade/[id]`)**  | ✅ Complete |
+| **Real-time Order Book**        | ✅ Complete |
+| **Quick Order Form**            | ✅ Complete |
+| **Active Orders Pipeline**      | ✅ Complete |
+| **Market Switcher**             | ✅ Complete |
+| **Portfolio Chart**             | ✅ Complete |
+| **Sentiment Gauge**             | ✅ Complete |
 | TypeScript Enums                | ✅ Complete |
 | Automated Trading Loop          | ✅ Complete |
 | Groq AI Integration             | ✅ Complete |
