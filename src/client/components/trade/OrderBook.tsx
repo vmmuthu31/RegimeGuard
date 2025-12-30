@@ -148,7 +148,9 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
 
       {/* Header */}
       <div className="flex justify-between px-4 py-2.5 text-[10px] text-zinc-400 font-black uppercase tracking-[0.15em] border-b border-white/20 bg-zinc-950/40 sticky top-0 z-30 backdrop-blur-md">
-        <span className="text-left w-1/3">Price <span className="text-[8px] opacity-40">(USDT)</span></span>
+        <span className="text-left w-1/3">
+          Price <span className="text-[8px] opacity-40">(USDT)</span>
+        </span>
         <span className="text-right w-1/3">Amount</span>
         <span className="text-right w-1/3">Sum</span>
       </div>
@@ -183,22 +185,24 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
       {/* Spread / Current Price Indicator */}
       <div className="py-5 my-1.5 bg-gradient-to-r from-zinc-950 via-zinc-900/60 to-zinc-950 border-y border-white/20 flex items-center justify-between px-6 backdrop-blur-xl shadow-[inset_0_0_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
         <div
-          className={`absolute inset-0 opacity-20 blur-2xl transition-colors duration-700 ${parseFloat(tickerData?.priceChangePercent || "0") >= 0
-            ? "bg-emerald-500/30"
-            : "bg-red-500/30"
-            }`}
+          className={`absolute inset-0 opacity-20 blur-2xl transition-colors duration-700 ${
+            parseFloat(tickerData?.priceChangePercent || "0") >= 0
+              ? "bg-emerald-500/30"
+              : "bg-red-500/30"
+          }`}
         />
 
         <div className="flex flex-col relative z-10">
           <div
-            className={`text-2xl font-black tracking-tighter ${parseFloat(tickerData?.priceChangePercent || "0") >= 0
-              ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]"
-              : "text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]"
-              }`}
+            className={`text-2xl font-black tracking-tighter ${
+              parseFloat(tickerData?.priceChangePercent || "0") >= 0
+                ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]"
+                : "text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]"
+            }`}
           >
             {formatPrice(lastPrice.toString())}
           </div>
-          <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mt-1 shadow-sm">
+          <div className="text-[10px] font-black text-zinc-400 -mt-1 uppercase tracking-[0.2em] shadow-sm">
             Mark Index <span className="text-[8px] opacity-40">USD</span>
           </div>
         </div>
@@ -208,10 +212,11 @@ export function OrderBook({ tickerData, symbol }: OrderBookProps) {
             {spread.toFixed(2)} <span className="text-zinc-600">SPREAD</span>
           </span>
           <span
-            className={`text-[10px] font-bold font-mono ${parseFloat(tickerData?.priceChangePercent || "0") >= 0
-              ? "text-emerald-500/60"
-              : "text-red-500/60"
-              }`}
+            className={`text-[10px] font-bold font-mono ${
+              parseFloat(tickerData?.priceChangePercent || "0") >= 0
+                ? "text-emerald-500/60"
+                : "text-red-500/60"
+            }`}
           >
             {parseFloat(tickerData?.priceChangePercent || "0") >= 0 ? "+" : ""}
             {(parseFloat(tickerData?.priceChangePercent || "0") * 100).toFixed(
