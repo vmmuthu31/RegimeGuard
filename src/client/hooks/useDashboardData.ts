@@ -75,7 +75,7 @@ export function useDashboardData() {
       const response = await fetch("/api/trade?action=current");
       const data = await response.json();
       if (data.success) setOrders(data.data);
-    } catch {}
+    } catch { }
   }, []);
 
   const connectAndSubscribe = useCallback(async () => {
@@ -128,13 +128,13 @@ export function useDashboardData() {
         if (Object.keys(newTickers).length) setTickers(newTickers);
         setLastUpdate(Date.now());
       }
-    } catch {}
+    } catch { }
   }, [connected]);
 
-  const fetchKlineData = useCallback(async (symbol: string) => {
+  const fetchKlineData = useCallback(async (symbol: string, granularity: string = "1m") => {
     try {
       const response = await fetch(
-        `/api/market/data?symbol=${symbol}&endpoint=candles&limit=100`
+        `/api/market/data?symbol=${symbol}&endpoint=candles&limit=100&granularity=${granularity}`
       );
       const data = await response.json();
       if (data.success && data.data) {
@@ -155,7 +155,7 @@ export function useDashboardData() {
         );
         setKlines((prev) => ({ ...prev, [symbol]: formattedKlines }));
       }
-    } catch {}
+    } catch { }
   }, []);
 
   const fetchAccountData = useCallback(async () => {
@@ -163,7 +163,7 @@ export function useDashboardData() {
       const response = await fetch("/api/account");
       const data = await response.json();
       if (data.success) setAccount(data.data);
-    } catch {}
+    } catch { }
   }, []);
 
   const fetchMarketData = useCallback(async () => {
@@ -171,7 +171,7 @@ export function useDashboardData() {
       const response = await fetch("/api/market?symbol=cmt_btcusdt");
       const data = await response.json();
       if (data.success) setMarket(data.data);
-    } catch {}
+    } catch { }
   }, []);
 
   const fetchLoopStatus = useCallback(async () => {
@@ -181,7 +181,7 @@ export function useDashboardData() {
       if (data.success && data.data?.state) {
         setLoopRunning(data.data.state.isRunning);
       }
-    } catch {}
+    } catch { }
   }, []);
 
   const toggleTradingLoop = async () => {
@@ -195,7 +195,7 @@ export function useDashboardData() {
       if (data.success) {
         await fetchLoopStatus();
       }
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
