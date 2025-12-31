@@ -7,6 +7,8 @@ import { RiskPanel } from "./RiskPanel";
 import { LiveTradeExecution } from "./LiveTradeExecution";
 import Link from "next/link";
 
+import { TypeAnimation } from 'react-type-animation';
+
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-12 bg-[#0B0E11]">
@@ -41,10 +43,24 @@ export const Hero = () => {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               className="space-y-4"
             >
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic min-h-[1.2em]">
                 AI That <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600">
-                  Protects Capital
+                  <TypeAnimation
+                    sequence={[
+                      'Protects Capital',
+                      2000,
+                      'Controls Drawdowns',
+                      2000,
+                      'Manages Volatility',
+                      2000,
+                      'Enforces Discipline',
+                      2000,
+                    ]}
+                    wrapper="span"
+                    speed={50}
+                    repeat={Infinity}
+                  />
                 </span>
                 <br />
                 <span className="text-zinc-600 text-2xl md:text-3xl lg:text-4xl tracking-widest block mt-2 not-italic font-bold">
