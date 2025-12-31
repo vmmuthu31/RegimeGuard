@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Shield, LayoutDashboard, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
@@ -30,7 +31,13 @@ export const Navbar = () => {
                         {/* Radar Pulse Effect */}
                         <div className="absolute inset-0 bg-emerald-500/20 rounded-lg animate-ping opacity-20" />
                         <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center relative overflow-hidden group-hover:border-emerald-500/50 transition-colors">
-                            <Shield className="w-5 h-5 text-emerald-500 relative z-10" />
+                            <NextImage
+                                src="/logo.png"
+                                alt="Logo"
+                                width={24}
+                                height={24}
+                                className="relative z-10 w-6 h-6 object-contain"
+                            />
                             {/* Inner Scan */}
                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-500/10 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000" />
                         </div>

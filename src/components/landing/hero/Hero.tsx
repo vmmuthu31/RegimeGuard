@@ -74,7 +74,7 @@ export const Hero = () => {
                 </Link>
 
                 <Link href="#demo">
-                  <Button variant="outline" size="lg" className="border-white/20 hover:border-white/40 text-zinc-300 hover:text-white hover:bg-white/5 font-bold uppercase tracking-widest px-10 h-14 text-sm transition-all border-dashed group">
+                  <Button variant="outline" size="lg" className="bg-zinc-950/50 hover:bg-zinc-900 border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-bold uppercase tracking-widest px-10 h-14 text-sm transition-all border-dashed group backdrop-blur-sm">
                     <PlayCircle className="mr-2 w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
                     <span className="opacity-80 group-hover:opacity-100 transition-opacity">View Logics</span>
                   </Button>

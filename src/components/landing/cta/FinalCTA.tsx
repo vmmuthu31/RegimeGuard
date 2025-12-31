@@ -35,7 +35,7 @@ export const FinalCTA = () => {
   }, []);
 
   return (
-    <section className="py-32 relative overflow-hidden bg-[#0B0E11]">
+    <section className="py-16 md:py-20 relative overflow-hidden bg-[#0B0E11]">
       {/* Background Volumetric Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-emerald-500/[0.03] rounded-full blur-[150px] pointer-events-none" />
 
@@ -61,43 +61,39 @@ export const FinalCTA = () => {
             <div ref={leftRef} className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500 to-transparent" />
           </div>
 
-          <div className="p-12 md:p-24 flex flex-col items-center text-center space-y-10 relative z-10">
-            <div className="flex flex-col items-center gap-4">
+          <div className="p-10 md:p-14 flex flex-col items-center text-center space-y-8 relative z-10">
+            <div className="flex flex-col items-center gap-2">
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20"
+                className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20"
               >
-                <Lock className="w-8 h-8 text-emerald-500" />
+                <Lock className="w-5 h-5 text-emerald-500" />
               </motion.div>
-              <span className="text-[10px] font-black text-emerald-500/60 font-mono tracking-[0.5em] uppercase">Security Confirmed</span>
+              <span className="text-[9px] font-black text-emerald-500/60 font-mono tracking-[0.5em] uppercase">Security Confirmed</span>
             </div>
 
-            <h2 className="text-4xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase italic md:not-italic">
-              Trade Less. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600">Protect More.</span> <br />
-              Stay in the Game.
+            <h2 className="text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter uppercase italic md:not-italic">
+              Trade Less. <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600">Protect More.</span>
             </h2>
 
-            <p className="text-base md:text-lg text-zinc-500 max-w-2xl mx-auto uppercase tracking-wide font-bold">
-              Ready to experience <span className="text-white">institutional-grade</span> risk control? <br />
-              Connect to WEEX and activate RegimeGuard.
+            <p className="text-sm md:text-base text-zinc-500 max-w-xl mx-auto uppercase tracking-wide font-bold">
+              Ready to experience <span className="text-white">institutional-grade</span> risk control?
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 pt-6 landing-tour-cta">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 landing-tour-cta">
               <Link href="/dashboard">
-                <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white font-black uppercase tracking-widest px-12 h-16 text-base shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95 group">
+                <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white font-black uppercase tracking-widest px-8 h-12 md:h-14 text-sm shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95 group">
                   Get Started
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
 
-            <div className="pt-16 border-t border-white/5 w-full">
-              <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 opacity-30 grayscale items-center">
-                <span className="text-[10px] font-black font-mono text-zinc-400">CONNECT_PROTOCOL_WEEX_v4</span>
-                <span className="text-[10px] font-black font-mono text-zinc-400">SSL_ENCRYPTION_ACTIVE</span>
-                <span className="text-[10px] font-black font-mono text-zinc-400">NODES_GLOBAL_01_TO_24</span>
+            <div className="pt-8 border-t border-white/5 w-full">
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 opacity-30 grayscale items-center">
+                <span className="text-[9px] font-black font-mono text-zinc-400">CONNECT_PROTOCOL_WEEX_v4</span>
+                <span className="text-[9px] font-black font-mono text-zinc-400">SSL_ACTIVE</span>
               </div>
             </div>
           </div>

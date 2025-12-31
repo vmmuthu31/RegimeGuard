@@ -6,7 +6,7 @@ import { ProblemSection } from "@/src/components/landing/problem/WhyBotsFail";
 import { RiskEngineFeature } from "@/src/components/landing/features/RiskEngine";
 import { FinalCTA } from "@/src/components/landing/cta/FinalCTA";
 import { NoiseOverlay } from "@/components/landing-utils";
-import { Navbar } from "@/src/components/landing/layout/Navbar";
+import { Navbar } from "@/src/components/landing/layout/Navbar"; // Rebuild Trigger
 import { Footer } from "@/src/components/landing/layout/Footer";
 
 export default function LandingPage() {
