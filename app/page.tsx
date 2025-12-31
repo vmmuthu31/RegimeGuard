@@ -19,11 +19,19 @@ export default function LandingPage() {
       <NoiseOverlay />
 
       <Navbar />
-      <Hero />
-      <ProblemSection />
-      <RiskEngineFeature />
+      <div id="hero">
+        <Hero />
+      </div>
+      <div id="protocol">
+        <ProblemSection />
+      </div>
+      <div id="risk-engine">
+        <RiskEngineFeature />
+      </div>
       <FinalCTA />
-      <Footer />
+      <div id="security">
+        <Footer />
+      </div>
     </main>
   );
 }

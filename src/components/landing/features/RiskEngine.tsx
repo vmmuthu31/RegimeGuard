@@ -39,7 +39,7 @@ export const RiskEngineFeature = () => {
             <div className="absolute inset-0 bg-radial-gradient(circle_at_center,transparent_0%,#000000_100%) pointer-events-none" />
 
             {/* Modules Container */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 relative z-10 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 relative z-10 items-stretch">
 
               {/* Module 1: Awareness */}
               <div className="relative group p-3 rounded-2xl bg-zinc-950/50 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-[0_0_50px_-20px_rgba(6,182,212,0.3)] flex flex-col justify-center">
@@ -66,24 +66,24 @@ export const RiskEngineFeature = () => {
               {/* Module 2: Risk Engine (Center) */}
               <div className="relative group p-3 rounded-2xl bg-zinc-950/60 border border-emerald-500/20 shadow-[0_0_40px_-20px_rgba(16,185,129,0.2)] lg:scale-105 lg:z-20 border-t-emerald-500/50 flex flex-col justify-center">
                 {/* Input Connector (From Awareness) - Pipe moved here for Z-index visibility */}
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-2 bg-zinc-800 z-0 hidden lg:block">
+                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-2 bg-zinc-800 z-0 hidden md:block">
                   <div className="h-full w-full overflow-hidden relative">
                     <div className="absolute inset-0 bg-cyan-500/20 animate-pulse" />
                     <div className="absolute top-0 bottom-0 left-0 w-2 bg-cyan-400 blur-sm animate-[slide_1s_linear_infinite]" />
                   </div>
                 </div>
                 {/* Input Connector Joint (Dot) */}
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-900 border-2 border-cyan-500/50 hidden lg:block z-10" />
+                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-900 border-2 border-cyan-500/50 hidden md:block z-10" />
 
                 {/* Output Connector (To Guard) */}
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-2 bg-zinc-800 z-0 hidden lg:block">
+                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-2 bg-zinc-800 z-0 hidden md:block">
                   <div className="h-full w-full overflow-hidden relative">
                     <div className="absolute inset-0 bg-emerald-500/20 animate-pulse" />
                     <div className="absolute top-0 bottom-0 left-0 w-2 bg-emerald-400 blur-sm animate-[slide_1s_linear_infinite]" />
                   </div>
                 </div>
                 {/* Output Joint (Dot) */}
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-900 border-2 border-emerald-500/50 hidden lg:block z-10" />
+                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-900 border-2 border-emerald-500/50 hidden md:block z-10" />
 
                 <PremiumFeatureCard
                   accentColor="emerald"

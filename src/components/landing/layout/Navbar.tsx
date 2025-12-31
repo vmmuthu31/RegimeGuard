@@ -15,13 +15,16 @@ export const Navbar = () => {
             className="fixed top-0 left-0 right-0 z-50 pointer-events-none"
         >
             {/* Full Width Creative Deck */}
-            <div className="pointer-events-auto w-full bg-[#0B0E11]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-8 py-4 relative overflow-hidden">
+            <div className="pointer-events-auto w-full bg-[#0B0E11]/90 backdrop-blur-2xl border-b border-white/5 flex items-center justify-between px-8 py-4 relative overflow-hidden shadow-[0_4px_30px_-10px_rgba(16,185,129,0.1)]">
                 {/* 1. Creative Background Pattern (Grid + Noise) */}
                 <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
                 <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-transparent to-zinc-950/80 pointer-events-none" />
 
+                {/* Bottom Neon Line */}
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+
                 {/* 2. Live Scanline (Bottom) */}
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/5">
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/5 z-20">
                     <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent animate-[shimmer_3s_infinite]" />
                 </div>
 
@@ -52,16 +55,25 @@ export const Navbar = () => {
                 </Link>
 
                 {/* Nav Links - Tech Pills */}
-                <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 bg-zinc-900/50 border border-white/5 p-1 rounded-full backdrop-blur-md shadow-2xl">
-                    {['Protocol', 'Risk Engine', 'Documentation'].map((item) => (
+                {/* Nav Links - Control Cluster */}
+                <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2 bg-[#0B0E11]/90 border border-white/10 p-1.5 rounded-full backdrop-blur-xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.5)] ring-1 ring-white/5">
+                    {['Protocol', 'Risk Engine', 'Security'].map((item) => (
                         <Link
                             key={item}
                             href={`#${item.toLowerCase().replace(' ', '-')}`}
-                            className="relative px-5 py-2 rounded-full text-[10px] font-bold text-zinc-400 uppercase tracking-[0.1em] hover:text-white hover:bg-white/5 transition-all group/link overflow-hidden"
+                            className="relative px-6 py-2.5 rounded-full text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em] hover:text-white transition-all group/link overflow-hidden"
                         >
-                            <span className="relative z-10">{item}</span>
-                            {/* Hover Highlight */}
-                            <div className="absolute inset-0 bg-white/5 translate-y-full group-hover/link:translate-y-0 transition-transform duration-300 rounded-full" />
+                            <span className="relative z-10 flex items-center gap-2">
+                                {/* Hover Dot */}
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-0 group-hover/link:opacity-100 transition-opacity shadow-[0_0_8px_#10b981]" />
+                                {item}
+                            </span>
+
+                            {/* Hover Highlight bg */}
+                            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300" />
+
+                            {/* Bottom Active Line on Hover */}
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-emerald-500/50 scale-x-0 group-hover/link:scale-x-100 transition-transform duration-300" />
                         </Link>
                     ))}
                 </nav>
