@@ -66,30 +66,56 @@ This creates a system that:
 ## 🏗️ System Architecture
 
 ```mermaid
-flowchart LR
-    A[📊 WEEX Market Data] --> B{🧠 AI Analysis}
+flowchart TB
+    subgraph INPUT["📊 DATA LAYER"]
+        A1[WEEX Market API]
+        A2[WebSocket Stream]
+        A3[Historical Candles]
+    end
 
-    B --> C[Regime Classifier]
-    B --> D[Risk Engine]
-    B --> E[Volatility Guard]
+    subgraph AI["🧠 AI INTELLIGENCE CORE"]
+        direction TB
+        B1[Regime Classifier]
+        B2[Risk Engine]
+        B3[Volatility Guard]
+        B4[Groq AI Analyzer]
+    end
 
-    C & D & E --> F{📈 Strategy Router}
+    subgraph STRATEGY["📈 STRATEGY LAYER"]
+        direction LR
+        C1[Trend Following]
+        C2[Mean Reversion]
+        C3[Capital Preservation]
+    end
 
-    F -->|Trending| G[Trend Following]
-    F -->|Range-Bound| H[Mean Reversion]
-    F -->|High Vol| I[Capital Guard]
+    subgraph EXECUTION["🎯 EXECUTION LAYER"]
+        D1[Position Sizing]
+        D2[Order Manager]
+        D3[Risk Controls]
+    end
 
-    G & H & I --> J[🎯 Trade Execution]
-    J --> K[WEEX Trading API]
+    subgraph OUTPUT["⚡ OUTPUT"]
+        E1[WEEX Trading API]
+        E2[AI Decision Logs]
+        E3[Real-time Dashboard]
+    end
 
-    J -.-> L[📝 AI Logger]
+    A1 & A2 & A3 --> AI
+    B1 --> |Trending| C1
+    B1 --> |Range-Bound| C2
+    B3 --> |High Volatility| C3
+    B2 --> D1
+    B4 --> |Enhanced Reasoning| D2
+    C1 & C2 & C3 --> EXECUTION
+    D1 & D2 & D3 --> E1
+    D2 --> E2
+    EXECUTION --> E3
 
-    style B fill:#22c55e,stroke:#16a34a,stroke-width:3px
-    style C fill:#22c55e,stroke:#16a34a
-    style D fill:#22c55e,stroke:#16a34a
-    style E fill:#22c55e,stroke:#16a34a
-    style F fill:#3b82f6,stroke:#2563eb
-    style L fill:#f59e0b,stroke:#d97706
+    style AI fill:#10b981,stroke:#059669,stroke-width:3px
+    style STRATEGY fill:#3b82f6,stroke:#2563eb,stroke-width:2px
+    style EXECUTION fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px
+    style INPUT fill:#6b7280,stroke:#4b5563
+    style OUTPUT fill:#f59e0b,stroke:#d97706,stroke-width:2px
 ```
 
 ### Architecture Layers
@@ -534,6 +560,25 @@ src/client/components/
 - **Typography:** Font-black weights, uppercase tracking-widest for labels
 - **Effects:** `drop-shadow`, `backdrop-blur-xl`, neon `box-shadow` glows
 - **Animations:** Framer Motion for transitions, CSS `animate-pulse` for live indicators
+
+### 📸 Live Screenshots
+
+<div align="center">
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="./public/dashboard.png" alt="Dashboard" width="100%" style="border-radius: 8px;" />
+<br />
+<b>Dashboard</b> — AI Engine Control & Market Intelligence
+</td>
+<td align="center" width="50%">
+<img src="./public/trade.png" alt="Trade Terminal" width="100%" style="border-radius: 8px;" />
+<br />
+<b>Trade Terminal</b> — Real-time Order Execution
+</td>
+</tr>
+</table>
+</div>
 
 ---
 
