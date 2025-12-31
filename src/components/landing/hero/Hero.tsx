@@ -90,7 +90,7 @@ export const Hero = () => {
                 <div className="h-6 w-[1px] bg-zinc-800" />
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[10px] font-black text-zinc-400 tracking-widest uppercase">Execution</span>
-                  <span className="text-[9px] text-zinc-600 font-mono">10ms_LATENCY_MAX</span>
+                  <span className="text-[9px] text-zinc-600 font-mono">10ms_SIGNAL_MAX</span>
                 </div>
               </div>
             </motion.div>

@@ -54,7 +54,7 @@ export default function ProductTour({ run, onFinish }: ProductTourProps) {
           <h4 className="font-bold text-white">Live System Status</h4>
           <p className="text-zinc-300 text-sm">
             Monitor real-time metrics: current market regime, risk exposure,
-            drawdown protection, and API latency.
+            drawdown protection, and signal strength.
           </p>
         </div>
       ),

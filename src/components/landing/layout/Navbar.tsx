@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, LayoutDashboard, ChevronRight } from "lucide-react";
+import { Shield, LayoutDashboard, ChevronRight, SignalHigh } from "lucide-react";
 import Link from "next/link";
 import NextImage from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ export const Navbar = () => {
             className="fixed top-0 left-0 right-0 z-50 pointer-events-none"
         >
             {/* Full Width Creative Deck */}
-            <div className="pointer-events-auto w-full bg-[#0B0E11]/90 backdrop-blur-2xl border-b border-white/5 flex items-center justify-between px-8 py-4 relative overflow-hidden shadow-[0_4px_30px_-10px_rgba(16,185,129,0.1)]">
+            <div className="pointer-events-auto w-full bg-[#0B0E11]/90 backdrop-blur-2xl border-b border-white/5 flex items-center justify-between px-8 py-4 relative overflow-hidden shadow-[0_4px_30px_-10px_rgba(16,185,129,0.1)] landing-tour-navbar">
                 {/* 1. Creative Background Pattern (Grid + Noise) */}
                 <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
                 <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-transparent to-zinc-950/80 pointer-events-none" />
@@ -81,9 +81,15 @@ export const Navbar = () => {
                 {/* Right Side: Status + Sign In */}
                 <div className="flex items-center gap-8 relative z-10">
                     {/* Ticker Tape Status */}
-                    <div className="hidden lg:flex flex-col items-end text-[9px] font-mono text-zinc-500 uppercase tracking-widest leading-tight border-r border-white/5 pr-8">
-                        <span className="text-zinc-700">Latency</span>
-                        <span className="text-emerald-500 font-bold">12ms <span className="text-zinc-600">Stable</span></span>
+                    <div className="hidden lg:flex items-center gap-3 text-[9px] font-mono border-r border-white/5 pr-8">
+                        <div className="flex flex-col items-end leading-tight">
+                            <div className="flex items-center gap-1.5 leading-none">
+                                <SignalHigh className="w-3 h-3 text-emerald-500" />
+                                <span className="text-zinc-700 uppercase tracking-widest font-bold">Signal</span>
+                                <span className="text-emerald-500 font-bold ml-1">12ms</span>
+                            </div>
+                            <span className="text-[8px] text-zinc-600 uppercase tracking-widest">System_Stable</span>
+                        </div>
                     </div>
 
                     <Link href="/dashboard">

@@ -32,7 +32,7 @@ export const RiskEngineFeature = () => {
         </div>
 
 
-        <div className="relative">
+        <div className="relative landing-tour-risk-engine">
           {/* Unified System Chassis */}
           <div className="w-full bg-zinc-900/60 backdrop-blur-md border border-emerald-500/30 ring-1 ring-emerald-500/20 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-[0_0_100px_-40px_rgba(16,185,129,0.2)]">
             {/* Clean Background - Grid Removed */}

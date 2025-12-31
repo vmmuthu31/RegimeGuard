@@ -22,7 +22,7 @@ const data = [
     featureName: "Fast Performance",
     featureItems: [
       "Optimized for speed",
-      "Low latency",
+      "Stable Signal",
       "Lightweight and efficient",
     ],
     icon: <FaRocket />,
