@@ -92,15 +92,29 @@ export const LiveTradeExecution = () => {
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
 
                     {/* Candles */}
-                    <div className="flex items-end justify-end h-full gap-1">
-                        {ticks.map((tick, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: `${20 + Math.random() * 40}%`, opacity: 1 }}
-                                className={`w-2 rounded-sm ${tick > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
-                            />
-                        ))}
+                    <div className="flex items-end justify-end h-full gap-1.5 px-2 pb-2">
+                        {ticks.map((tick, i) => {
+                            const height = 15 + Math.random() * 40;
+                            const color = tick > 0 ? 'bg-emerald-500' : 'bg-red-500';
+                            const wickColor = tick > 0 ? 'bg-emerald-500/50' : 'bg-red-500/50';
+                            return (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, scaleY: 0 }}
+                                    animate={{ opacity: 1, scaleY: 1 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="relative w-1.5 flex flex-col items-center justify-end"
+                                    style={{ height: `${height}%` }}
+                                >
+                                    {/* Top Wick */}
+                                    <div className={`w-[1px] h-3 -mt-3 absolute ${wickColor}`} />
+                                    {/* Candle Body */}
+                                    <div className={`w-full h-full rounded-[1px] ${color} ${(i === ticks.length - 1) ? 'animate-pulse' : ''}`} />
+                                    {/* Bottom Wick */}
+                                    <div className={`w-[1px] h-3 -mb-3 absolute bottom-0 ${wickColor}`} />
+                                </motion.div>
+                            );
+                        })}
                     </div>
 
                     {/* Trade Execution Overlay */}
@@ -120,10 +134,14 @@ export const LiveTradeExecution = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <CheckCircle2 className="w-10 h-10 text-emerald-500" />
-                                            <div className="text-center">
-                                                <span className="block text-sm font-black text-white uppercase tracking-wider">Filled</span>
-                                                <span className="text-[10px] text-zinc-400 font-mono">0.45s LATENCY</span>
+                                            <div className="p-3 bg-zinc-900/90 rounded-xl border border-emerald-500/20 shadow-xl backdrop-blur-md">
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                                                    <div className="text-center">
+                                                        <span className="block text-xs font-black text-white uppercase tracking-wider">Filled</span>
+                                                        <span className="text-[9px] text-zinc-500 font-mono">0.45s</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </>
                                     )}

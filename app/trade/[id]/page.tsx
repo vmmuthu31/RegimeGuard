@@ -10,14 +10,12 @@ import { motion } from "framer-motion";
 import { useDashboardData, SYMBOLS } from "@/src/client/hooks/useDashboardData";
 import { CandleChart } from "@/src/client/components/trade/CandleChart";
 import { OrderForm } from "@/src/client/components/trade/OrderForm";
-import {
-  ActiveOrders,
-  Order,
-} from "@/src/client/components/trade/ActiveOrders";
-import { TerminalPanel } from "@/src/client/components/dashboard/TerminalPanel";
+import { ActiveOrders, Order } from "@/src/client/components/trade/ActiveOrders";
+// import { TerminalPanel } from "@/src/client/components/dashboard/TerminalPanel";
 import { DashboardHeader } from "@/src/client/components/dashboard/DashboardHeader";
 import { MarketSwitcher } from "@/src/client/components/trade/MarketSwitcher";
 import { OrderBook } from "@/src/client/components/trade/OrderBook";
+import { WeexMarketBar } from "@/src/client/components/trade/WeexMarketBar";
 import { formatPrice, formatPercent } from "@/src/shared/utils/formatters";
 import { cn } from "@/src/lib/utils";
 
@@ -303,40 +301,7 @@ export default function TradePage({ params }: PageProps) {
 
             <MarketSwitcher currentSymbol={symbol.name} />
             <div className="h-4 w-px bg-white/20 hidden md:block" />
-            {tickerData && (
-              <div className="flex items-center gap-8 overflow-hidden">
-                <div className="flex flex-col group/price">
-                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5 group-hover/price:text-emerald-500/80 transition-colors">Mark Price</span>
-                  <span className={cn("text-[11px] font-mono font-bold tracking-tight transition-all duration-300", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.4)]" : "text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.4)]")}>
-                    {formatPrice(tickerData.lastPrice)}
-                  </span>
-                </div>
-                <div className="hidden sm:flex flex-col">
-                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h Change</span>
-                  <span className={cn("text-[11px] font-mono font-bold tracking-tight", parseFloat(tickerData.priceChangePercent) >= 0 ? "text-emerald-500" : "text-red-500")}>
-                    {formatPercent(tickerData.priceChangePercent)}
-                  </span>
-                </div>
-                <div className="hidden md:flex flex-col">
-                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h High</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-white">
-                    {formatPrice(tickerData.high)}
-                  </span>
-                </div>
-                <div className="hidden md:flex flex-col">
-                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">24h Low</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-white">
-                    {formatPrice(tickerData.low)}
-                  </span>
-                </div>
-                <div className="hidden lg:flex flex-col">
-                  <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-tighter mb-0.5">Funding / Countdown</span>
-                  <span className="text-[11px] font-mono font-bold tracking-tight text-zinc-300 uppercase">
-                    0.0100% / 06:42:12
-                  </span>
-                </div>
-              </div>
-            )}
+            <WeexMarketBar tickerData={tickerData} symbol={symbol.name} />
           </div>
           {/* Top Level: Chart and Order Book */}
           <div className="flex flex-col lg:flex-row h-[550px] gap-[1px] bg-zinc-800/40">
@@ -354,20 +319,19 @@ export default function TradePage({ params }: PageProps) {
                 </div>
 
                 {/* Chart Intervals */}
-                <div className="flex items-center gap-3 text-[10px] font-bold text-zinc-500 font-mono">
-                  <span className="text-[9px] uppercase tracking-tighter opacity-50 mr-1">Time</span>
-                  {["1m", "5m", "15m", "1H", "4H", "1D", "1W"].map((int) => (
+                <div className="flex items-center gap-2 p-1 bg-black/40 rounded-lg border border-white/5">
+                  {["1m", "5m", "15m", "1H", "4H", "1D"].map((int) => (
                     <button
                       key={int}
                       onClick={() => setGranularity(int.toLowerCase())}
-                      className={`hover:text-white transition-colors uppercase ${granularity === int.toLowerCase() ? "text-white" : ""}`}
+                      className={`px-2 py-1 rounded text-[10px] font-bold font-mono transition-all ${granularity === int.toLowerCase()
+                        ? "bg-zinc-800 text-white shadow-sm"
+                        : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+                        }`}
                     >
                       {int}
                     </button>
                   ))}
-                  <button className="hover:text-white transition-colors">
-                    <span className="text-[10px]">▼</span>
-                  </button>
                 </div>
               </div>
               <div className="flex-1 relative overflow-hidden bg-zinc-900/10">

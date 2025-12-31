@@ -11,40 +11,75 @@ export const Navbar = () => {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 left-0 right-0 z-50 px-4 py-4 pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-50 pointer-events-none"
         >
-            <div className="container max-w-6xl mx-auto flex items-center justify-between p-2 pl-4 pr-2 bg-zinc-950/40 backdrop-blur-3xl border border-white/10 rounded-2xl pointer-events-auto shadow-2xl">
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500/20 transition-all">
-                        <Shield className="w-6 h-6 text-emerald-500" />
+            {/* Full Width Creative Deck */}
+            <div className="pointer-events-auto w-full bg-[#0B0E11]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-8 py-4 relative overflow-hidden">
+                {/* 1. Creative Background Pattern (Grid + Noise) */}
+                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-transparent to-zinc-950/80 pointer-events-none" />
+
+                {/* 2. Live Scanline (Bottom) */}
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/5">
+                    <div className="absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent animate-[shimmer_3s_infinite]" />
+                </div>
+
+                {/* Logo Section - Encased */}
+                <Link href="/" className="flex items-center gap-4 group relative z-10 pr-8 border-r border-white/5">
+                    <div className="relative w-10 h-10 flex items-center justify-center">
+                        {/* Radar Pulse Effect */}
+                        <div className="absolute inset-0 bg-emerald-500/20 rounded-lg animate-ping opacity-20" />
+                        <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center relative overflow-hidden group-hover:border-emerald-500/50 transition-colors">
+                            <Shield className="w-5 h-5 text-emerald-500 relative z-10" />
+                            {/* Inner Scan */}
+                            <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-500/10 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000" />
+                        </div>
                     </div>
-                    <div className="flex flex-col -gap-1">
-                        <span className="text-sm font-black text-white uppercase tracking-tighter italic">RegimeGuard</span>
-                        <span className="text-[8px] font-mono text-emerald-500/60 uppercase tracking-widest font-black leading-none">Intelligence_v4</span>
+                    <div className="flex flex-col gap-0.5">
+                        <span className="text-sm font-black text-white uppercase tracking-widest leading-none">RegimeGuard</span>
+                        <div className="flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em] leading-none">System Online</span>
+                        </div>
                     </div>
                 </Link>
 
-                {/* Navigation */}
-                <nav className="hidden md:flex items-center gap-8">
-                    {['Markets', 'Logic', 'Compliance'].map((item) => (
+                {/* Nav Links - Tech Pills */}
+                <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 bg-zinc-900/50 border border-white/5 p-1 rounded-full backdrop-blur-md shadow-2xl">
+                    {['Protocol', 'Risk Engine', 'Documentation'].map((item) => (
                         <Link
                             key={item}
-                            href={`#${item.toLowerCase()}`}
-                            className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] hover:text-white transition-colors"
+                            href={`#${item.toLowerCase().replace(' ', '-')}`}
+                            className="relative px-5 py-2 rounded-full text-[10px] font-bold text-zinc-400 uppercase tracking-[0.1em] hover:text-white hover:bg-white/5 transition-all group/link overflow-hidden"
                         >
-                            {item}
+                            <span className="relative z-10">{item}</span>
+                            {/* Hover Highlight */}
+                            <div className="absolute inset-0 bg-white/5 translate-y-full group-hover/link:translate-y-0 transition-transform duration-300 rounded-full" />
                         </Link>
                     ))}
                 </nav>
 
-                {/* Action */}
-                <Link href="/dashboard">
-                    <Button className="bg-white text-black hover:bg-zinc-200 font-black uppercase tracking-widest text-[10px] h-10 px-6 rounded-xl group shadow-lg">
-                        Sign In
-                        <ChevronRight className="ml-1 w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                </Link>
+                {/* Right Side: Status + Sign In */}
+                <div className="flex items-center gap-8 relative z-10">
+                    {/* Ticker Tape Status */}
+                    <div className="hidden lg:flex flex-col items-end text-[9px] font-mono text-zinc-500 uppercase tracking-widest leading-tight border-r border-white/5 pr-8">
+                        <span className="text-zinc-700">Latency</span>
+                        <span className="text-emerald-500 font-bold">12ms <span className="text-zinc-600">Stable</span></span>
+                    </div>
+
+                    <Link href="/dashboard">
+                        {/* ALWAYS-ON Spinner Button */}
+                        <div className="relative group/btn overflow-hidden rounded-lg p-[1px]">
+                            {/* Persistent Animation (Opacity 100) */}
+                            <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#10b981_0%,#0f172a_50%,#10b981_100%)] opacity-100" />
+
+                            <Button className="relative bg-zinc-950 hover:bg-zinc-900 border border-transparent text-white font-black uppercase tracking-widest text-[10px] h-9 px-6 rounded-lg transition-all group-hover/btn:scale-[0.98]">
+                                Sign In
+                                <ChevronRight className="ml-1 w-3 h-3 text-emerald-500" />
+                            </Button>
+                        </div>
+                    </Link>
+                </div>
             </div>
         </motion.header>
     );

@@ -41,14 +41,18 @@ export const Hero = () => {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               className="space-y-4"
             >
-              <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic">
-                AI Controls <br />
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic">
+                AI That <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600">
-                  The Risk.
+                  Protects Capital
+                </span>
+                <br />
+                <span className="text-zinc-600 text-2xl md:text-3xl lg:text-4xl tracking-widest block mt-2 not-italic font-bold">
+                  — Not Chases Price
                 </span>
               </h1>
               <p className="text-sm md:text-base text-zinc-500 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium uppercase tracking-wide">
-                The institutional trading dashboard where <span className="text-white">artificial intelligence</span> manages exposure, drawdowns, and volatility — so you don't have to.
+                Risk-adaptive trading where <span className="text-white">artificial intelligence</span> controls exposure, drawdowns, and volatility — <span className="text-emerald-500/80 italic">transparently</span>.
               </p>
             </motion.div>
 
@@ -56,37 +60,38 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start"
+              className="flex flex-col gap-6"
             >
-              <Link href="/dashboard">
-                <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white font-black uppercase tracking-widest px-10 h-14 text-sm shadow-[0_0_30px_-5px_rgba(16,185,129,0.5)] transition-all hover:scale-105 active:scale-95">
-                  Sign In
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-              <Link href="#demo">
-                <Button variant="outline" size="lg" className="border-white/10 text-zinc-400 hover:bg-white/5 hover:text-white font-bold uppercase tracking-widest px-10 h-14 text-sm transition-all border-dashed">
-                  <PlayCircle className="mr-2 w-4 h-4" />
-                  View Logics
-                </Button>
-              </Link>
-            </motion.div>
+              <div className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start">
+                <Link href="/dashboard">
+                  <div className="relative group overflow-hidden rounded-lg p-[1px]">
+                    <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#10b981_0%,#000000_50%,#10b981_100%)]" />
+                    <Button size="lg" className="relative bg-zinc-950 hover:bg-zinc-900 border border-white/10 text-white font-black uppercase tracking-widest px-10 h-14 text-sm shadow-2xl transition-all">
+                      Start Trading
+                      <ArrowRight className="ml-2 w-4 h-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </Link>
 
-            {/* Bottom Proof Line */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
-              transition={{ duration: 2, delay: 1 }}
-              className="pt-12 flex items-center justify-center lg:justify-start gap-12"
-            >
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-black text-white tracking-widest uppercase">Connectivity</span>
-                <span className="text-[10px] text-zinc-500 font-mono">WEEX_OPEN_API_v4</span>
+                <Link href="#demo">
+                  <Button variant="outline" size="lg" className="border-white/20 hover:border-white/40 text-zinc-300 hover:text-white hover:bg-white/5 font-bold uppercase tracking-widest px-10 h-14 text-sm transition-all border-dashed group">
+                    <PlayCircle className="mr-2 w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+                    <span className="opacity-80 group-hover:opacity-100 transition-opacity">View Logics</span>
+                  </Button>
+                </Link>
               </div>
-              <div className="h-8 w-[1px] bg-zinc-800" />
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-black text-white tracking-widest uppercase">Execution</span>
-                <span className="text-[10px] text-zinc-500 font-mono">10ms_LATENCY_MAX</span>
+
+              {/* Bottom Proof Line - Directly under buttons */}
+              <div className="flex items-center justify-center lg:justify-start gap-8 pl-1">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-black text-zinc-400 tracking-widest uppercase">Connectivity</span>
+                  <span className="text-[9px] text-zinc-600 font-mono">WEEX_OPEN_API_v4</span>
+                </div>
+                <div className="h-6 w-[1px] bg-zinc-800" />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-black text-zinc-400 tracking-widest uppercase">Execution</span>
+                  <span className="text-[9px] text-zinc-600 font-mono">10ms_LATENCY_MAX</span>
+                </div>
               </div>
             </motion.div>
           </div>
