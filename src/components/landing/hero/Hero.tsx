@@ -19,11 +19,11 @@ export const Hero = () => {
         <div className="absolute -top-[10%] left-[10%] w-[40%] h-[40%] bg-blue-500/[0.05] rounded-full blur-[100px] pointer-events-none" />
       </div>
 
-      <div className="container max-w-6xl mx-auto relative z-10 px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div className="container max-w-7xl mx-auto relative z-10 px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
           {/* Left Column: Staggered Institutional Typography */}
-          <div className="space-y-10 text-center lg:text-left landing-tour-hero-text pt-12">
+          <div className="lg:col-span-7 space-y-10 text-center lg:text-left landing-tour-hero-text pt-12">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -43,9 +43,9 @@ export const Hero = () => {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               className="space-y-4"
             >
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic min-h-[1.2em]">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white leading-[0.9] uppercase italic sm:not-italic min-h-[1.2em]">
                 AI That <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-emerald-600 whitespace-nowrap">
                   <TypeAnimation
                     sequence={[
                       'Protects Capital',
@@ -67,7 +67,7 @@ export const Hero = () => {
                   — Not Chases Price
                 </span>
               </h1>
-              <p className="text-sm md:text-base text-zinc-500 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium uppercase tracking-wide">
+              <p className="text-sm md:text-base text-zinc-500 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium uppercase tracking-wide">
                 Risk-adaptive trading where <span className="text-white">artificial intelligence</span> controls exposure, drawdowns, and volatility — <span className="text-emerald-500/80 italic">transparently</span>.
               </p>
             </motion.div>
@@ -113,7 +113,7 @@ export const Hero = () => {
           </div>
 
           {/* Right Column: Stacked Intelligence & Execution */}
-          <div className="relative flex flex-col gap-6 justify-start pt-12">
+          <div className="lg:col-span-5 relative flex flex-col gap-6 justify-start pt-12">
             <RiskPanel />
             <LiveTradeExecution />
           </div>
