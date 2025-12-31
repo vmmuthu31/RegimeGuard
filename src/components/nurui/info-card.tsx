@@ -9,8 +9,8 @@ function isRTL(text: string) {
 export interface InfoCardProps {
   title: string;
   description: string;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   borderColor?: string;
   borderBgColor?: string;
   borderWidth?: number;
@@ -31,8 +31,8 @@ export interface InfoCardProps {
 export const InfoCard: React.FC<InfoCardProps> = ({
   title,
   description,
-  width = 388,
-  height = 378,
+  width = "100%",
+  height = "100%",
   borderColor = "#10b981",
   borderBgColor = "rgba(16, 185, 129, 0.2)",
   borderWidth = 3,

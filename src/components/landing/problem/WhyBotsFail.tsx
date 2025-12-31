@@ -2,6 +2,7 @@
 
 import { AlertTriangle, TrendingDown, EyeOff, ZapOff } from "lucide-react";
 import { motion } from "framer-motion";
+import { InfoCard } from "../../nurui/info-card";
 import { PremiumFeatureCard } from "../features/PremiumFeatureCard";
 
 const problems = [
@@ -62,13 +63,20 @@ export const ProblemSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {problems.map((item, index) => (
-            <PremiumFeatureCard
+            <InfoCard
               key={item.title}
-              accentColor="red"
-              variant="glitch"
-              icon={item.icon}
               title={item.title}
               description={item.desc}
+              icon={item.icon}
+              width="100%"
+              height={280}
+              borderColor="#ef4444"
+              borderBgColor="rgba(239, 68, 68, 0.1)"
+              effectBgColor="#ef4444"
+              cardBgColor="#18181b" // zinc-950
+              textColor="#d4d4d8" // zinc-300
+              hoverTextColor="#000000"
+              borderWidth={1}
             />
           ))}
         </div>
