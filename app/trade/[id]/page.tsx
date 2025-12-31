@@ -385,7 +385,13 @@ export default function TradePage({ params }: PageProps) {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleClosePosition(symbol.id)}
-                  className="px-3 py-1.5 rounded bg-red-500/10 border border-red-500/30 text-[10px] font-bold text-red-400 hover:text-white hover:bg-red-500 transition-all uppercase"
+                  disabled={positions.length === 0}
+                  className={cn(
+                    "px-3 py-1.5 rounded text-[10px] font-bold transition-all uppercase",
+                    positions.length > 0
+                      ? "bg-red-500/10 border border-red-500/30 text-red-400 hover:text-white hover:bg-red-500"
+                      : "bg-zinc-900 border border-white/5 text-zinc-600 cursor-not-allowed opacity-50"
+                  )}
                 >
                   Close All
                 </button>

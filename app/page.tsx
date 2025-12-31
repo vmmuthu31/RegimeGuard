@@ -28,10 +28,10 @@ export default function LandingPage() {
       <div id="risk-engine">
         <RiskEngineFeature />
       </div>
-      <FinalCTA />
       <div id="security">
-        <Footer />
+        <FinalCTA />
       </div>
+      <Footer />
     </main>
   );
 }
