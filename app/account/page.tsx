@@ -200,8 +200,9 @@ export default function AccountPage() {
               </span>
             </div>
             <div
-              className={`text-2xl font-black font-mono ${totalUnrealizedPnl >= 0 ? "text-emerald-400" : "text-red-400"
-                }`}
+              className={`text-2xl font-black font-mono ${
+                totalUnrealizedPnl >= 0 ? "text-emerald-400" : "text-red-400"
+              }`}
             >
               {totalUnrealizedPnl >= 0 ? "+" : ""}$
               {totalUnrealizedPnl.toFixed(2)}
@@ -226,8 +227,9 @@ export default function AccountPage() {
               </span>
             </div>
             <div
-              className={`text-2xl font-black font-mono ${totalRealizedPnl >= 0 ? "text-emerald-400" : "text-red-400"
-                }`}
+              className={`text-2xl font-black font-mono ${
+                totalRealizedPnl >= 0 ? "text-emerald-400" : "text-red-400"
+              }`}
             >
               {totalRealizedPnl >= 0 ? "+" : ""}${totalRealizedPnl.toFixed(2)}
             </div>
@@ -291,10 +293,11 @@ export default function AccountPage() {
                           .replace("usdt", "/USDT")}
                       </span>
                       <span
-                        className={`ml-2 text-[10px] font-bold ${pos.side === "LONG"
+                        className={`ml-2 text-[10px] font-bold ${
+                          pos.side === "LONG"
                             ? "text-emerald-400"
                             : "text-red-400"
-                          }`}
+                        }`}
                       >
                         {pos.side}
                       </span>
@@ -305,10 +308,11 @@ export default function AccountPage() {
                   </div>
                   <div className="text-right">
                     <div
-                      className={`text-[14px] font-black font-mono ${pos.unrealizedPnl >= 0
+                      className={`text-[14px] font-black font-mono ${
+                        pos.unrealizedPnl >= 0
                           ? "text-emerald-400"
                           : "text-red-400"
-                        }`}
+                      }`}
                     >
                       {pos.unrealizedPnl >= 0 ? "+" : ""}$
                       {pos.unrealizedPnl.toFixed(4)}
@@ -380,14 +384,17 @@ export default function AccountPage() {
                             {new Date(trade.createdTime).toLocaleTimeString()}
                           </td>
                           <td className="p-3 text-white font-bold uppercase">
-                            {trade.symbol.replace("cmt_", "").replace("usdt", "")}
+                            {trade.symbol
+                              .replace("cmt_", "")
+                              .replace("usdt", "")}
                           </td>
                           <td className="p-3">
                             <span
-                              className={`px-2 py-0.5 rounded text-[9px] font-black ${isLong
+                              className={`px-2 py-0.5 rounded text-[9px] font-black ${
+                                isLong
                                   ? "bg-emerald-500/10 text-emerald-400"
                                   : "bg-red-500/10 text-red-400"
-                                }`}
+                              }`}
                             >
                               {trade.positionSide || trade.side}
                             </span>
@@ -396,7 +403,10 @@ export default function AccountPage() {
                             {trade.fillSize}
                           </td>
                           <td className="p-3 text-right text-white font-mono">
-                            ${parseFloat(trade.fillPrice || "0").toLocaleString()}
+                            $
+                            {parseFloat(
+                              trade.fillPrice || "0"
+                            ).toLocaleString()}
                           </td>
                           <td className="p-3 text-right text-zinc-400 font-mono">
                             ${parseFloat(trade.fillValue || "0").toFixed(2)}
@@ -405,8 +415,9 @@ export default function AccountPage() {
                             -${parseFloat(trade.fillFee || "0").toFixed(4)}
                           </td>
                           <td
-                            className={`p-3 text-right font-mono font-bold ${pnl >= 0 ? "text-emerald-400" : "text-red-400"
-                              }`}
+                            className={`p-3 text-right font-mono font-bold ${
+                              pnl >= 0 ? "text-emerald-400" : "text-red-400"
+                            }`}
                           >
                             {pnl >= 0 ? "+" : ""}${pnl.toFixed(4)}
                           </td>
@@ -422,7 +433,8 @@ export default function AccountPage() {
           {trades.length > ITEMS_PER_PAGE && (
             <div className="p-4 border-t border-white/5 bg-zinc-950/20 flex items-center justify-between">
               <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                Page {currentPage} of {Math.ceil(trades.length / ITEMS_PER_PAGE)}
+                Page {currentPage} of{" "}
+                {Math.ceil(trades.length / ITEMS_PER_PAGE)}
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -434,18 +446,21 @@ export default function AccountPage() {
                 </button>
                 <div className="flex gap-1">
                   {Array.from({
-                    length: Math.min(5, Math.ceil(trades.length / ITEMS_PER_PAGE)),
+                    length: Math.min(
+                      5,
+                      Math.ceil(trades.length / ITEMS_PER_PAGE)
+                    ),
                   }).map((_, i) => {
                     const pageNum = i + 1;
-                    // Simple logic to show a few page numbers around current page could be added here for better UX
                     return (
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 rounded-lg border text-[10px] font-black transition-all ${currentPage === pageNum
+                        className={`w-8 h-8 rounded-lg border text-[10px] font-black transition-all ${
+                          currentPage === pageNum
                             ? "bg-emerald-500 border-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.3)]"
                             : "bg-zinc-900 border-white/10 text-zinc-500 hover:text-white"
-                          }`}
+                        }`}
                       >
                         {pageNum}
                       </button>
