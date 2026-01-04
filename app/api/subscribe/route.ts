@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (fetchError && fetchError.code !== "PGRST116") {
-      // PGRST116 is "not found" error, which is fine
       console.error("Database fetch error:", fetchError);
       return NextResponse.json(
         { success: false, error: "Database error" },
